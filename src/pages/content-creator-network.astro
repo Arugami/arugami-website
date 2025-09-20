@@ -1,0 +1,287 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Content Creator Network — Local Storytellers for Hudson County Campaigns';
+const description = 'Tap Arugami\'s curated content creator network for Hudson County. Creators get trade or paid collaborations; brands get managed campaigns, HudPost amplification, and reliable booking coordination.';
+
+// Replace these URLs with the live Airtable form share links once finalized.
+const CREATOR_FORM_URL = 'https://airtable.com/appPot2mPmiIMs7b2/pagwmY89O9yr4BKmZ/form';
+const BRAND_FORM_URL = 'https://airtable.com/app9H72vryJEnLRQk/pagSVrD9GbTyBlOWh/form';
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="relative overflow-hidden bg-arugami-dark text-white">
+      <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 10% 10%, #ff3399 0, transparent 45%), radial-gradient(circle at 80% 0%, #5fe385 0, transparent 40%), radial-gradient(circle at 0% 75%, #e2ff3f 0, transparent 55%);"></div>
+      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="max-w-3xl">
+          <span class="inline-flex rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-white/70">Content Creator Network</span>
+          <h1 class="mt-6 text-4xl sm:text-5xl font-black tracking-tight">Local storytellers. Trade or paid collabs. Campaigns managed for you.</h1>
+          <p class="mt-5 text-lg text-white/75">Creators see a welcoming community. Brands get a fully-managed creator & influencer roster that pairs HudPost exposure with AI-assisted scheduling and reporting.</p>
+          <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
+            <a href={CREATOR_FORM_URL} class="inline-flex items-center justify-center gap-3 rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_20px_40px_rgba(255,51,153,0.3)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark" target="_blank" rel="noopener">Join the Content Creator Network</a>
+            <a href={BRAND_FORM_URL} class="inline-flex items-center justify-center gap-3 rounded-full border border-white/40 px-6 py-3 text-sm font-bold text-white/90 backdrop-blur transition hover:-translate-y-1 hover:border-arugami-yellow hover:text-white" target="_blank" rel="noopener">Brands: Submit a campaign request</a>
+          </div>
+          <dl class="mt-12 grid gap-6 sm:grid-cols-3 text-sm text-white/70">
+            <div>
+              <dt class="font-semibold text-white">Foodie Creator Roster</dt>
+              <dd>Hudson County restaurants tap vetted storytellers for trade or paid experiences.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-white">Custom Network Builds</dt>
+              <dd>Retail, beauty, and professional service campaigns get bespoke creator shortlists.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-white">Bookings On-Record</dt>
+              <dd>Every engagement runs through Airtable for transparent scheduling and follow-up.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
+        <div class="space-y-6">
+          <h2 class="text-3xl font-black tracking-tight">Why creators and brands choose Arugami</h2>
+          <ul class="space-y-5 text-sm text-arugami-dark/75">
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-pink"></span><span><strong class="text-arugami-dark">Curated roster, not an open marketplace.</strong> Every creator is vetted for audience authenticity, brand fit, and responsiveness before they’re invited.</span></li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-green"></span><span><strong class="text-arugami-dark">HudPost amplification built in.</strong> Campaigns plug into the same media system that delivers guaranteed HudPost coverage for Arugami clients.</span></li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-yellow"></span><span><strong class="text-arugami-dark">Bookings that feel organized.</strong> Airtable-powered sign-up and scheduling keeps contact info, availability, and deliverables clean for both sides.</span></li>
+          </ul>
+        </div>
+        <div class="rounded-3xl border border-arugami-pink/20 bg-soft-gray p-8 shadow-[0_24px_50px_rgba(255,51,153,0.15)]">
+          <h3 class="text-xl font-black text-arugami-dark">Creator-friendly from the jump</h3>
+          <p class="mt-4 text-sm text-arugami-dark/75">We make expectations clear up front—trade collaboration, paid campaign, or open to either—so creators opt into opportunities that fit their brand.</p>
+          <dl class="mt-6 space-y-4 text-sm text-arugami-dark/80">
+            <div>
+              <dt class="font-semibold text-arugami-dark">Compensation preference captured</dt>
+              <dd>Forms include trade, paid, or both—saves back-and-forth.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-arugami-dark">Availability logged</dt>
+              <dd>Creators share windows once, brands see it in every booking.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-arugami-dark">Media kits organized</dt>
+              <dd>Links and highlights stay tied to each profile for quick vetting.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray/60">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
+          <div class="space-y-4">
+            <span class="inline-flex rounded-full bg-arugami-green/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-green">Apply now</span>
+            <h2 class="text-3xl font-black tracking-tight text-arugami-dark">Content Creator Network application</h2>
+            <p class="text-sm text-arugami-dark/75">Complete the short form to join the roster. We review new creators weekly and follow up with next steps, collaboration guidelines, and booking availability requests.</p>
+            <p class="text-xs text-arugami-dark/60">Note: This embedded form loads securely from Airtable. If it doesn’t appear, <a href={CREATOR_FORM_URL} class="font-semibold text-arugami-pink underline" target="_blank" rel="noopener">open it in a new tab</a>.</p>
+          </div>
+          <div class="rounded-3xl border border-arugami-dark/10 bg-white p-3 shadow-[0_24px_48px_rgba(54,54,54,0.08)]">
+            <iframe
+              class="airtable-embed h-[540px] w-full rounded-2xl"
+              src="https://airtable.com/embed/appPot2mPmiIMs7b2/pagwmY89O9yr4BKmZ/form"
+              frameborder="0"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              title="Content Creator Network application form"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
+          <div class="space-y-4">
+            <span class="inline-flex rounded-full bg-arugami-yellow/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark">Brands</span>
+            <h2 class="text-3xl font-black tracking-tight text-arugami-dark">Request a creator campaign</h2>
+            <p class="text-sm text-arugami-dark/75">Share your launch details, target audience, and budget. We’ll scope the right creators, confirm HudPost needs, and send a plan within two business days.</p>
+            <p class="text-xs text-arugami-dark/60">If the embed below doesn’t load, <a href={BRAND_FORM_URL} class="font-semibold text-arugami-pink underline" target="_blank" rel="noopener">open the campaign request form in a new tab</a>.</p>
+          </div>
+          <div class="rounded-3xl border border-arugami-dark/10 bg-soft-gray p-3 shadow-[0_24px_48px_rgba(54,54,54,0.08)]">
+            <iframe
+              class="airtable-embed h-[540px] w-full rounded-2xl bg-white"
+              src="https://airtable.com/embed/app9H72vryJEnLRQk/pagSVrD9GbTyBlOWh/form"
+              frameborder="0"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              title="Brand campaign intake form"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-black tracking-tight text-center">How the Content Creator Network works</h2>
+        <p class="mt-4 text-center text-lg text-arugami-dark/70 max-w-3xl mx-auto">A simple path whether you\'re a creator applying to the roster or a brand ready to launch a campaign.</p>
+        <div class="mt-12 grid gap-8 md:grid-cols-3">
+          {[
+            { title: 'Apply', body: 'Creators share links, compensation preference, and availability. Brands give us a campaign brief and internal point person.' },
+            { title: 'Vetting & Match', body: 'We align on the right roster tier, handle outreach, and prep deliverables, timelines, and FTC disclosures.' },
+            { title: 'Campaign Booking', body: 'Bookings run through Airtable—calendar invites, shoot details, and follow-up content all tracked in one workspace.' },
+          ].map((step, index) => (
+            <div class="relative rounded-3xl border border-arugami-dark/10 bg-white p-8 shadow-[0_16px_30px_rgba(54,54,54,0.06)]">
+              <span class="absolute -top-5 left-6 flex h-10 w-10 items-center justify-center rounded-full bg-arugami-pink text-sm font-bold text-white shadow-[0_10px_20px_rgba(255,51,153,0.25)]">{index + 1}</span>
+              <h3 class="text-xl font-black text-arugami-dark">{step.title}</h3>
+              <p class="mt-4 text-sm text-arugami-dark/75">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-center">
+        <div class="space-y-6">
+          <h2 class="text-3xl font-black tracking-tight">Foodie Creator Roster: built with Hoboken legend La Isla</h2>
+          <p class="text-lg text-arugami-dark/70">Hospitality brands plug into two clear tracks—trade collaborations to keep costs low, or paid campaigns when you need premium reach. We pilot-tested the model with La Isla Hoboken and rebuilt their launch calendar in weeks.</p>
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div class="rounded-2xl border border-arugami-pink/20 bg-soft-gray p-6">
+              <h3 class="text-lg font-black text-arugami-dark">Trade Collaborations</h3>
+              <p class="mt-3 text-sm text-arugami-dark/70">Hosted experiences, honest storytelling. Perfect for steady UGC and repeatable buzz.</p>
+              <ul class="mt-4 space-y-2 text-sm text-arugami-dark/75">
+                <li>Hosted meal = 4 reels/story sets</li>
+                <li>Weekend availability tracked in Airtable</li>
+                <li>Great for soft launches & menu updates</li>
+              </ul>
+            </div>
+            <div class="rounded-2xl border border-arugami-green/20 bg-soft-gray p-6">
+              <h3 class="text-lg font-black text-arugami-dark">Paid Campaigns</h3>
+              <p class="mt-3 text-sm text-arugami-dark/70">Premium visuals, guaranteed deliverables, optional ad-ready edits.</p>
+              <ul class="mt-4 space-y-2 text-sm text-arugami-dark/75">
+                <li>Top-tier foodie storytellers</li>
+                <li>Launch support + guaranteed coverage</li>
+                <li>Integrated with HudPost features</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-arugami-yellow/30 bg-white p-8 shadow-[0_24px_48px_rgba(226,255,63,0.2)]">
+          <p class="text-sm uppercase tracking-wide text-arugami-dark/60 font-semibold">Creator Highlight</p>
+          <blockquote class="mt-4 text-lg font-semibold text-arugami-dark">
+            “Arugami kept the whole collab easy—calendar link, shot list, even hashtags. The restaurant filled mid-week tables from one post.”
+          </blockquote>
+          <p class="mt-4 text-sm text-arugami-dark/70">— La Isla Hoboken partner creator</p>
+          <dl class="mt-6 grid gap-4 text-sm text-arugami-dark/75">
+            <div class="flex items-center justify-between rounded-2xl bg-soft-gray px-4 py-3">
+              <dt class="font-semibold text-arugami-dark">3.2x engagement lift</dt>
+              <dd>Compared to previous self-managed foodie visits.</dd>
+            </div>
+            <div class="flex items-center justify-between rounded-2xl bg-soft-gray px-4 py-3">
+              <dt class="font-semibold text-arugami-dark">Sold-out brunch weekend</dt>
+              <dd>After campaign rollout + HudPost feature.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
+        <div class="rounded-3xl border border-arugami-dark/10 bg-white p-8 shadow-[0_20px_40px_rgba(54,54,54,0.07)]">
+          <h3 class="text-xl font-black text-arugami-dark">What brands get</h3>
+          <ul class="mt-5 space-y-4 text-sm text-arugami-dark/75">
+            <li>Creator shortlists matched to goals & budget</li>
+            <li>Briefing, shot lists, and messaging handled by Arugami</li>
+            <li>HudPost feature integration when you need extra reach</li>
+            <li>Content handoff ready for organic, paid, and CRM follow-up</li>
+          </ul>
+        </div>
+        <div class="rounded-3xl border border-arugami-dark/10 bg-white p-8 shadow-[0_20px_40px_rgba(54,54,54,0.07)]">
+          <h3 class="text-xl font-black text-arugami-dark">What creators can expect</h3>
+          <ul class="mt-5 space-y-4 text-sm text-arugami-dark/75">
+            <li>Clear deliverables, deadlines, and contact info before each booking</li>
+            <li>Compensation confirmed up front (trade, paid, or both)</li>
+            <li>Fast feedback and repurposed assets credited to you</li>
+            <li>Optional HudPost amplification and behind-the-scenes support</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-black tracking-tight text-center">Recent creator campaigns</h2>
+        <p class="mt-4 text-center text-lg text-arugami-dark/70 max-w-3xl mx-auto">From menu drops to professional service spotlights, the network keeps content authentic and performance-driven.</p>
+        <div class="mt-12 grid gap-8 md:grid-cols-3">
+          {[
+            {
+              title: 'La Isla Hoboken',
+              summary: 'Trade collab series with weekend brunch focus; reels averaged 45K views and filled the reservations list.',
+              tag: 'Hospitality',
+            },
+            {
+              title: 'Journal Square Wellness',
+              summary: 'Paid micro-creator package featuring multilingual Stories + testimonial edits for ad retargeting.',
+              tag: 'Wellness',
+            },
+            {
+              title: 'West New York Boutique',
+              summary: 'Seasonal styling drop with bilingual creators; drove 18% uptick in foot traffic over launch weekend.',
+              tag: 'Retail',
+            },
+          ].map((campaign) => (
+            <div class="rounded-3xl border border-arugami-dark/10 bg-soft-gray p-6">
+              <span class="inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-arugami-dark/60">{campaign.tag}</span>
+              <h3 class="mt-4 text-lg font-black text-arugami-dark">{campaign.title}</h3>
+              <p class="mt-3 text-sm text-arugami-dark/75">{campaign.summary}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-black tracking-tight text-center">FAQs</h2>
+        <div class="mt-10 space-y-6">
+          {[
+            {
+              q: 'How long does onboarding take?',
+              a: 'Creators get a welcome packet within 24 hours. Brand campaigns typically launch within 10 business days once the brief and roster are approved.'
+            },
+            {
+              q: 'Can creators choose trade or paid opportunities only?',
+              a: 'Yes. We ask for a compensation preference during signup and only send campaigns that match what they selected.'
+            },
+            {
+              q: 'Do brands get usage rights for all content?',
+              a: 'Deliverables come with social and website usage for 12 months. We can negotiate extended or paid usage on a per-campaign basis.'
+            },
+            {
+              q: 'How do you measure success?',
+              a: 'Each campaign tracks the results that matter—reservations, leads captured, product sells, or engagement lift—logged in Airtable and shared during wrap-up.'
+            }
+          ].map((item) => (
+            <div class="rounded-3xl border border-arugami-dark/10 bg-white p-6 shadow-[0_16px_30px_rgba(54,54,54,0.05)]">
+              <h3 class="text-lg font-black text-arugami-dark">{item.q}</h3>
+              <p class="mt-3 text-sm text-arugami-dark/75">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-24 bg-arugami-dark text-white">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-black tracking-tight">Ready to collaborate?</h2>
+        <p class="mt-4 text-lg text-white/75">Creators, join the roster. Brands, send your campaign brief. We\'ll route everything through the Content Creator Network workspace so nothing slips.</p>
+        <div class="mt-8 flex flex-col sm:flex-row sm:justify-center gap-4">
+          <a href={CREATOR_FORM_URL} class="inline-flex items-center justify-center gap-3 rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_18px_36px_rgba(255,51,153,0.35)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark" target="_blank" rel="noopener">Apply as a Creator</a>
+          <a href={BRAND_FORM_URL} class="inline-flex items-center justify-center gap-3 rounded-full border border-white/40 px-6 py-3 text-sm font-bold text-white/90 transition hover:-translate-y-1 hover:border-arugami-green hover:text-white" target="_blank" rel="noopener">Brands: Submit a campaign request</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

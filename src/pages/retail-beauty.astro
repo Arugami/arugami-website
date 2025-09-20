@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ServicePage from '../components/templates/ServicePage.astro';
+
+const title = "Retail & Beauty Marketing Hudson County | Arugami";
+const description = "Arugami helps Hudson County salons, boutiques, and studios stay fully booked with culture-first content, HudPost hype, and loyalty automation.";
+
+const hero = {
+  kicker: 'Retail & beauty icons',
+  title: 'Become a neighborhood favorite. Keep regulars returning.',
+  subtitle:
+    'Salons, barbershops, boutiques, and studios thrive when visuals pop, booking flows are simple, and loyalty loops bring customers back. We deliver the full system.',
+  image: '/images/culture/culture-algorithm-lifestyle@2x.jpg',
+  alt: 'Lifestyle shoot featuring Arugami-branded fashion accessories',
+  stats: [
+    { value: '+212%', label: 'Increase in booking inquiries after rebrand + content engine' },
+    { value: '5.0⭐', label: 'Average rating across beauty roster within 4 months' },
+    { value: '3x', label: 'Growth in repeat purchase rate via automation + SMS' },
+  ],
+  primaryCta: { href: '/contact', label: 'Talk to a Hudson County expert' },
+  secondaryCta: { href: '/contact', label: 'Show me what you’d fix' },
+};
+
+const intro =
+  'Hudson County shoppers want experiences that feel like culture, not generic ads. When your feed looks corporate or availability is unclear, they bounce to the next trend. We create scroll-stopping visuals, frictionless booking, and loyalty automations that keep your chair or rack busy.';
+
+const painPoints = [
+  {
+    title: 'Feeds that feel off-brand',
+    description: 'Stock photos and inconsistent color palettes fail to capture your vibe or audience.',
+  },
+  {
+    title: 'Manual booking chaos',
+    description: 'Clients DM, call, and text—yet availability lives in notebooks and staff never confirms fast enough.',
+    accent: 'green',
+  },
+  {
+    title: 'Low review + referral momentum',
+    description: 'Happy clients leave quietly, leaving page-one results and social proof empty.',
+    accent: 'yellow',
+  },
+];
+
+const playbook = [
+  {
+    title: 'Phase 1 · Digital foundation',
+    bullets: [
+      'Build a mobile-first site with real photography, service menus, and integrated booking.',
+      'Optimize Google Business Profile with seasonal offers, galleries, and bilingual descriptions.',
+      'Connect booking apps, POS, and CRM so every visit triggers review + loyalty journeys.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost hype + content',
+    bullets: [
+      'Produce monthly HudPost spotlights showcasing transformations and community impact.',
+      'Capture shoot days with street-style imagery that matches Hudson County energy.',
+      'Drop weekly reels, stories, and email drops tailored to weekend and commuter audiences.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'AI concierge confirms appointments, handles reschedules, and sells add-ons instantly.',
+      'Loyalty automations reward VIPs, win back lapsed clients, and promote product drops.',
+      'Simple scorecard tracks real results: bookings, average ticket, repeat visit rate, and review velocity.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '+62%', description: 'Increase in average ticket for a Hoboken salon after upsell automations + HudPost press.' },
+  { stat: '147', description: 'New 5-star reviews in 120 days for a Jersey City boutique studio.' },
+  { stat: '4.3x', description: 'Growth in Instagram reach after Arugami content and paid social remixing.' },
+  { stat: '$96k', description: 'Additional quarterly revenue across a retail collective after relaunching loyalty + SMS.' },
+];
+
+const faq = [
+  {
+    question: 'How quickly can we schedule photo and video shoots?',
+    answer:
+      'We plan your first shoot during onboarding so you have new content within the first 30 days—capturing services, products, and behind-the-scenes culture.',
+  },
+  {
+    question: 'Do you manage our booking and POS tools?',
+    answer:
+      'Yes. We integrate with Square, GlossGenius, Mindbody, Booker, and more to sync availability, confirmations, and loyalty automations into one flow.',
+  },
+  {
+    question: 'Can you run bilingual campaigns for my clientele?',
+    answer:
+      'Absolutely. We craft bilingual content and automations, then train AI concierge responses so guests receive the same brand experience in either language.',
+  },
+];
+
+const schema = {
+  name: 'Arugami Retail & Beauty Growth System',
+  description: hero.subtitle,
+  serviceType: 'Retail and beauty marketing, HudPost media, loyalty automation',
+  areaServed: 'Hudson County, NJ',
+};
+
+const closing = {
+  title: 'Turn your brand into Hudson County’s obsession.',
+  subtitle: 'We will craft the visuals, automate the bookings, and hand you HudPost features that keep buzz alive.',
+  ctaLabel: 'Start your audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <ServicePage
+      hero={hero}
+      intro={intro}
+      painPoints={painPoints}
+      playbook={playbook}
+      proof={proof}
+      galleryImage="/images/culture/culture-rooftop-sofa-brick@2x.jpg"
+      galleryAlt="Neon Arugami sofa setup with skyline backdrop"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

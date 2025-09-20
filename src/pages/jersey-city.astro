@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocationPage from '../components/templates/LocationPage.astro';
+
+const title = "Jersey City Marketing Partner | Arugami";
+const description = "Arugami helps Jersey City businesses dominate from Newport to the Heights with foundation-first marketing, HudPost coverage, and AI smart employees.";
+
+const hero = {
+  kicker: 'Jersey City',
+  title: 'Own the square mile that rivals Manhattan',
+  subtitle:
+    'Jersey City businesses compete with NYC budgets while serving the most diverse market in the country. We blend professional polish with local grit so every neighborhood knows your name.',
+  image: '/images/culture/culture-rooftop-sofa-skyline@2x.jpg',
+  alt: 'Neon Arugami sofa overlooking the Manhattan skyline from Jersey City',
+  stats: [
+    { value: '#1-3', label: 'Average map pack rank across service clients' },
+    { value: '200K+', label: 'HudPost readers reached monthly with JC stories' },
+    { value: '4.7⭐', label: 'Average rating maintained for Jersey City roster' },
+  ],
+  primaryCta: { href: '/contact', label: 'Book a Jersey City audit' },
+  secondaryCta: { href: '/case-studies', label: 'See JC proof' },
+};
+
+const intro =
+  'From waterfront luxury towers to Journal Square hustle, messaging must address commuters, locals, and corporate tenants simultaneously. We craft bilingual, results-driven campaigns that keep Jersey City dollars local.';
+
+const neighborhoods = [
+  {
+    title: 'Downtown & Newport',
+    description: 'High-income professionals expect seamless digital experiences and premium visuals. We focus on polish, reviews, and corporate partnerships.',
+  },
+  {
+    title: 'Journal Square & McGinley Square',
+    description: 'Emerging arts corridor with transit-heavy crowds. Community storytelling and HudPost coverage drive differentiation.',
+  },
+  {
+    title: 'The Heights & Riverview',
+    description: 'Family-focused neighborhoods that value bilingual messaging, fast replies, and neighborhood-specific offers.',
+  },
+  {
+    title: 'Bergen-Lafayette & Greenville',
+    description: 'Culture-rich communities seeking authentic visuals, local hiring stories, and grassroots partnerships.',
+  },
+];
+
+const strategy = [
+  {
+    title: 'Phase 1 · Foundation',
+    bullets: [
+      'Rebuild websites and listings with sections for commuters, locals, and bilingual audiences.',
+      'Capture fresh photography across waterfront, mural, and neighborhood backdrops.',
+      'Pipe every inbound lead into AI receptionist + CRM to cover late-night inquiries from PATH commuters.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost & Community',
+    bullets: [
+      'Monthly HudPost stories featuring JC-specific collaborations and culture.',
+      'Local partnership calendar: Smorgasburg, Newark Ave events, Mana Contemporary, and neighborhood associations.',
+      'Platform-native content timed for PATH rush hours and weekend nightlife.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'AI concierge handles reservations, appointments, and bilingual FAQs 24/7.',
+      'Retention flows segmented by neighborhood and commuter vs. resident audiences.',
+      'Dashboard tracks covers, bookings, service requests, and review velocity by zip code.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '+88%', description: 'Lift in signed contracts for a Newark Ave law firm after foundation rebuild + HudPost features.' },
+  { stat: '147', description: 'New reviews for a Heights restaurant group with QR review engine and bilingual prompts.' },
+  { stat: '3.1x', description: 'Increase in ecommerce conversions for a JC boutique after content + automation relaunch.' },
+  { stat: '44s', description: 'Average response time achieved across Jersey City clients using AI receptionist.' },
+];
+
+const faq = [
+  {
+    question: 'Can you tailor campaigns for both waterfront professionals and neighborhood locals?',
+    answer:
+      'Yes. We segment messaging, offers, and automations so Newport commuters, Downtown residents, and Greenville families each receive hyper-relevant content.',
+  },
+  {
+    question: 'Do you handle bilingual outreach for Journal Square and Heights audiences?',
+    answer:
+      'We build bilingual landing pages, ad copy, email/SMS flows, and AI responses so English and Spanish speakers get the same brand experience.',
+  },
+  {
+    question: 'How fast can we launch after kickoff?',
+    answer:
+      'The foundation sprint starts immediately and wraps within 45 days, delivering a refreshed site, GBP overhaul, and AI receptionist before phase-two campaigns fire.',
+  },
+];
+
+const schema = {
+  name: 'Arugami — Jersey City Growth Partner',
+  description: intro,
+  areaServed: 'Jersey City, NJ',
+};
+
+const closing = {
+  title: 'Make Jersey City talk about your business before Manhattan does.',
+  subtitle: 'We bring the foundation, media access, and AI smart employee so you can stay focused on service.',
+  ctaLabel: 'Start your Jersey City audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <LocationPage
+      hero={hero}
+      intro={intro}
+      neighborhoods={neighborhoods}
+      strategy={strategy}
+      proof={proof}
+      galleryImage="/images/culture/culture-rooftop-street-team@2x.jpg"
+      galleryAlt="Arugami crew celebrating on a Jersey City rooftop"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

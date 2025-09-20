@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocationPage from '../components/templates/LocationPage.astro';
+
+const title = "Hoboken Marketing Partner | Arugami";
+const description = "Arugami helps Hoboken restaurants, boutiques, and professional services own Washington Street and the waterfront with foundation-first systems and HudPost hype.";
+
+const hero = {
+  kicker: 'Hoboken',
+  title: 'From Mile Square to worldwide buzz',
+  subtitle:
+    'Hoboken brands balance upscale professionals, weekend crowds, and loyal locals. We keep you top of mind across all three with culture-first content and airtight systems.',
+  image: '/images/culture/culture-rooftop-sofa-front@2x.jpg',
+  alt: 'Hoboken skyline backdrop with Arugami neon display',
+  stats: [
+    { value: '+62%', label: 'Average increase in reservations for Hoboken hospitality clients' },
+    { value: '5.0⭐', label: 'Rating maintained for Hoboken salons with review engine' },
+    { value: 'Monthly', label: 'HudPost nightlife + lifestyle features secured' },
+  ],
+  primaryCta: { href: '/contact', label: 'Audit my Hoboken presence' },
+  secondaryCta: { href: '/case-studies', label: 'Read Hoboken wins' },
+};
+
+const intro =
+  'Washington Street foot traffic, waterfront commuters, and condo residents demand a premium experience. When branding, booking, or follow-up slips, they head across the river. We make sure that never happens.';
+
+const neighborhoods = [
+  { title: 'Washington Street', description: 'Retail and hospitality row. Needs constant content, clear offers, and fast booking links.' },
+  { title: 'Waterfront & Maxwell Place', description: 'Luxury apartments expect concierge-level service, bilingual automation, and slick digital journeys.' },
+  { title: 'Southwest & Monroe', description: 'Young families and creatives respond to community storytelling and convenience-driven messaging.' },
+  { title: 'Nightlife corridors', description: 'Late-night patrons need instant replies, waitlist automation, and HudPost coverage to stay loyal.' },
+];
+
+const strategy = [
+  {
+    title: 'Phase 1 · Foundation',
+    bullets: [
+      'Rebuild sites with real photography, reservation/booking integrations, and bilingual CTAs.',
+      'Optimize GBP with event posts, seasonal menus, and neighborhood-specific keywords.',
+      'Route calls, DMs, and webchat to AI concierge trained on Hoboken-specific FAQs and specials.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost & local PR',
+    bullets: [
+      'Monthly HudPost features highlighting Hoboken waterfront experiences, chef stories, or boutique drops.',
+      'Influencer + partnership calendar with Pier events, Fit Foundry, and Mile Square makers.',
+      'Weekly reels and newsletters targeting commuters Monday-Thursday and nightlife Thu-Sat.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'AI host confirms reservations, handles cancellations, and offers upsell packages.',
+      'VIP loyalty sequences reward high-spend regulars and track average ticket growth.',
+      'Dashboards track covers, booking channel mix, and repeat visits by zip code.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '+74%', description: 'Growth in weekend covers for a Hoboken restaurant after automation + HudPost rollout.' },
+  { stat: '5.0⭐', description: 'Salon collective maintained perfect rating with Arugami review flows.' },
+  { stat: '3x', description: 'Lift in apparel pre-orders for a Hoboken boutique using loyalty SMS + content drops.' },
+  { stat: '$96k', description: 'Quarterly revenue increase across a waterfront hospitality group post refresh.' },
+];
+
+const faq = [
+  {
+    question: 'Will our campaigns reach both commuters and weekend visitors?',
+    answer:
+      'We segment messaging by daypart—commuter-focused offers Monday through Thursday and nightlife/weekend content for visitors—so both audiences stay engaged.',
+  },
+  {
+    question: 'Do you coordinate with local events and partnerships?',
+    answer:
+      'Yes. We manage a partnership calendar with Hoboken festivals, waterfront events, gyms, and creators to keep collaborations running year-round.',
+  },
+  {
+    question: 'How soon will the AI concierge be live?',
+    answer:
+      'Within the first month. We load your FAQs, reservation rules, and tone so guests get polished responses within seconds on SMS, chat, or social.',
+  },
+];
+
+const schema = {
+  name: 'Arugami — Hoboken Growth Partner',
+  description: intro,
+  areaServed: 'Hoboken, NJ',
+};
+
+const closing = {
+  title: 'Make Hoboken weekends revolve around your brand.',
+  subtitle: 'We bring the visuals, media moments, and automation that keep locals and visitors choosing you first.',
+  ctaLabel: 'Start your Hoboken audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <LocationPage
+      hero={hero}
+      intro={intro}
+      neighborhoods={neighborhoods}
+      strategy={strategy}
+      proof={proof}
+      galleryImage="/images/culture/culture-theater-team@2x.jpg"
+      galleryAlt="Team collaborating in Hoboken theater setting"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = "Privacy Policy — Arugami";
+const description = "Learn how Arugami collects, stores, and uses information when delivering marketing services to Hudson County businesses.";
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="py-16 bg-soft-gray">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-black tracking-tight">Privacy Policy</h1>
+        <p class="mt-4 text-sm text-arugami-dark/70">Updated: September 18, 2025</p>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-sm text-arugami-dark/75 leading-relaxed">
+        <p>Arugami operates as a Hudson County-based marketing agency. We collect information solely to deliver services, evaluate campaign performance, and improve client outcomes. We do not sell personal information.</p>
+        <p><strong class="text-arugami-dark">Information we collect:</strong> contact details provided through forms, booked consultations, and analytics generated through campaigns. Sensitive payment data is handled by third-party providers and never stored on our servers.</p>
+        <p><strong class="text-arugami-dark">How we use information:</strong> to plan foundation sprints, coordinate HudPost coverage, configure AI automations, and communicate with your team.</p>
+        <p><strong class="text-arugami-dark">Data retention:</strong> client project files are retained for active engagements and archived after 18 months of inactivity unless otherwise requested.</p>
+        <p><strong class="text-arugami-dark">Contact:</strong> privacy questions can be sent to <a href="mailto:privacy@arugami.com" class="text-arugami-pink font-semibold">privacy@arugami.com</a>.</p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

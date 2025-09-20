@@ -1,0 +1,505 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = "Arugami — Hudson County's Foundation-First Growth Partner";
+const description = "Hudson County's #1 local business growth partner. Foundation-first websites + HudPost media + AI assistants that work like smart employees. We help Jersey City, Hoboken, Bayonne, and beyond get famous.";
+
+const heroStats = [
+  { label: 'Hudson County businesses transformed', value: '200+' },
+  { label: 'Average reply time reduced to', value: '44s' },
+  { label: 'Guaranteed HudPost features per year', value: '12' },
+];
+
+// A/B headline + CTA variants (query params)
+const variant = Astro.url.searchParams.get('variant') || 'a';
+const heroHeadline = variant === 'b'
+  ? 'Fix the foundation. Fill the calendar.'
+  : 'Made in Hudson County. Built to make you busy.';
+
+const ctaParam = Astro.url.searchParams.get('cta') || 'audit';
+const heroPrimaryCta =
+  ctaParam === 'plan'
+    ? { href: '/contact', label: 'See your custom plan in 15 minutes' }
+    : ctaParam === 'hudpost'
+    ? { href: '/hudpost-partnership', label: 'See your guaranteed HudPost coverage' }
+    : { href: '/contact', label: 'Get a free Foundation Audit' };
+
+const kpiTrack = [
+  {
+    title: 'Speed-to-Reply',
+    description: 'Missed call text-back, unified inbox, AI receptionist that never clocks out.',
+    metric: '24/7',
+    accent: 'pink',
+  },
+  {
+    title: 'Top 3 on Google (map pack)',
+    description: 'Google Business Profile tune-ups, geo-tagged media, monthly review velocity.',
+    metric: '#1-3',
+    accent: 'green',
+  },
+  {
+    title: 'Review Velocity',
+    description: 'QR-powered review flows, automated thank-yous, AI-crafted replies.',
+    metric: '+38%',
+    accent: 'yellow',
+  },
+  {
+    title: 'Site Conversion',
+    description: 'Conversion-first pages, click-to-book flows, SMS + email nurture.',
+    metric: '3.1x',
+    accent: 'pink',
+  },
+];
+
+const stages = [
+  {
+    name: 'Phase 1 · Digital Foundation',
+    points: [
+      'Conversion-ready website + mobile-first UX',
+      'Google Business Profile clean-up and content cadence',
+      'Lead capture routing into Arugami CRM + SMS webchat',
+    ],
+    accent: 'pink',
+  },
+  {
+    name: 'Phase 2 · Social Presence',
+    points: [
+      'Daily platform-native content (IG, TikTok, Facebook)',
+      'HudPost + local media placements every quarter',
+      'Local partnerships and UGC that feel like home',
+    ],
+    accent: 'green',
+  },
+  {
+    name: 'Phase 3 · Smart Automation',
+    points: [
+      'AI “smart employee” workflows for replies + follow-up',
+      'Retention automations for VIPs, memberships, and reviews',
+      'Dashboard that tracks what fills seats, not vanity metrics',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const services = [
+  {
+    name: 'Professional Legends',
+    blurb: 'Law, finance, real estate, healthcare — we position you ahead of Manhattan firms with local proof and trust systems.',
+    href: '/professional-services',
+  },
+  {
+    name: 'Home & Field Heroes',
+    blurb: 'Home services, auto repair, trades — instant response flows and review boosts so you win every urgent search.',
+    href: '/home-services',
+  },
+  {
+    name: 'Retail & Beauty Icons',
+    blurb: 'Salons, boutiques, fitness studios — content that feels like culture plus loyalty automations customers love.',
+    href: '/retail-beauty',
+  },
+  {
+    name: 'Food & Hospitality Legends',
+    blurb: 'Restaurants, bars, cafes — scroll-stopping visuals, HudPost spotlights, and tables that stay booked.',
+    href: '/restaurant-marketing',
+  },
+];
+
+const locations = [
+  {
+    name: 'Jersey City',
+    detail: 'Waterfront luxury meets Journal Square hustle — we tailor messaging from Newport to the Heights.',
+    href: '/jersey-city',
+  },
+  {
+    name: 'Hoboken',
+    detail: 'Weekend foot traffic + weekday professionals. We build programs that hit both.',
+    href: '/hoboken',
+  },
+  {
+    name: 'Bayonne',
+    detail: 'Service-first, family-owned legends. Hyperlocal SEO and reputation wins.',
+    href: '/bayonne',
+  },
+  {
+    name: 'Union City',
+    detail: 'Multilingual storytelling and community-first campaigns that actually feel Hudson.',
+    href: '/union-city',
+  },
+  {
+    name: 'Weehawken',
+    detail: 'Luxury service experiences with skyline-level polish and local warmth.',
+    href: '/weehawken',
+  },
+  {
+    name: 'West New York',
+    detail: 'Dense retail corridors, bilingual content, and loyalty loops for repeat visits.',
+    href: '/west-new-york',
+  },
+  {
+    name: 'North Bergen',
+    detail: 'Neighborhood staples + commuter traffic. We make both remember your name.',
+    href: '/north-bergen',
+  },
+];
+
+const proofPoints = [
+  {
+    stat: '88% faster',
+    copy: 'response time after deploying AI receptionist & missed-call text back for a Union City salon collective.',
+  },
+  {
+    stat: '4.8⭐',
+    copy: 'average Google rating across Hoboken hospitality roster after review velocity campaigns.',
+  },
+  {
+    stat: '$240k',
+    copy: 'new revenue in 6 months for Bayonne home services trio combining foundation-first rebuild + HudPost coverage.',
+  },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-arugami-dark via-black/80 to-arugami-dark"></div>
+        <img src="/images/culture/culture-rooftop-street-team@2x.jpg" width="1920" height="1989" loading="lazy" decoding="async" alt="Arugami culture crew celebrating on a Jersey City rooftop" class="absolute inset-0 h-full w-full object-cover opacity-35" />
+      </div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+        <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
+          <div class="space-y-8 text-white">
+            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+              Hudson County foundation-first marketing
+            </span>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight" data-variant={variant}>
+              {heroHeadline}
+            </h1>
+            <p class="text-lg sm:text-xl text-white/80 max-w-2xl">
+              We build your website, tune your Google profile, and set up AI that answers customers 24/7. Then we add guaranteed HudPost coverage.
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href={heroPrimaryCta.href} class="inline-flex items-center gap-3 rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_16px_30px_rgba(255,51,153,0.28)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark" data-component="hero-cta-primary" data-variant={variant} data-cta-variant={ctaParam}>
+                {heroPrimaryCta.label}
+              </a>
+              <a href="/contact" class="inline-flex items-center gap-3 rounded-full border border-white/30 px-6 py-3 text-sm font-bold text-white/80 transition hover:border-arugami-green hover:text-white">
+                Show me what you’d fix
+              </a>
+            </div>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+            <p class="text-white/70 text-sm uppercase tracking-[0.3em]">Your results</p>
+            <div class="mt-6 space-y-4">
+              {heroStats.map((item) => (
+                <div class="rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
+                  <p class="text-3xl font-black text-white">{item.value}</p>
+                  <p class="text-sm text-white/70">{item.label}</p>
+                </div>
+              ))}
+            </div>
+            <p class="mt-6 text-xs text-white/60">
+              Powered by foundation-first systems, HudPost partnership, and AI that sounds like you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="inline-flex rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Start with one tool</span>
+          <h2 class="mt-4 text-4xl font-black tracking-tight text-arugami-dark">Pick your biggest pain. We’ll set it up fast.</h2>
+          <p class="mt-4 text-lg text-arugami-dark/70">Feel the difference this week. Add more later — once the basics hum. Single tools typically run $99–$299/month.</p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <a href="/contact?tool=textback" class="group relative overflow-hidden rounded-3xl border border-arugami-pink/20 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-black text-arugami-dark">Missing calls?</h3>
+              <span class="rounded-full bg-arugami-pink/10 px-3 py-1 text-[11px] font-semibold text-arugami-pink">$99–$299/mo</span>
+            </div>
+            <p class="mt-3 text-sm text-arugami-dark/70">Turn missed calls into text conversations that book jobs automatically.</p>
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-pink">Start this →</span>
+          </a>
+          <a href="/contact?tool=dm" class="group relative overflow-hidden rounded-3xl border border-arugami-green/20 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-black text-arugami-dark">Social taking forever?</h3>
+              <span class="rounded-full bg-arugami-green/10 px-3 py-1 text-[11px] font-semibold text-arugami-green">$99–$299/mo</span>
+            </div>
+            <p class="mt-3 text-sm text-arugami-dark/70">Auto-replies for DMs and comments so no one waits for answers.</p>
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-green">Start this →</span>
+          </a>
+          <a href="/contact?tool=reviews" class="group relative overflow-hidden rounded-3xl border border-arugami-yellow/30 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-black text-arugami-dark">Reviews too slow?</h3>
+              <span class="rounded-full bg-arugami-yellow/20 px-3 py-1 text-[11px] font-semibold text-arugami-dark">$99–$299/mo</span>
+            </div>
+            <p class="mt-3 text-sm text-arugami-dark/70">QR-powered review asks and on-brand replies grow 5‑stars monthly.</p>
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-dark">Start this →</span>
+          </a>
+          <a href="/contact?tool=chat" class="group relative overflow-hidden rounded-3xl border border-arugami-pink/20 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-black text-arugami-dark">Site not converting?</h3>
+              <span class="rounded-full bg-arugami-pink/10 px-3 py-1 text-[11px] font-semibold text-arugami-pink">$99–$299/mo</span>
+            </div>
+            <p class="mt-3 text-sm text-arugami-dark/70">24/7 website assistant that answers FAQs and books appointments.</p>
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-pink">Start this →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
+          <div class="space-y-6">
+            <span class="inline-flex rounded-full bg-arugami-yellow/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark">First 30 days</span>
+            <h2 class="text-4xl font-black tracking-tight">What you get in the first 30 days</h2>
+            <p class="text-lg text-arugami-dark/70">Fast wins, set up for long-term growth. You’ll feel it quickly — faster replies, more bookings, steady reviews.</p>
+            <ul class="grid gap-4 text-sm text-arugami-dark/75 sm:grid-cols-2">
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
+                Website tune-up and Google Business Profile clean-up
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-green"></span>
+                Missed-call text-back on and 24/7 website chat enabled
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-yellow"></span>
+                Review flow started with QR kit + on-brand replies
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
+                Forms, calls, chat, and DMs routed to one inbox (CRM)
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-green"></span>
+                Simple scorecard to track bookings, leads, reviews
+              </li>
+            </ul>
+            <div>
+              <a href="/contact" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">See my 30‑day plan →</a>
+            </div>
+          </div>
+          <div class="relative overflow-hidden rounded-3xl border border-arugami-dark/10 bg-soft-gray p-6">
+            <img src="/images/culture/culture-rooftop-sofa-skyline@2x.jpg" width="1600" height="1616" loading="lazy" decoding="async" alt="Arugami team setting up systems in a Hudson County business" class="h-full w-full object-cover rounded-2xl" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-arugami-dark/10 bg-white py-14">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {kpiTrack.map((kpi) => (
+            <div class={`rounded-2xl border px-5 py-6 shadow-sm ${
+              kpi.accent === 'pink'
+                ? 'border-arugami-pink/30'
+                : kpi.accent === 'green'
+                ? 'border-arugami-green/30'
+                : 'border-arugami-yellow/40'
+            }`}> 
+              <p class="text-sm font-semibold text-arugami-dark/60 uppercase tracking-wide">{kpi.title}</p>
+              <p class={`mt-3 text-3xl font-black ${
+                kpi.accent === 'pink'
+                  ? 'text-arugami-pink'
+                  : kpi.accent === 'green'
+                  ? 'text-arugami-green'
+                  : 'text-arugami-dark'
+              }`}>{kpi.metric}</p>
+              <p class="mt-2 text-sm text-arugami-dark/70">{kpi.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="inline-flex items-center gap-2 rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Foundation first</span>
+          <h2 class="mt-4 text-4xl font-black tracking-tight">The three-phase system that keeps Hudson County busy</h2>
+          <p class="mt-4 text-lg text-arugami-dark/70">We never drop you into flashy tactics before the basics are bulletproof. Every engagement moves through the same foundation-first methodology.</p>
+        </div>
+        <div class="mt-12 grid gap-8 lg:grid-cols-3">
+          {stages.map((stage) => (
+            <div class={`rounded-3xl border bg-white p-8 shadow-[0_20px_40px_rgba(54,54,54,0.06)] ${
+              stage.accent === 'pink'
+                ? 'border-arugami-pink/30'
+                : stage.accent === 'green'
+                ? 'border-arugami-green/30'
+                : 'border-arugami-yellow/30'
+            }`}>
+              <h3 class="text-xl font-black text-arugami-dark">{stage.name}</h3>
+              <ul class="mt-6 space-y-4 text-arugami-dark/75">
+                {stage.points.map((point) => (
+                  <li class="flex items-start gap-3 text-sm">
+                    <span class={`mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full ${
+                      stage.accent === 'pink'
+                        ? 'bg-arugami-pink'
+                        : stage.accent === 'green'
+                        ? 'bg-arugami-green'
+                        : 'bg-arugami-yellow'
+                    }`}></span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
+          <div class="space-y-6">
+            <span class="inline-flex rounded-full bg-arugami-green/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-green">HudPost + Local Authority</span>
+            <h2 class="text-4xl font-black tracking-tight">Hudson County coverage you can’t get anywhere else.</h2>
+            <p class="text-lg text-arugami-dark/70">Our exclusive HudPost partnership means guaranteed editorial features, while our cameras capture the real culture of your block. We swap stock photos for rooftop shoots, block party stories, and local legends.</p>
+            <ul class="grid gap-4 text-sm text-arugami-dark/75 sm:grid-cols-2">
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
+                Monthly HudPost feature baked into every growth retainer.
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-green"></span>
+                Neighborhood-specific plans for each Hudson County city.
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-yellow"></span>
+                Simple scorecard focused on real revenue metrics.
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
+                AI “smart employees” trained on your offers and tone.
+              </li>
+            </ul>
+            <a href="/hudpost-partnership" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">
+              See the HudPost playbook →
+            </a>
+          </div>
+          <div class="relative overflow-hidden rounded-3xl border border-arugami-pink/20 shadow-[0_30px_60px_rgba(255,51,153,0.25)]">
+            <img src="/images/culture/culture-rooftop-sofa-skyline@2x.jpg" width="1600" height="1616" loading="lazy" decoding="async" alt="Neon Arugami sign on a Hudson County rooftop" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-soft-gray">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
+        <div class="space-y-6">
+          <span class="inline-flex rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Creator campaigns</span>
+          <h2 class="text-4xl font-black tracking-tight text-arugami-dark">Content Creator Network + influencer access, managed by Arugami.</h2>
+          <p class="text-lg text-arugami-dark/70">Tap our curated roster of Hudson County storytellers — trade collaborations, paid campaigns, and HudPost amplification handled in one workspace.</p>
+          <ul class="space-y-4 text-sm text-arugami-dark/75">
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-pink"></span>Vetted local creators with compensation preferences captured up front.</li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-green"></span>Airtable-backed intake and booking so every deliverable stays on schedule.</li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-yellow"></span>Foodie Creator Roster for hospitality plus custom builds for other industries.</li>
+          </ul>
+          <a href="/content-creator-network" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">Explore the Creator Network →</a>
+        </div>
+        <div class="rounded-3xl border border-arugami-pink/20 bg-white p-6 shadow-[0_20px_40px_rgba(255,51,153,0.15)]">
+          <h3 class="text-lg font-black text-arugami-dark">La Isla Hoboken highlight</h3>
+          <p class="mt-3 text-sm text-arugami-dark/70">Trade collaboration reels averaged 45K views and filled weekend brunch after combining HudPost coverage with our creator roster.</p>
+          <dl class="mt-6 space-y-3 text-sm text-arugami-dark/75">
+            <div class="flex items-center justify-between rounded-2xl bg-soft-gray px-4 py-3">
+              <dt class="font-semibold text-arugami-dark">3.2x engagement lift</dt>
+              <dd>versus self-managed visits</dd>
+            </div>
+            <div class="flex items-center justify-between rounded-2xl bg-soft-gray px-4 py-3">
+              <dt class="font-semibold text-arugami-dark">Bookings waitlist</dt>
+              <dd>filled within 48 hours</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-arugami-dark text-white py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="inline-flex rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/70">Who we make famous</span>
+          <h2 class="mt-4 text-4xl font-black tracking-tight">Built for local legends across every Hudson County industry</h2>
+          <p class="mt-4 text-lg text-white/70">One system, four industry playbooks tuned to the way your customers discover, choose, and come back.</p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {services.map((service) => (
+            <a href={service.href} class="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-arugami-yellow/60">
+              <div class="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 transition group-hover:opacity-100"></div>
+              <h3 class="text-xl font-black text-white">{service.name}</h3>
+              <p class="mt-4 text-sm text-white/70">{service.blurb}</p>
+              <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-arugami-yellow">Explore playbook →</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
+          <div class="space-y-6">
+            <span class="inline-flex rounded-full bg-arugami-yellow/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark">Hudson County footprint</span>
+            <h2 class="text-4xl font-black tracking-tight">Seven municipalities. One culture-first system.</h2>
+            <p class="text-lg text-arugami-dark/70">From PATH commuters to Bergenline shoppers, we tailor campaigns to the neighborhoods you actually serve. No generic North Jersey fluff — just block-by-block relevance.</p>
+          </div>
+          <div class="rounded-3xl border border-arugami-dark/10 bg-soft-gray p-6 shadow-inner">
+            <div class="grid gap-4">
+              {locations.map((city) => (
+                <a href={city.href} class="rounded-2xl border border-arugami-dark/10 bg-white p-4 transition hover:border-arugami-pink/30 hover:shadow-lg">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-black text-arugami-dark">{city.name}</h3>
+                    <svg class="h-4 w-4 text-arugami-pink" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7" />
+                    </svg>
+                  </div>
+                  <p class="mt-2 text-sm text-arugami-dark/70">{city.detail}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
+          <div class="space-y-8">
+            <span class="inline-flex rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Proof Hudson County trusts</span>
+            <h2 class="text-4xl font-black tracking-tight text-arugami-dark">Real numbers, not vanity metrics.</h2>
+            <p class="text-lg text-arugami-dark/70">Every win is tracked against the results that move revenue — faster replies, higher conversion, more repeat business, and media coverage that actually matters.</p>
+            <div class="grid gap-6 md:grid-cols-3">
+              {proofPoints.map((proof) => (
+                <div class="rounded-3xl border border-arugami-dark/10 bg-white p-6 shadow-sm">
+                  <p class="text-3xl font-black text-arugami-pink">{proof.stat}</p>
+                  <p class="mt-3 text-sm text-arugami-dark/70">{proof.copy}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div class="overflow-hidden rounded-3xl border border-arugami-pink/20 shadow-[0_20px_40px_rgba(255,51,153,0.2)]">
+            <img src="/images/culture/culture-graffiti-crew@2x.jpg" width="1600" height="1818" loading="lazy" decoding="async" alt="Hudson County business owners captured at a street mural" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-arugami-dark text-white py-20">
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <h2 class="text-4xl font-black tracking-tight">Ready to make Hudson County talk about you?</h2>
+        <p class="mt-4 text-lg text-white/70">Let’s build the foundation, line up your HudPost spotlight, and train AI to sound like your best employee. We’ll map your results before we touch a tactic.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="inline-flex items-center gap-3 rounded-full bg-arugami-pink px-8 py-3 text-sm font-bold text-white shadow-[0_18px_40px_rgba(255,51,153,0.35)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark">Book a quick 15‑minute call</a>
+          <a href="/contact" class="inline-flex items-center gap-3 rounded-full border border-white/30 px-8 py-3 text-sm font-bold text-white/80 transition hover:border-arugami-green hover:text-white">Let’s get me busy</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

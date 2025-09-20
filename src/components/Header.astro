@@ -1,0 +1,180 @@
+---
+// Responsive navigation tuned to the updated Arugami visual system
+const services = [
+  { href: '/professional-services', label: 'Professional Services' },
+  { href: '/home-services', label: 'Home Services' },
+  { href: '/retail-beauty', label: 'Retail & Beauty' },
+  { href: '/restaurant-marketing', label: 'Food & Restaurants' },
+];
+
+const locations = [
+  { href: '/jersey-city', label: 'Jersey City' },
+  { href: '/hoboken', label: 'Hoboken' },
+  { href: '/bayonne', label: 'Bayonne' },
+  { href: '/union-city', label: 'Union City' },
+  { href: '/weehawken', label: 'Weehawken' },
+  { href: '/west-new-york', label: 'West New York' },
+  { href: '/north-bergen', label: 'North Bergen' },
+];
+---
+
+<header class="sticky top-0 z-50 backdrop-blur bg-white/90 border-b border-arugami-dark/10">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between py-3">
+      <a href="/" class="flex items-center gap-3 rounded-full px-3 py-1 transition hover:bg-arugami-pink/10">
+        <img src="/images/brand/arugami-logomark.png" width="36" height="36" alt="Arugami logomark" class="h-9 w-9" />
+        <span class="flex flex-col leading-tight text-sm">
+          <span class="font-black text-arugami-dark tracking-tight">arugami</span>
+          <span class="text-arugami-dark/60">Hudson County Growth Partner</span>
+        </span>
+      </a>
+
+      <div class="hidden lg:flex items-center gap-10 text-sm font-semibold">
+        <div class="relative group" data-nav-group>
+          <button type="button" class="flex items-center gap-1 text-arugami-dark/80 hover:text-arugami-pink transition-colors" data-nav-trigger aria-haspopup="true">
+            Services
+            <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="absolute left-0 mt-3 w-64 rounded-2xl border border-arugami-pink/20 bg-white/95 p-3 shadow-xl opacity-0 pointer-events-none transition group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto" data-nav-panel>
+            <nav class="flex flex-col gap-2">
+              {services.map((item) => (
+                <a href={item.href} class="rounded-xl px-3 py-2 text-sm text-arugami-dark/80 transition hover:bg-arugami-pink/10 hover:text-arugami-pink">
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        <div class="relative group" data-nav-group>
+          <button type="button" class="flex items-center gap-1 text-arugami-dark/80 hover:text-arugami-green transition-colors" data-nav-trigger aria-haspopup="true">
+            Locations
+            <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="absolute left-0 mt-3 w-64 rounded-2xl border border-arugami-green/20 bg-white/95 p-3 shadow-xl opacity-0 pointer-events-none transition group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto" data-nav-panel>
+            <nav class="grid grid-cols-1 gap-2">
+              {locations.map((item) => (
+                <a href={item.href} class="rounded-xl px-3 py-2 text-sm text-arugami-dark/80 transition hover:bg-arugami-green/10 hover:text-arugami-green">
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        <a href="/case-studies" class="text-arugami-dark/80 transition hover:text-arugami-yellow">Case Studies</a>
+        <a href="/about" class="text-arugami-dark/80 transition hover:text-arugami-green">About</a>
+        <a href="/content-creator-network" class="text-arugami-dark/80 transition hover:text-arugami-pink">Creator Network</a>
+        <a href="/blog" class="text-arugami-dark/80 transition hover:text-arugami-pink">Insights</a>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-3">
+        <p class="hidden xl:block text-xs font-semibold uppercase tracking-wide text-arugami-dark/60">HudPost Exclusive Access</p>
+        <a href="/contact" class="inline-flex items-center gap-2 rounded-full bg-arugami-pink px-5 py-2 text-sm font-bold text-white shadow-[0_12px_24px_rgba(255,51,153,0.25)] transition hover:translate-y-[-2px] hover:bg-arugami-yellow hover:text-arugami-dark">
+          <span>Book a Strategy Call</span>
+        </a>
+        <button class="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-arugami-dark/10 text-arugami-dark" id="mobile-menu-button" aria-label="Open menu">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <button class="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-arugami-dark/10 text-arugami-dark" id="mobile-menu-button" aria-label="Open menu">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="lg:hidden hidden" id="mobile-menu">
+      <div class="mt-3 space-y-4 rounded-3xl border border-arugami-dark/10 bg-white/95 p-4 shadow-xl">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-arugami-dark/60">Services</p>
+          <nav class="mt-2 flex flex-col gap-2">
+            {services.map((item) => (
+              <a href={item.href} class="rounded-xl border border-arugami-pink/10 px-3 py-2 text-sm font-semibold text-arugami-dark/80 transition hover:bg-arugami-pink/10 hover:text-arugami-pink">
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-arugami-dark/60">Hudson County</p>
+          <nav class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {locations.map((item) => (
+              <a href={item.href} class="rounded-xl border border-arugami-green/10 px-3 py-2 text-sm font-semibold text-arugami-dark/80 transition hover:bg-arugami-green/10 hover:text-arugami-green">
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+        <div class="grid gap-2">
+          <a href="/case-studies" class="rounded-xl border border-arugami-yellow/20 px-3 py-2 text-sm font-semibold text-arugami-dark/80 transition hover:bg-arugami-yellow/20 hover:text-arugami-dark">Case Studies</a>
+          <a href="/about" class="rounded-xl border border-arugami-green/20 px-3 py-2 text-sm font-semibold text-arugami-dark/80 transition hover:bg-arugami-green/10 hover:text-arugami-green">About</a>
+          <a href="/content-creator-network" class="rounded-xl border border-arugami-pink/20 px-3 py-2 text-sm font-semibold text-arugami-dark/80 transition hover:bg-arugami-pink/10 hover:text-arugami-pink">Creator Network</a>
+          <a href="/blog" class="rounded-xl border border-arugami-pink/20 px-3 py-2 text-sm font-semibold text-arugami-dark/80 transition hover:bg-arugami-pink/10 hover:text-arugami-pink">Insights</a>
+          <a href="/contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-arugami-pink px-4 py-3 text-sm font-bold text-white shadow-[0_12px_24px_rgba(255,51,153,0.25)] transition hover:bg-arugami-yellow hover:text-arugami-dark">
+            Book a Strategy Call
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleButtons = document.querySelectorAll('#mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    toggleButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        mobileMenu?.classList.toggle('hidden');
+      });
+    });
+
+    const desktopGroups = document.querySelectorAll('[data-nav-group]');
+    desktopGroups.forEach((group) => {
+      const panel = group.querySelector('[data-nav-panel]');
+      const trigger = group.querySelector('[data-nav-trigger]');
+      if (!panel || !trigger) return;
+
+      let hideTimeout;
+
+      const open = () => {
+        panel.classList.add('opacity-100', 'pointer-events-auto');
+        panel.classList.remove('opacity-0', 'pointer-events-none');
+        trigger.setAttribute('aria-expanded', 'true');
+      };
+
+      const close = () => {
+        panel.classList.add('opacity-0', 'pointer-events-none');
+        panel.classList.remove('opacity-100', 'pointer-events-auto');
+        trigger.setAttribute('aria-expanded', 'false');
+      };
+
+      group.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+        open();
+      });
+
+      group.addEventListener('mouseleave', () => {
+        hideTimeout = window.setTimeout(close, 80);
+      });
+
+      trigger.addEventListener('focus', open);
+      trigger.addEventListener('blur', () => {
+        hideTimeout = window.setTimeout(close, 80);
+      });
+      panel.addEventListener('focusout', (event) => {
+        if (panel.contains(event.relatedTarget as Node)) return;
+        hideTimeout = window.setTimeout(close, 80);
+      });
+    });
+  });
+</script>

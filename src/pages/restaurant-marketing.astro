@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ServicePage from '../components/templates/ServicePage.astro';
+
+const title = "Restaurant Marketing Hudson County | Arugami";
+const description = "Arugami keeps Hudson County restaurants, cafes, and bars fully booked. Foundation-first websites, HudPost coverage, content that hits, and AI that captures every reservation.";
+
+const hero = {
+  kicker: 'Food & hospitality legends',
+  title: 'Scroll‑stopping content. Booked‑out tables.',
+  subtitle:
+    'We turn your menu, team, and story into content people crave. From reservation flows to HudPost features, everything points back to customers in seats.',
+  image: '/images/culture/culture-rooftop-street-team@2x.jpg',
+  alt: 'Arugami team celebrating on a Hudson County rooftop',
+  stats: [
+    { value: '+74%', label: 'Uplift in weekly covers after launch' },
+    { value: '3.6x', label: 'Increase in delivery & pickup conversion' },
+    { value: 'Every month', label: 'Guaranteed HudPost feature for your concept' },
+  ],
+  primaryCta: { href: '/contact', label: 'Talk to a Hudson County expert' },
+  secondaryCta: { href: '/contact', label: 'Show me what you’d fix' },
+};
+
+const intro =
+  'Your guests decide where to eat based on Instagram, Google photos, and how fast someone confirms a table. If visuals look generic or no one replies, they take the PATH to Manhattan. We keep the hype and the systems working 24/7.';
+
+const painPoints = [
+  {
+    title: 'Inconsistent visuals & menus',
+    description: 'Food photos are outdated, menus live in PDFs, and nothing reflects the current vibe.',
+  },
+  {
+    title: 'Reservation + waitlist chaos',
+    description: 'Hosts juggle phones, DMs, and walk-ins without automation to keep parties informed.',
+    accent: 'green',
+  },
+  {
+    title: 'No local media momentum',
+    description: 'After a grand opening buzz fades, there is no ongoing press or community coverage.',
+    accent: 'yellow',
+  },
+];
+
+const playbook = [
+  {
+    title: 'Phase 1 · Digital foundation',
+    bullets: [
+      'Launch a mobile-first site with live menus, reservation integrations, and ordering flows.',
+      'Refresh Google Business Profile with weekly shoots, event posts, and bilingual descriptions.',
+      'Route every inquiry through AI host that answers FAQs, confirms bookings, and captures leads.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost hype machine',
+    bullets: [
+      'Monthly HudPost spreads featuring chefs, cocktails, and community collaborations.',
+      'Street-culture shoots and reel drops tailored to nightlife, brunch, and family audiences.',
+      'Influencer and neighborhood partnership calendar managed quarter by quarter.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'VIP + loyalty flows that move guests from first visit to regular status.',
+      'AI review replies that keep ratings high while staying on-brand.',
+      'Promotions triggered by weather, events, and seat availability to smooth demand.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '62%', description: 'Increase in table turns for a Hoboken restaurant after AI host + HudPost coverage.' },
+  { stat: '+214%', description: 'Growth in social reach across a Jersey City food collective with Arugami content engine.' },
+  { stat: '$150k', description: 'Quarterly revenue uplift for a Bayonne restaurant group after automation + loyalty relaunch.' },
+  { stat: '4.8⭐', description: 'Average Google rating maintained for hospitality roster with automated review replies.' },
+];
+
+const faq = [
+  {
+    question: 'Do you coordinate with reservation and waitlist platforms we already use?',
+    answer:
+      'Yes. We integrate with OpenTable, Resy, Toast, SevenRooms, and others so confirmations, cancellations, and waitlists sync with AI host messaging.',
+  },
+  {
+    question: 'Can you support bilingual menus and promotions?',
+    answer:
+      'We translate key landing pages, reservation flows, and automations so guests receive the same experience in English and Spanish (or additional languages as needed).',
+  },
+  {
+    question: 'How often will we appear in HudPost once we partner?',
+    answer:
+      'Every growth retainer includes monthly HudPost coverage—rotating between chef spotlights, behind-the-scenes content, and campaign recaps to keep buzz alive.',
+  },
+];
+
+const schema = {
+  name: 'Arugami Restaurant & Hospitality Growth System',
+  description: hero.subtitle,
+  serviceType: 'Restaurant marketing, HudPost media, AI host automation',
+  areaServed: 'Hudson County, NJ',
+};
+
+const closing = {
+  title: 'Let’s make your block crave your spot.',
+  subtitle: 'We bring cameras, HudPost, and AI hosts so your team can stay focused on service.',
+  ctaLabel: 'Book a tasting call',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <ServicePage
+      hero={hero}
+      intro={intro}
+      painPoints={painPoints}
+      playbook={playbook}
+      proof={proof}
+      galleryImage="/images/culture/culture-graffiti-crew@2x.jpg"
+      galleryAlt="Restaurant team posing against graffiti wall with Arugami branding"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

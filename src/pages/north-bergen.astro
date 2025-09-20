@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocationPage from '../components/templates/LocationPage.astro';
+
+const title = "North Bergen Marketing Partner | Arugami";
+const description = "Arugami supports North Bergen retailers, home services, and healthcare brands with foundation-first marketing, HudPost storytelling, and AI automations.";
+
+const hero = {
+  kicker: 'North Bergen',
+  title: 'Win the hilltop and the avenue',
+  subtitle:
+    'North Bergen is a mix of industrial corridors, residential hills, and commuter avenues. We align your messaging, proof, and automation for every audience you serve.',
+  image: '/images/culture/culture-stranger-ads-squad@2x.jpg',
+  alt: 'North Bergen service squad in Arugami gear',
+  stats: [
+    { value: '+187%', label: 'Increase in inbound leads for North Bergen clients' },
+    { value: '4.8⭐', label: 'Average rating after review engine deployment' },
+    { value: '0', label: 'Missed leads once AI dispatcher went live' },
+  ],
+  primaryCta: { href: '/contact', label: 'Book a North Bergen audit' },
+  secondaryCta: { href: '/case-studies', label: 'View results' },
+};
+
+const intro =
+  'Tonnelle Avenue logistics, Bergenline retail, and hilltop neighborhoods require different playbooks. We deliver foundation-first systems, HudPost coverage, and automations that speak to each segment.';
+
+const neighborhoods = [
+  { title: 'Tonnelle Avenue corridor', description: 'Industrial + automotive businesses need reputation management and quick inbound routing.' },
+  { title: 'Bergenline & 74th Street', description: 'Retail and dining corridor benefitting from bilingual content and HudPost spotlighting.' },
+  { title: 'North Bergen hilltop', description: 'Residential neighborhoods looking for trusted service providers and family-friendly messaging.' },
+  { title: 'River Road', description: 'Commuter-heavy stretch needing polished digital experiences and speedy customer service.' },
+];
+
+const strategy = [
+  {
+    title: 'Phase 1 · Foundation',
+    bullets: [
+      'Upgrade websites with service-specific landing pages and bilingual CTAs.',
+      'Refresh GBP listings with industrial, commuter, and family keywords plus fresh photography.',
+      'Implement AI receptionist to triage calls, SMS, and WhatsApp inquiries around the clock.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost & local partnerships',
+    bullets: [
+      'HudPost features that highlight community projects, trades expertise, and neighborhood stories.',
+      'Collaborations with schools, civic groups, and industrial associations to drive referrals.',
+      'Content calendar balanced between service education, bilingual promos, and community spotlights.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'Pipeline automations for estimates, service follow-up, and maintenance plans.',
+      'Review + testimonial engine encouraging bilingual feedback at every job site.',
+      'Dashboard tracking response time, job type, and revenue per neighborhood.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '+187%', description: 'Lead volume jump for a North Bergen auto repair shop after foundation sprint.' },
+  { stat: '4.8⭐', description: 'Average rating sustained for home service providers using Arugami review system.' },
+  { stat: '$90k', description: 'Quarterly revenue increase for an industrial supplier after HudPost media + automation.' },
+  { stat: '32%', description: 'Reduction in admin time with AI dispatcher handling inbound traffic.' },
+];
+
+const faq = [
+  {
+    question: 'Do you support both industrial and residential messaging?',
+    answer:
+      'We create parallel campaigns—one for Tonnelle Avenue industrial clients and another for hilltop residents—so each segment gets relevant offers and follow-ups.',
+  },
+  {
+    question: 'Can you manage bilingual communication for Bergenline customers?',
+    answer:
+      'Yes. We provide bilingual intake forms, automations, and AI responses to keep Spanish-speaking customers informed and engaged.',
+  },
+  {
+    question: 'How soon will the AI receptionist be live?',
+    answer:
+      'Within the first 30 days. We load your FAQs, service types, and routing rules so every inquiry hits the right contact instantly.',
+  },
+];
+
+const schema = {
+  name: 'Arugami — North Bergen Growth Partner',
+  description: intro,
+  areaServed: 'North Bergen, NJ',
+};
+
+const closing = {
+  title: 'Own every neighborhood across North Bergen.',
+  subtitle: 'We bring the foundational rebuild, HudPost spotlight, and AI smart employee so your team stays booked.',
+  ctaLabel: 'Start your North Bergen audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <LocationPage
+      hero={hero}
+      intro={intro}
+      neighborhoods={neighborhoods}
+      strategy={strategy}
+      proof={proof}
+      galleryImage="/images/culture/culture-hudson-runs@2x.jpg"
+      galleryAlt="North Bergen team captured in Arugami production"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

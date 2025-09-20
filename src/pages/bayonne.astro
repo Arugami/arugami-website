@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocationPage from '../components/templates/LocationPage.astro';
+
+const title = "Bayonne Marketing Partner | Arugami";
+const description = "Arugami powers Bayonne service businesses, restaurants, and retailers with foundation-first marketing, HudPost spotlights, and AI follow-up.";
+
+const hero = {
+  kicker: 'Bayonne',
+  title: 'Own the peninsula and the bridges',
+  subtitle:
+    'Bayonne businesses win when they dominate local search, respond instantly, and show real proof. We deliver systems that keep blue-collar loyalty strong and attract commuters crossing the bridge.',
+  image: '/images/culture/culture-stranger-ads-squad@2x.jpg',
+  alt: 'Service team posing in an industrial Hudson County set',
+  stats: [
+    { value: '3.4x', label: 'Average job volume lift for Bayonne service clients' },
+    { value: '118', label: 'Reviews added within 3 months using QR flows' },
+    { value: '24/7', label: 'AI dispatcher coverage for emergency calls' },
+  ],
+  primaryCta: { href: '/contact', label: 'Book a Bayonne audit' },
+  secondaryCta: { href: '/case-studies', label: 'See Bayonne wins' },
+};
+
+const intro =
+  'Bayonne families rely on trusted local pros and restaurants. They respond to proof, speed, and community ties—not big city polish. We help you show up first and feel like the hometown favorite every time.';
+
+const neighborhoods = [
+  { title: 'Broadway Corridor', description: 'Dense mix of retail and dining—needs constant content updates and review management.' },
+  { title: 'Constable Hook & MOTBY', description: 'Industrial + new development. Messaging focuses on reliability, safety, and convenience.' },
+  { title: 'Avenue A & West Side', description: 'Single-family neighborhoods and multi-generational households respond to bilingual outreach.' },
+  { title: 'Bridge commuters', description: 'Capture search from Staten Island and Jersey City drivers with fast response systems.' },
+];
+
+const strategy = [
+  {
+    title: 'Phase 1 · Foundation',
+    bullets: [
+      'Rebuild sites with service menus, financing info, and emergency call CTAs.',
+      'Standardize GBP and directory listings to dominate “near me” searches.',
+      'Install AI dispatcher + SMS workflows to capture after-hours emergencies.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost & community',
+    bullets: [
+      'HudPost features highlighting Bayonne family stories, unions, and neighborhood impact.',
+      'Photo/video shoots around 8th Street, Bayonne Bridge, and local landmarks.',
+      'Partnerships with schools, Little League, and civic associations to keep referrals flowing.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'Automated review engine with QR cards handed out on every job.',
+      'Maintenance reminders and membership programs to smooth seasonality.',
+      'Dashboard tracking job type mix, response time, and revenue per route.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '$240k', description: 'Additional revenue for a Bayonne HVAC trio after Arugami foundation sprint.' },
+  { stat: '0', description: 'Missed emergency calls once AI dispatcher + SMS routing went live.' },
+  { stat: '+212%', description: 'Increase in Google profile views for a local bakery with HudPost coverage.' },
+  { stat: '4.8⭐', description: 'Average rating maintained for Bayonne roster via automated review replies.' },
+];
+
+const faq = [
+  {
+    question: 'How do you handle after-hours emergency calls?',
+    answer:
+      'Our AI dispatcher responds immediately, collects job details, and routes to your on-call tech or office team so no Bayonne resident is left waiting.',
+  },
+  {
+    question: 'Can you feature our story in HudPost?',
+    answer:
+      'Absolutely. Every growth retainer includes monthly HudPost coverage—highlighting local impact, union roots, or family ownership to build trust.',
+  },
+  {
+    question: 'Do you support bilingual outreach for Avenue A and Broadway customers?',
+    answer:
+      'Yes. We craft bilingual content, review prompts, and automations to keep Spanish-speaking customers engaged.',
+  },
+];
+
+const schema = {
+  name: 'Arugami — Bayonne Growth Partner',
+  description: intro,
+  areaServed: 'Bayonne, NJ',
+};
+
+const closing = {
+  title: 'Keep Bayonne choosing you before crossing the bridge.',
+  subtitle: 'We will rebuild your foundation, land HudPost press, and automate every follow-up touchpoint.',
+  ctaLabel: 'Start your Bayonne audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <LocationPage
+      hero={hero}
+      intro={intro}
+      neighborhoods={neighborhoods}
+      strategy={strategy}
+      proof={proof}
+      galleryImage="/images/culture/culture-hudson-runs@2x.jpg"
+      galleryAlt="Bayonne service team captured in Arugami creative shoot"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

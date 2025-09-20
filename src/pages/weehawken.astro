@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocationPage from '../components/templates/LocationPage.astro';
+
+const title = "Weehawken Marketing Partner | Arugami";
+const description = "Arugami helps Weehawken hospitality, luxury services, and developers deliver premium experiences with foundation-first marketing and HudPost media.";
+
+const hero = {
+  kicker: 'Weehawken',
+  title: 'Serve skyline expectations with neighborhood warmth',
+  subtitle:
+    'Waterfront venues, luxury services, and residential communities expect concierge-level polish. We pair high-end visuals with systems that keep every guest and resident cared for.',
+  image: '/images/culture/culture-rooftop-sofa-brick@2x.jpg',
+  alt: 'Arugami neon sign against brick wall with skyline view',
+  stats: [
+    { value: '+58%', label: 'Increase in event bookings for Weehawken venues' },
+    { value: '5.0⭐', label: 'Rating maintained for luxury services with review automation' },
+    { value: '0', label: 'Missed VIP inquiries after AI concierge setup' },
+  ],
+  primaryCta: { href: '/contact', label: 'Audit my Weehawken experience' },
+  secondaryCta: { href: '/case-studies', label: 'See client stories' },
+};
+
+const intro =
+  'Lincoln Harbor, Port Imperial, and King Avenue residents expect immediate replies and seamless booking. Corporate events and wedding planners compare you to NYC venues. We make sure you win on both fronts.';
+
+const neighborhoods = [
+  { title: 'Port Imperial corridor', description: 'High-rise residents and ferry commuters respond to polished digital experiences and quick concierge responses.' },
+  { title: 'Lincoln Harbor', description: 'Event spaces and restaurants need premium visuals and HudPost coverage for corporate planners.' },
+  { title: 'King Avenue & Uptown', description: 'Long-term residents appreciate community storytelling, loyalty perks, and bilingual updates.' },
+];
+
+const strategy = [
+  {
+    title: 'Phase 1 · Foundation',
+    bullets: [
+      'Design luxury-grade websites with immersive visuals, virtual tours, and instant booking/consultation flows.',
+      'Upgrade GBP, OpenTable/Resy, and event listings with consistent brand voice + photography.',
+      'Configure AI concierge to handle VIP inquiries, proposals, and after-hours questions.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost & premium PR',
+    bullets: [
+      'HudPost columns featuring waterfront experiences, chef collaborations, and resident amenities.',
+      'Video + photo production capturing skyline views, sunset experiences, and team hospitality.',
+      'Partnership calendar with ferry operators, nearby hotels, and developers.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'Lead scoring and follow-up flows for event planners, residents, and recurring guests.',
+      'VIP loyalty sequences delivering curated offers and concierge access.',
+      'Dashboards tracking booking sources, revenue per guest, and review sentiment.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '+58%', description: 'Growth in waterfront event bookings after automation and HudPost exposure.' },
+  { stat: '4.9⭐', description: 'Average rating maintained for Weehawken spa collective with Arugami review engine.' },
+  { stat: '$120k', description: 'Quarterly upsell revenue from VIP loyalty flows for a luxury service provider.' },
+  { stat: '48h', description: 'Turnaround time for proposals thanks to AI concierge + template library.' },
+];
+
+const faq = [
+  {
+    question: 'Can you manage proposals for corporate and wedding planners?',
+    answer:
+      'Yes. We create AI-assisted proposal workflows that gather requirements, send polished decks within 48 hours, and keep planners updated automatically.',
+  },
+  {
+    question: 'Do you provide media assets that match our luxury vibe?',
+    answer:
+      'We schedule quarterly shoots highlighting skyline views, chef experiences, and hospitality moments so every channel looks high-end.',
+  },
+  {
+    question: 'How do you support residents and VIP guests long term?',
+    answer:
+      'We launch loyalty and concierge sequences that deliver personalized offers, event invites, and renewal reminders for residents and members.',
+  },
+];
+
+const schema = {
+  name: 'Arugami — Weehawken Growth Partner',
+  description: intro,
+  areaServed: 'Weehawken, NJ',
+};
+
+const closing = {
+  title: 'Deliver the skyline experience every time.',
+  subtitle: 'We support your team with polished visuals, HudPost storytelling, and concierge-level automation.',
+  ctaLabel: 'Start your Weehawken audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <LocationPage
+      hero={hero}
+      intro={intro}
+      neighborhoods={neighborhoods}
+      strategy={strategy}
+      proof={proof}
+      galleryImage="/images/culture/culture-rooftop-sofa-front@2x.jpg"
+      galleryAlt="Luxury lounge setup with Arugami branding overlooking skyline"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

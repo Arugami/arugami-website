@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocationPage from '../components/templates/LocationPage.astro';
+
+const title = "West New York Marketing Partner | Arugami";
+const description = "Arugami drives growth for West New York retailers, medical practices, and restaurants with foundation-first marketing, HudPost PR, and automation.";
+
+const hero = {
+  kicker: 'West New York',
+  title: 'Reach every high-rise, hillside, and waterfront block',
+  subtitle:
+    'West New York businesses serve dense residential towers, family-owned storefronts, and commuters. We tailor messaging and automation for each audience so your brand stays top of mind.',
+  image: '/images/culture/culture-rooftop-street-team@2x.jpg',
+  alt: 'Arugami crew celebrating with skyline backdrop',
+  stats: [
+    { value: '+3.2x', label: 'Growth in digital inquiries for WNY clients' },
+    { value: '95%', label: 'HudPost story open rate for neighborhood features' },
+    { value: '24/7', label: 'AI receptionist coverage in English & Spanish' },
+  ],
+  primaryCta: { href: '/contact', label: 'Book a West New York audit' },
+  secondaryCta: { href: '/case-studies', label: 'See neighborhood outcomes' },
+};
+
+const intro =
+  'Boulevard East views, Bergenline retail, and waterfront condos demand localized messaging and fast response. We bring bilingual content, HudPost storytelling, and smart systems that keep residents loyal.';
+
+const neighborhoods = [
+  { title: 'Boulevard East', description: 'Upscale residents and tourists attracted by skyline views—expect polished branding and concierge experiences.' },
+  { title: 'Bergenline & 60th Street', description: 'Retail heart that needs bilingual promotions, reviews, and constant content.',
+  },
+  { title: 'Port Imperial waterfront', description: 'Luxury condos and commuters require SMS automation and high-end visuals.' },
+  { title: 'West New York healthcare corridor', description: 'Clinics and specialists relying on trust, proof, and fast follow-up to secure appointments.' },
+];
+
+const strategy = [
+  {
+    title: 'Phase 1 · Foundation',
+    bullets: [
+      'Launch bilingual landing pages, appointment flows, and reservation systems.',
+      'Optimize GBP with neighborhood keywords, photo shoots, and frequent posts.',
+      'Deploy AI assistant across voice, SMS, and chat to handle inquiries instantly.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost + community lift',
+    bullets: [
+      'Monthly HudPost features celebrating neighborhood contributions and cultural flavor.',
+      'Collaborations with local festivals, schools, and waterfront events to drive referrals.',
+      'Content calendar tuned to commuter schedules and weekend family outings.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'Segmentation for residents vs. visitors, English vs. Spanish, and VIP vs. first-time guests.',
+      'Review engine with QR prompts placed in lobby, tables, and checkout counters.',
+      'Scorecard tracks results by building, channel, and repeat visit rate to adjust offers fast.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '+3.2x', description: 'Increase in appointment requests for a WNY medical practice after automation rollout.' },
+  { stat: '102', description: 'New Google reviews generated for a Bergenline retailer in 60 days.' },
+  { stat: '+198%', description: 'Growth in delivery + pickup orders for a waterfront restaurant with HudPost hype.' },
+  { stat: '5.0⭐', description: 'Average rating maintained via bilingual review replies and follow-up.' },
+];
+
+const faq = [
+  {
+    question: 'How do you segment messaging for high-rises versus street-level retail?',
+    answer:
+      'We maintain separate automations and content calendars for Boulevard East residents, waterfront commuters, and Bergenline shoppers so each audience receives relevant offers.',
+  },
+  {
+    question: 'Can you manage bilingual promotions and customer support?',
+    answer:
+      'Yes. We provide bilingual landing pages, campaigns, and AI responses so Spanish-speaking customers get the same fast service.',
+  },
+  {
+    question: 'What does HudPost coverage look like for West New York brands?',
+    answer:
+      'Expect monthly stories highlighting cultural contributions, behind-the-scenes operations, and customer wins—paired with repurposed reels and ad creative.',
+  },
+];
+
+const schema = {
+  name: 'Arugami — West New York Growth Partner',
+  description: intro,
+  areaServed: 'West New York, NJ',
+};
+
+const closing = {
+  title: 'Keep West New York choosing local.',
+  subtitle: 'We deliver the foundation, HudPost spotlight, and smart employee automations to make it happen.',
+  ctaLabel: 'Start your West New York audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <LocationPage
+      hero={hero}
+      intro={intro}
+      neighborhoods={neighborhoods}
+      strategy={strategy}
+      proof={proof}
+      galleryImage="/images/culture/culture-graffiti-crew@2x.jpg"
+      galleryAlt="West New York team featured in Arugami graffiti shoot"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

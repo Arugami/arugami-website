@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LocationPage from '../components/templates/LocationPage.astro';
+
+const title = "Union City Marketing Partner | Arugami";
+const description = "Arugami helps Union City businesses reach bilingual audiences with foundation-first marketing, HudPost features, and AI assistants that answer in English & Spanish.";
+
+const hero = {
+  kicker: 'Union City',
+  title: 'Speak the language of the Palisades',
+  subtitle:
+    'Union City thrives on multi-generational, bilingual households. We deliver messaging, proof, and automation that feel like the neighborhood while keeping operations sharp.',
+  image: '/images/culture/culture-union-city-sunglasses@2x.jpg',
+  alt: 'Arugami-branded sunglasses with Union City street sign in background',
+  stats: [
+    { value: '2.5x', label: 'Growth in inbound leads for Union City businesses after bilingual automation' },
+    { value: '100%', label: 'HudPost features delivered in English & Spanish' },
+    { value: '4.9⭐', label: 'Rating maintained across Union City roster' },
+  ],
+  primaryCta: { href: '/contact', label: 'Book a Union City audit' },
+  secondaryCta: { href: '/case-studies', label: 'See neighborhood wins' },
+};
+
+const intro =
+  'From Bergenline Avenue retailers to Bergenline restaurants and service providers, success comes from authentic bilingual storytelling, fast SMS replies, and proof rooted in community involvement. We make sure every touchpoint speaks the neighborhood’s voice.';
+
+const neighborhoods = [
+  { title: 'Bergenline Avenue', description: 'High-foot-traffic retail strip needing daily social content, reviews, and bilingual promos.' },
+  { title: '38th Street & Summit Avenue', description: 'Family services and clinics that rely on trust, quick follow-up, and community testimonials.' },
+  { title: '42nd Street Arts Corridor', description: 'Creative studios and theaters needing HudPost spotlights and event promotion automations.' },
+  { title: 'Residential high-rises', description: 'Apartment dwellers who respond to SMS offers, QR review flows, and concierge-style service.' },
+];
+
+const strategy = [
+  {
+    title: 'Phase 1 · Foundation',
+    bullets: [
+      'Launch bilingual websites, landing pages, and funnels with clear mobile-first CTAs.',
+      'Standardize GBP with Spanish + English descriptions, Q&A, and photography.',
+      'Train AI receptionist to handle Spanish and English inquiries automatically.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost & community storytelling',
+    bullets: [
+      'Monthly HudPost bilingual features highlighting cultural impact and neighborhood roots.',
+      'Street shoots and reels showcasing Bergenline energy and authentic client stories.',
+      'Partnerships with local schools, churches, and arts programs to boost referrals.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'Automated follow-up flows with segmented SMS + WhatsApp outreach.',
+      'Review engine prompting English + Spanish testimonials with QR support.',
+      'Scorecard segmenting results by language, service line, and repeat visits.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '+138%', description: 'Increase in appointments for a Union City wellness clinic after bilingual automation launch.' },
+  { stat: '88', description: 'New five-star reviews gathered in two months for a Bergenline retailer.' },
+  { stat: '3.2x', description: 'Growth in Instagram engagement for a local arts hub using Arugami content calendar.' },
+  { stat: '24/7', description: 'Availability of AI receptionist handling English + Spanish inquiries.' },
+];
+
+const faq = [
+  {
+    question: 'Can you manage English and Spanish outreach end to end?',
+    answer:
+      'Yes. We craft bilingual landing pages, ads, SMS/WhatsApp flows, and AI responses so every Bergenline customer feels understood.',
+  },
+  {
+    question: 'How fast can we start seeing leads from automation?',
+    answer:
+      'Within the first month we launch the AI receptionist and nurture flows. Most Union City clients see faster reply times and new appointments within the first 30 days.',
+  },
+  {
+    question: 'Do you coordinate HudPost stories for our neighborhood?',
+    answer:
+      'Absolutely. We plan a bilingual HudPost feature every month to celebrate your team, community programs, and customer wins.',
+  },
+];
+
+const schema = {
+  name: 'Arugami — Union City Growth Partner',
+  description: intro,
+  areaServed: 'Union City, NJ',
+};
+
+const closing = {
+  title: 'Let Union City hear and feel your brand.',
+  subtitle: 'We will build bilingual foundations, secure HudPost storytelling, and automate every follow-up.',
+  ctaLabel: 'Start your Union City audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <LocationPage
+      hero={hero}
+      intro={intro}
+      neighborhoods={neighborhoods}
+      strategy={strategy}
+      proof={proof}
+      galleryImage="/images/culture/culture-algorithm-lifestyle@2x.jpg"
+      galleryAlt="Union City lifestyle shoot with Arugami branding"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

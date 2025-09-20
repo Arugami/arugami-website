@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const title = "Arugami Insights — Hudson County Growth Playbooks";
+const description = "Guides, playbooks, and results breakdowns for Hudson County local businesses covering foundations, HudPost media, and AI smart employee tactics.";
+
+const modules = import.meta.glob('./*.md', { eager: true });
+
+const posts = Object.values(modules)
+  .map((mod: any) => mod)
+  .sort((a, b) => {
+    const dateA = new Date(a.frontmatter?.date ?? 0).getTime();
+    const dateB = new Date(b.frontmatter?.date ?? 0).getTime();
+    return dateB - dateA;
+  });
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-flex rounded-full bg-arugami-yellow/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark">Insights</span>
+        <h1 class="mt-4 text-4xl font-black tracking-tight">Playbooks for hustlers who run Hudson County.</h1>
+        <p class="mt-4 text-lg text-arugami-dark/70">We publish what works — foundation checklists, automation scripts, and local media strategies your team can execute today.</p>
+      </div>
+    </section>
+
+    <section class="py-16 bg-white">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-6">
+        {posts.map((post) => (
+          <article class="overflow-hidden rounded-3xl border border-arugami-dark/10 bg-white shadow-[0_16px_32px_rgba(54,54,54,0.06)] transition hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(54,54,54,0.12)]">
+            {post.frontmatter.heroImage && (
+              <img src={post.frontmatter.heroImage} loading="lazy" decoding="async" alt={post.frontmatter.title} class="h-48 w-full object-cover" />
+            )}
+            <div class="p-6">
+              <p class="text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark/60">
+                {post.frontmatter.date && <time datetime={post.frontmatter.date}>{new Date(post.frontmatter.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>}
+              </p>
+              <h2 class="mt-3 text-2xl font-black text-arugami-dark">{post.frontmatter.title}</h2>
+              <p class="mt-3 text-sm text-arugami-dark/70">{post.frontmatter.description}</p>
+              <a href={post.url} class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-arugami-pink">Read the playbook →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="py-16 bg-soft-gray">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-black tracking-tight">Get the next playbook first.</h2>
+        <p class="mt-3 text-lg text-arugami-dark/70">Drop your email and we’ll send the monthly Hudson County growth memo before it hits the site.</p>
+        <form class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center" aria-label="Subscribe to Arugami insights">
+          <label class="sr-only" for="insights-email">Email address</label>
+          <input id="insights-email" type="email" placeholder="you@hudsonbusiness.com" class="w-full max-w-md rounded-full border border-arugami-dark/10 px-4 py-3 text-sm text-arugami-dark placeholder:text-arugami-dark/50 focus:border-arugami-pink focus:outline-none" />
+          <button type="submit" class="inline-flex items-center justify-center rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_18px_40px_rgba(255,51,153,0.35)] transition hover:bg-arugami-yellow hover:text-arugami-dark">Join the list</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

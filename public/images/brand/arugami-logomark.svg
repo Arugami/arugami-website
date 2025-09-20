@@ -1,0 +1,6 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Arugami logomark</title>
+  <desc id="desc">Lowercase letter a in bright pink with a green dot above the bowl</desc>
+  <circle cx="710" cy="210" r="110" fill="#5fe385" />
+  <path d="M357 150c156 0 259 71 259 276v365h-171v-83c-38 67-111 104-217 104-170 0-288-110-288-287 0-178 120-287 288-287 87 0 150 27 188 70v-158c0-19 8-26 26-26h115v26c-55 0-115 0-115 0s0 0 0 0c0 0 0 0 0 0zM209 523c0 80 55 135 138 135 87 0 139-52 139-135 0-83-52-135-139-135-82 0-138 55-138 135z" fill="#ff3399" />
+</svg>

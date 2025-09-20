@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ServicePage from '../components/templates/ServicePage.astro';
+
+const title = "Home Services Marketing Hudson County | Arugami";
+const description = "Arugami keeps Hudson County home service pros first in line. Foundation-first websites, 24/7 response automations, HudPost authority, and review machines for trades.";
+
+const hero = {
+  kicker: 'Home & field heroes',
+  title: 'Answer every call. Book more jobs.',
+  subtitle:
+    'Plumbers, HVAC techs, electricians, and repair shops win when they pick up fast and show proof. We build the foundation and automations so emergencies route straight to you.',
+  image: '/images/culture/culture-stranger-ads-squad@2x.jpg',
+  alt: 'Home service team in Arugami gear during a production shoot',
+  stats: [
+    { value: '0', label: 'Missed emergency calls after AI text-back launch' },
+    { value: '+310%', label: 'Increase in map pack impressions within 60 days' },
+    { value: '4.8⭐', label: 'Average rating across service roster' },
+  ],
+  primaryCta: { href: '/contact', label: 'Talk to a Hudson County expert' },
+  secondaryCta: { href: '/contact', label: 'Show me what you’d fix' },
+};
+
+const intro =
+  'When a boiler fails or a car won’t start, homeowners choose whoever answers first, proves they are legit, and shows real reviews. Most service pros still rely on patchy Facebook replies and ignored voicemails. We fix that in the first month.';
+
+const painPoints = [
+  {
+    title: 'Leads slipping through the cracks',
+    description: 'Calls roll to voicemail, DMs stack up overnight, and dispatch cannot follow-up fast enough.',
+  },
+  {
+    title: 'Map pack invisibility',
+    description: 'Inconsistent NAP data, few photos, and no keyword-rich updates bury your listing.',
+    accent: 'green',
+  },
+  {
+    title: 'Thin proof of quality',
+    description: 'Happy customers forget to leave reviews, leaving prospects unsure who to trust.',
+    accent: 'yellow',
+  },
+];
+
+const playbook = [
+  {
+    title: 'Phase 1 · Digital foundation',
+    bullets: [
+      'Launch a conversion-first site with service menus, financing info, and instant contact options.',
+      'Fix Google Business Profile, citations, and photo cadence for every municipality you serve.',
+      'Pipe phone, SMS, chat, and form leads into a single CRM queue with routing rules.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · HudPost + neighborhood proof',
+    bullets: [
+      'Secure quarterly HudPost features highlighting transformation jobs and community involvement.',
+      'Capture before/after photography + reels that feel like your crew, not stock footage.',
+      'Publish bilingual maintenance tips that build trust across Jersey City, Union City, and Bayonne.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'AI dispatcher texts missed calls instantly, books jobs, and handles after-hours triage.',
+      'Automated review requests with QR cards and drip sequences until feedback is posted.',
+      'Service reminders and membership renewal flows that keep trucks busy year round.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  { stat: '3.4x', description: 'Job volume growth for a Bayonne HVAC trio after foundation rebuild + HudPost credibility.' },
+  { stat: '118', description: 'New Google reviews in 90 days for a Jersey City auto shop using Arugami review engine.' },
+  { stat: '22%', description: 'Decrease in dispatch labor hours once AI handled inbound screening and scheduling.' },
+  { stat: '$240k', description: 'Additional revenue generated in six months from nurture flows and maintenance plans.' },
+];
+
+const faq = [
+  {
+    question: 'How fast does the AI dispatcher respond to emergency leads?',
+    answer:
+      'The dispatcher replies within seconds—capturing calls, SMS, webchat, and social DMs—then routes the job to your on-call tech or office staff so no request goes unanswered.',
+  },
+  {
+    question: 'Can you integrate with my existing scheduling or field service software?',
+    answer:
+      'Yes. We connect to popular tools like Jobber, Housecall Pro, ServiceTitan, and more. If you are using a custom system, we map intake fields so data flows into your workflow.',
+  },
+  {
+    question: 'Will my crew know how to trigger review and follow-up automations?',
+    answer:
+      'We provide QR cards, text templates, and simple completion steps so every tech can collect reviews or start nurture flows from their phone before leaving the job site.',
+  },
+];
+
+const schema = {
+  name: 'Arugami Home Services Growth System',
+  description: hero.subtitle,
+  serviceType: 'Home services marketing, HudPost media, AI dispatcher',
+  areaServed: 'Hudson County, NJ',
+};
+
+const closing = {
+  title: 'Keep your crews booked without missing a single call.',
+  subtitle: 'We’ll handle the foundation, HudPost stories, and AI dispatcher so you can focus on the work.',
+  ctaLabel: 'Lock in your audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <ServicePage
+      hero={hero}
+      intro={intro}
+      painPoints={painPoints}
+      playbook={playbook}
+      proof={proof}
+      galleryImage="/images/culture/culture-hudson-runs@2x.jpg"
+      galleryAlt="Home service team in Arugami jackets highlighting Hudson County pride"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

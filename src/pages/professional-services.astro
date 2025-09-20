@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ServicePage from '../components/templates/ServicePage.astro';
+
+const title = "Professional Services Marketing Hudson County | Arugami";
+const description = "Hudson County growth systems for lawyers, accountants, consultants, and real estate pros. Foundation-first websites, HudPost proof, and AI that books high-value clients.";
+
+const hero = {
+  kicker: 'Professional legends',
+  title: 'Look premium. Earn trust. Book more clients.',
+  subtitle:
+    'Law, finance, healthcare, and real estate teams that work with Arugami respond faster, look sharper, and show proof that converts hesitant leads into high-value clients.',
+  image: '/images/culture/culture-theater-team@2x.jpg',
+  alt: 'Professional services crew reviewing marketing assets in a theater setting',
+  stats: [
+    { value: '44s', label: 'Average reply time after AI receptionist launch' },
+    { value: '+62%', label: 'Increase in booked consultations within 90 days' },
+    { value: '12x', label: 'HudPost spotlights per year guaranteed' },
+  ],
+  primaryCta: { href: '/contact', label: 'Talk to a Hudson County expert' },
+  secondaryCta: { href: '/contact', label: 'Show me what you’d fix' },
+};
+
+const intro =
+  'People shopping for attorneys, accountants, and advisors judge you on polish and speed. If your website feels dated or it takes hours to respond, they move on to the next firm. We rebuild the foundation and automate the follow-up so Hudson County prospects pick you first.';
+
+const painPoints = [
+  {
+    title: 'Outdated credibility signals',
+    description: 'Websites and listings look like 2012, making premium services feel risky despite stellar expertise.',
+  },
+  {
+    title: 'Slow or missed lead response',
+    description: 'Calls roll to voicemail, consultation forms sit unanswered, and referrals go cold before anyone replies.',
+    accent: 'green',
+  },
+  {
+    title: 'Light social proof',
+    description: 'Few reviews and zero local media coverage make it hard for prospects to trust you over Manhattan firms.',
+    accent: 'yellow',
+  },
+];
+
+const playbook = [
+  {
+    title: 'Phase 1 · Digital foundation',
+    bullets: [
+      'Design a conversion-ready site with clear practice areas and bilingual CTAs.',
+      'Optimize Google Business Profile + LinkedIn with consistent proof and booking flows.',
+      'Pipe every lead into CRM + SMS so paralegals and admins never miss a follow-up.',
+    ],
+    accent: 'pink',
+  },
+  {
+    title: 'Phase 2 · Authority & HudPost',
+    bullets: [
+      'Secure monthly HudPost thought-leadership features with persuasive results.',
+      'Produce professional photo/video days that show the team and client experience.',
+      'Publish platform-native content aimed at Jersey City, Hoboken, and Bayonne professionals.',
+    ],
+    accent: 'green',
+  },
+  {
+    title: 'Phase 3 · Smart automation',
+    bullets: [
+      'Deploy AI receptionist that routes leads, sends intake forms, and books consults 24/7.',
+      'Run nurture sequences for prospects, referral partners, and past clients.',
+      'Track revenue-driving scorecard metrics: consultation rate, review velocity, and case value uplift.',
+    ],
+    accent: 'yellow',
+  },
+];
+
+const proof = [
+  {
+    stat: '+88%',
+    description: 'Lift in signed retainers for a Jersey City law firm after new site, HudPost coverage, and AI follow-up.',
+  },
+  {
+    stat: '4.9⭐',
+    description: 'Average rating across Hoboken accounting offices after review engine rollout.',
+  },
+  {
+    stat: '$180k',
+    description: 'Net-new advisory revenue in six months for a Bayonne wealth team leveraging automation drip campaigns.',
+  },
+  {
+    stat: '3x',
+    description: 'Increase in qualified consultation requests once HudPost features were repurposed across social + email.',
+  },
+];
+
+const faq = [
+  {
+    question: 'How quickly can you rebuild our professional foundation?',
+    answer:
+      'We complete the foundation sprint—site refresh, GBP overhaul, CRM intake, and AI receptionist setup—within the first 45 days so your team sees faster replies immediately.',
+  },
+  {
+    question: 'Can you work within compliance and industry regulations?',
+    answer:
+      'Yes. We coordinate with your legal/compliance team, create approved messaging libraries, and train the AI receptionist to stay within required language for legal, financial, or medical services.',
+  },
+  {
+    question: 'Do you support bilingual or multi-office teams?',
+    answer:
+      'We build bilingual content and automations when needed and manage routing rules so inquiries reach the correct office, partner, or assistant instantly.',
+  },
+];
+
+const schema = {
+  name: 'Arugami Professional Services Marketing',
+  description: hero.subtitle,
+  serviceType: 'Professional services marketing, HudPost media, and AI automation',
+  areaServed: 'Hudson County, NJ',
+};
+
+const closing = {
+  title: 'Give Hudson County professionals a reason to choose you first.',
+  subtitle: 'We will rebuild the foundation, script your HudPost debut, and train AI to sound like your sharpest associate.',
+  ctaLabel: 'Schedule your audit',
+  ctaHref: '/contact',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={hero.image}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <ServicePage
+      hero={hero}
+      intro={intro}
+      painPoints={painPoints}
+      playbook={playbook}
+      proof={proof}
+      galleryImage="/images/culture/culture-theater-trio@2x.jpg"
+      galleryAlt="Professional team posing in branded Arugami apparel"
+      closing={closing}
+      faq={faq}
+      schema={schema}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

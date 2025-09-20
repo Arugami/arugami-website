@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = "Arugami Case Studies — Hudson County Businesses Getting Famous";
+const description = "Foundation-first marketing wins across Hudson County: restaurants, salons, home services, and professional firms using Arugami systems.";
+
+const studies = [
+  {
+    title: 'Jersey City Salon Collective',
+    headline: 'From missed calls to a two-week waitlist',
+    metrics: ['44s avg response time', '98 new five-star reviews', 'HudPost feature drove 3x bookings'],
+    excerpt: 'We rebuilt the digital foundation, routed every lead into SMS + CRM, and launched AI follow-up that spoke English + Spanish. HudPost coverage spotlighted the owners and their community programs.',
+  },
+  {
+    title: 'Bayonne HVAC & Home Services',
+    headline: 'Foundation-first approach added $240k in six months',
+    metrics: ['3.4x increase in booked jobs', 'Map pack #1 across five neighborhoods', 'Zero missed emergency calls'],
+    excerpt: 'A new conversion-first site, 24/7 text-back, and QR review kits combined with monthly HudPost education features to dominate local search and referrals.',
+  },
+  {
+    title: 'Hoboken Hospitality Group',
+    headline: 'Full houses every weekend with culture-first content',
+    metrics: ['Weekly social reach +312%', 'Reserved tables up 62%', 'HudPost nightlife column secured monthly'],
+    excerpt: 'We captured authentic rooftop shoots, launched a bilingual content calendar, and activated loyalty automations that brought regulars back twice as often.',
+  },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="bg-arugami-dark text-white py-20">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-flex rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/70">Hudson County proof</span>
+        <h1 class="mt-4 text-4xl font-black tracking-tight">We track the results that put customers through the door.</h1>
+        <p class="mt-5 text-lg text-white/70">Every project starts with a foundation sprint, locks in HudPost visibility, then layers AI that behaves like your top employee. Here’s what that actually looks like.</p>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {studies.map((study, idx) => (
+          <article class="overflow-hidden rounded-3xl border border-arugami-dark/10 bg-white shadow-[0_20px_40px_rgba(54,54,54,0.08)]">
+            <div class={`grid gap-8 p-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] ${idx % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+              <div class="space-y-4">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.2em] text-arugami-dark/60">{study.title}</h2>
+                <p class="text-3xl font-black text-arugami-dark">{study.headline}</p>
+                <p class="text-sm text-arugami-dark/70">{study.excerpt}</p>
+                <ul class="mt-6 grid gap-3 text-sm text-arugami-dark/80">
+                  {study.metrics.map((metric) => (
+                    <li class="flex items-start gap-3">
+                      <span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-pink"></span>
+                      <span>{metric}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div class="relative overflow-hidden rounded-3xl border border-arugami-pink/20">
+                <img src={idx === 0 ? '/images/culture/culture-theater-team@2x.jpg' : idx === 1 ? '/images/culture/culture-union-city-sunglasses@2x.jpg' : '/images/culture/culture-stranger-ads-squad@2x.jpg'} width="1600" height="1700" loading="lazy" decoding="async" alt={`Arugami case study visual for ${study.title}`} class="h-full w-full object-cover" />
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-black tracking-tight">Want your story to read like this?</h2>
+        <p class="mt-4 text-lg text-arugami-dark/70">We’ll audit your current foundation, capture new culture-forward visuals, and map the HudPost + automation plan that moves revenue.</p>
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="inline-flex items-center gap-3 rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_18px_40px_rgba(255,51,153,0.35)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark">Book a case study consult</a>
+          <a href="/blog" class="inline-flex items-center gap-3 rounded-full border border-arugami-dark/20 px-6 py-3 text-sm font-bold text-arugami-dark/80 transition hover:border-arugami-green hover:text-arugami-dark">Read the latest wins</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = "Terms of Service — Arugami";
+const description = "Terms of service governing Arugami marketing engagements, HudPost media partnership deliverables, and automation systems.";
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="py-16 bg-soft-gray">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-black tracking-tight">Terms of Service</h1>
+        <p class="mt-4 text-sm text-arugami-dark/70">Updated: September 18, 2025</p>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-sm text-arugami-dark/75 leading-relaxed">
+        <p>By working with Arugami you agree to the terms below. These terms ensure transparent collaboration and protect the confidentiality of both parties.</p>
+        <ul class="list-disc pl-5 space-y-3">
+          <li><strong class="text-arugami-dark">Scope:</strong> Deliverables are detailed within each project statement of work. Foundation-first tasks occur before advanced campaigns.</li>
+          <li><strong class="text-arugami-dark">Approvals:</strong> Client approvals are required for HudPost stories, brand visuals, and public-facing automation messaging.</li>
+          <li><strong class="text-arugami-dark">Content rights:</strong> Clients retain ownership of brand assets created during the engagement once invoices are paid in full.</li>
+          <li><strong class="text-arugami-dark">Confidentiality:</strong> All shared business data and performance metrics remain confidential and are used solely for campaign execution.</li>
+          <li><strong class="text-arugami-dark">Payment:</strong> Retainers are billed monthly; production intensives require 50% upfront and 50% on delivery.</li>
+          <li><strong class="text-arugami-dark">Cancellation:</strong> Either party may terminate with 30 days written notice. Outstanding work is billed at the hourly rate outlined in the agreement.</li>
+        </ul>
+        <p>Questions? Email <a href="mailto:legal@arugami.com" class="text-arugami-pink font-semibold">legal@arugami.com</a>.</p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

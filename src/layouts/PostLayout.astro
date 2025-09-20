@@ -1,0 +1,57 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const { frontmatter } = Astro.props;
+const {
+  title,
+  description,
+  ogImage = frontmatter.heroImage ?? '/images/culture/culture-rooftop-street-team@2x.jpg',
+  heroImage = '/images/culture/culture-rooftop-street-team@2x.jpg',
+  date,
+  readingTime,
+} = frontmatter;
+
+const publishedDate = date ? new Date(date) : undefined;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-arugami-dark via-black/70 to-arugami-dark"></div>
+        <img src={heroImage} loading="lazy" decoding="async" alt={title} class="absolute inset-0 h-full w-full object-cover opacity-35" />
+      </div>
+      <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-white">
+        <span class="inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/70">Hudson County Insights</span>
+        <h1 class="mt-6 text-4xl sm:text-5xl font-black tracking-tight">{title}</h1>
+        {description && <p class="mt-4 text-lg text-white/80 max-w-3xl">{description}</p>}
+        {(publishedDate || readingTime) && (
+          <p class="mt-6 text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
+            {publishedDate && <time datetime={publishedDate.toISOString()}>{publishedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>}
+            {publishedDate && readingTime ? ' · ' : ''}
+            {readingTime}
+          </p>
+        )}
+      </div>
+    </section>
+
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-6 text-lg leading-relaxed text-arugami-dark/80">
+      <slot />
+    </article>
+
+    <section class="bg-soft-gray py-16">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-black tracking-tight text-arugami-dark">Ready to put this playbook to work?</h2>
+        <p class="mt-4 text-lg text-arugami-dark/70">We can implement the entire foundation-first system for you—HudPost coverage, culture-forward content, and AI that acts like your best employee.</p>
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="inline-flex items-center gap-3 rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_18px_40px_rgba(255,51,153,0.35)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark">Book a foundation audit</a>
+          <a href="/case-studies" class="inline-flex items-center gap-3 rounded-full border border-arugami-dark/20 px-6 py-3 text-sm font-bold text-arugami-dark/80 transition hover:border-arugami-green hover:text-arugami-dark">See Hudson County proof</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

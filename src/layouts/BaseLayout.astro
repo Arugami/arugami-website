@@ -1,0 +1,96 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  keywords?: string[];
+  canonicalURL?: string;
+  ogImage?: string;
+}
+
+const { 
+  title, 
+  description, 
+  keywords = [], 
+  canonicalURL,
+  ogImage = '/images/arugami-og.jpg'
+} = Astro.props;
+
+const fullTitle = title.includes('Arugami') ? title : `${title} | Arugami - Where Local Businesses Get Famous`;
+const currentURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    {canonicalURL ? (
+      <link rel="canonical" href={canonicalURL} />
+    ) : (
+      <link rel="canonical" href={currentURL} />
+    )}
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={currentURL} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={currentURL} />
+    <meta property="twitter:title" content={fullTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(ogImage, Astro.site)} />
+    
+    <!-- Local Business Schema -->
+    <script type="application/ld+json">
+      {
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Arugami",
+          "description": "Hudson County's #1 Local Business Growth Partner - Where Local Businesses Get Famous",
+          "url": "https://arugami.com",
+          "telephone": "+1-555-ARUGAMI",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Jersey City",
+            "addressRegion": "NJ",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "40.7178",
+            "longitude": "-74.0431"
+          },
+          "areaServed": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+              "@type": "GeoCoordinates",
+              "latitude": "40.7178",
+              "longitude": "-74.0431"
+            },
+            "geoRadius": "25000"
+          },
+          "serviceArea": {
+            "@type": "Place",
+            "name": "Hudson County, New Jersey"
+          }
+        })
+      }
+    </script>
+  </head>
+  <body class="min-h-screen bg-white text-gray-900">
+    <slot />
+  </body>
+</html>

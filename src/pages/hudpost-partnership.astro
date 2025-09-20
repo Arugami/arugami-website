@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = "HudPost Partnership — Exclusive Media Advantage with Arugami";
+const description = "Arugami clients receive guaranteed HudPost coverage, local media coaching, and amplification strategies that drive Hudson County results.";
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="bg-white text-arugami-dark">
+    <section class="bg-arugami-dark text-white py-20">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-flex rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/70">HudPost x Arugami</span>
+        <h1 class="mt-4 text-4xl font-black tracking-tight">The only Hudson County agency with guaranteed HudPost coverage.</h1>
+        <p class="mt-5 text-lg text-white/70">We built an exclusive partnership with the county’s largest local publication so your story reaches 200K+ residents every month.</p>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
+        <div class="space-y-6">
+          <h2 class="text-3xl font-black tracking-tight">What the partnership includes</h2>
+          <ul class="space-y-5 text-sm text-arugami-dark/75">
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-pink"></span>Monthly HudPost feature (article, video, or photo essay) produced with our team.</li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-green"></span>Media coaching and interview prep so you speak in results-driven soundbites.</li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-yellow"></span>Repurposing system: we slice HudPost coverage into social clips, ads, and email content the same week it drops.</li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-pink"></span>Backlink + SEO boost from HudPost domain authority, improving your local search rankings.</li>
+          </ul>
+        </div>
+        <div class="relative overflow-hidden rounded-3xl border border-arugami-pink/20 shadow-[0_20px_40px_rgba(255,51,153,0.2)]">
+          <img src="/images/culture/culture-rooftop-sofa-front@2x.jpg" width="1600" height="1712" loading="lazy" decoding="async" alt="HudPost shoot on a rooftop with the Arugami set" class="h-full w-full object-cover" />
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-soft-gray">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
+        <div class="rounded-3xl border border-arugami-dark/10 bg-white p-8 shadow-[0_20px_40px_rgba(54,54,54,0.08)]">
+          <h3 class="text-xl font-black text-arugami-dark">HudPost feature types we run</h3>
+          <ul class="mt-5 space-y-4 text-sm text-arugami-dark/75">
+            <li><span class="font-semibold text-arugami-dark">Local Legends Series</span> — photo-driven spotlights tailored for restaurants, salons, and boutiques.</li>
+            <li><span class="font-semibold text-arugami-dark">Smart Systems Stories</span> — deep dives showing how automation + AI keep you responsive 24/7.</li>
+            <li><span class="font-semibold text-arugami-dark">Community Builders</span> — highlighting sponsorships, workshops, and neighborhood initiatives.</li>
+            <li><span class="font-semibold text-arugami-dark">Foundations First Audits</span> — before/after features for businesses we transform within 60 days.</li>
+          </ul>
+        </div>
+        <div class="space-y-6">
+          <h3 class="text-3xl font-black tracking-tight">Amplify beyond the article</h3>
+          <p class="text-lg text-arugami-dark/70">Our distribution plan turns each feature into a multi-channel campaign.</p>
+          <ul class="space-y-4 text-sm text-arugami-dark/75">
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-green"></span>Promo kit within 48 hours: reels, stories, captions, and email copy.</li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-yellow"></span>Google Business Profile updates with HudPost assets to boost map pack visibility.</li>
+            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-pink"></span>Retargeting audiences built from HudPost traffic for paid campaigns if needed.</li>
+          </ul>
+          <a href="/case-studies" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">See client spotlights →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-black tracking-tight">Let’s plan your first HudPost feature.</h2>
+        <p class="mt-4 text-lg text-arugami-dark/70">We’ll identify the best angle, prep your team, and script the follow-up that turns coverage into real customers.</p>
+        <a href="/contact" class="mt-6 inline-flex items-center gap-3 rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_18px_40px_rgba(255,51,153,0.35)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark">Book a media planning call</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
