@@ -8,6 +8,7 @@ const description = 'Run a 60-second local visibility audit for your restaurant.
 
 const apiBase = import.meta.env.PUBLIC_API_BASE ?? '';
 const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
+const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 ---
 
 <BaseLayout title={pageTitle} description={description}>
@@ -187,9 +188,7 @@ const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
   </main>
   <Footer />
 
-  <script type="application/json" id="grader-config">
-    {JSON.stringify({ apiBase, recaptchaSiteKey })}
-  </script>
+  <script type="application/json" id="grader-config" set:html={configJson}></script>
   <script type="module">
     const configEl = document.getElementById('grader-config');
     const config = configEl ? JSON.parse(configEl.textContent) : {};
