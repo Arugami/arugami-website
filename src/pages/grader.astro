@@ -1,0 +1,457 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = 'Local Visibility Grader — Free Restaurant Audit';
+const description = 'Run a 60-second local visibility audit for your restaurant. See Google profile gaps, review momentum, and website fixes before you talk to a sales rep.';
+
+const apiBase = import.meta.env.PUBLIC_API_BASE ?? '';
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
+---
+
+<BaseLayout title={pageTitle} description={description}>
+  <Header />
+  <main class="bg-slate-950 text-white py-16">
+    <section class="max-w-6xl mx-auto px-6">
+      <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-start">
+        <div class="space-y-6">
+          <span class="inline-flex items-center gap-2 rounded-full bg-pink-500/10 px-4 py-2 text-sm font-semibold text-pink-300">
+            <span class="inline-block h-2 w-2 rounded-full bg-pink-400"></span>
+            Local Visibility Grader
+          </span>
+          <h1 class="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+            Grade your local presence before the dinner rush hits.
+          </h1>
+          <p class="text-lg text-slate-300">
+            Drop your restaurant name and we scan your Google Business Profile, top competitors, reviews, and mobile performance. In under two minutes you get a playbook—with the dollar impact—to fix what is costing you tables.
+          </p>
+          <ul class="grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
+            <li class="flex items-start gap-3">
+              <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-pink-500/20 text-xs font-bold text-pink-200">1</span>
+              <span>We pull your Google profile, photos, reviews, and map rankings.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-pink-500/20 text-xs font-bold text-pink-200">2</span>
+              <span>We stress test your website on mobile and map the fastest local competitors.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-pink-500/20 text-xs font-bold text-pink-200">3</span>
+              <span>You verify with your phone number to unlock the 0–100 score and ROI breakdown.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-pink-500/20 text-xs font-bold text-pink-200">4</span>
+              <span>See the top fixes, expected revenue, and book a call when you are ready.</span>
+            </li>
+          </ul>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-6 text-sm text-slate-200">
+            <p class="font-semibold text-white">What we scan right now</p>
+            <p class="mt-2 text-slate-300">
+              Google Business Profile completeness, reviews, photos, website conversion paths, and mobile performance. SERP ranking and competitor animations land in Sprint 2.
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/10 shadow-xl" id="grader-card">
+          <div class="border-b border-white/10 px-6 py-5">
+            <p class="text-sm font-medium uppercase tracking-[0.2em] text-pink-200">Start your scan</p>
+            <h2 class="mt-1 text-xl font-semibold text-white">Hudson County restaurants get priority processing.</h2>
+          </div>
+          <div class="p-6" id="grader-form-container">
+            <form id="grader-form" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-200" for="businessName">Restaurant name *</label>
+                <input id="businessName" name="businessName" type="text" required placeholder="eg. Ani Ramen Jersey City" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-200" for="city">City</label>
+                <input id="city" name="city" type="text" placeholder="Jersey City" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-200" for="website">Website</label>
+                <input id="website" name="website" type="url" placeholder="https://" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-200" for="cuisine">Cuisine / focus</label>
+                <input id="cuisine" name="cuisine" type="text" placeholder="Filipino brunch" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-200" for="contactName">Your name</label>
+                <input id="contactName" name="contactName" type="text" placeholder="Angel from Bread & Salt" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-200" for="email">Email (optional)</label>
+                <input id="email" name="email" type="email" placeholder="you@restaurant.com" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+              </div>
+              <p class="text-xs text-slate-400">We send the report to your phone—email helps us follow up with more ideas.</p>
+              <button type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Run my free audit</button>
+              <p class="hidden text-xs text-amber-300" id="grader-warning"></p>
+            </form>
+
+            <div id="grader-progress" class="hidden space-y-5">
+              <div class="rounded-xl bg-slate-900/70 p-4">
+                <p class="text-sm font-semibold text-pink-200">Status</p>
+                <p id="progress-status" class="mt-1 text-lg font-semibold text-white">Preparing your scan…</p>
+                <p id="progress-subtitle" class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">We queue your grader in Hudson County</p>
+              </div>
+              <ol class="space-y-3 text-sm" id="progress-steps">
+                <li data-step="queued" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                  <div>
+                    <p class="font-semibold text-white">Queued</p>
+                    <p class="text-xs text-slate-400">We lock in your spot and prep the Google APIs.</p>
+                  </div>
+                </li>
+                <li data-step="resolving" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                  <div>
+                    <p class="font-semibold text-white">Resolving your listing</p>
+                    <p class="text-xs text-slate-400">Matching your restaurant with Google Business Profile and map data.</p>
+                  </div>
+                </li>
+                <li data-step="details" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                  <div>
+                    <p class="font-semibold text-white">Pulling profile details</p>
+                    <p class="text-xs text-slate-400">Gathering hours, services, photos, and review velocity.</p>
+                  </div>
+                </li>
+                <li data-step="competitors" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                  <div>
+                    <p class="font-semibold text-white">Mapping local competitors</p>
+                    <p class="text-xs text-slate-400">Finding who outranks you and what they do better.</p>
+                  </div>
+                </li>
+                <li data-step="performance" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                  <div>
+                    <p class="font-semibold text-white">Testing mobile speed</p>
+                    <p class="text-xs text-slate-400">Running Google PageSpeed Insights against your website.</p>
+                  </div>
+                </li>
+                <li data-step="scoring" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                  <div>
+                    <p class="font-semibold text-white">Scoring your visibility</p>
+                    <p class="text-xs text-slate-400">Building the 0–100 score, impact estimate, and top fixes.</p>
+                  </div>
+                </li>
+                <li data-step="done" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                  <div>
+                    <p class="font-semibold text-white">Score ready</p>
+                    <p class="text-xs text-slate-400">Verify your phone to unlock the full report.</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <div id="grader-verify" class="hidden space-y-4">
+              <div class="rounded-xl bg-slate-900/70 p-4">
+                <p class="text-sm font-semibold text-pink-200">Verify your phone</p>
+                <p class="mt-1 text-sm text-slate-300">We text a 6-digit code to unlock the full report and dollar impact. No spam—just the playbook.</p>
+              </div>
+              <form id="verify-form" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-200" for="verifyPhone">Phone number *</label>
+                  <input id="verifyPhone" name="phone" type="tel" placeholder="201-555-0123" required class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                </div>
+                <button type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Text me the code</button>
+              </form>
+              <form id="verify-code-form" class="hidden space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-200" for="verifyCode">Enter the 6-digit code</label>
+                  <input id="verifyCode" name="code" type="text" inputmode="numeric" maxlength="6" placeholder="123456" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                </div>
+                <button type="submit" class="w-full rounded-lg bg-green-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-900 transition hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-300">Unlock my report</button>
+              </form>
+              <p class="hidden text-xs text-amber-300" id="verify-warning"></p>
+            </div>
+
+            <div id="grader-result" class="hidden space-y-4 rounded-xl bg-slate-900/70 p-4">
+              <p class="text-sm font-semibold text-pink-200">Report unlocked</p>
+              <p class="text-lg font-semibold text-white" id="result-headline">Your score is loading…</p>
+              <a id="result-link" class="inline-flex items-center gap-2 text-sm font-semibold text-pink-200 underline underline-offset-4" href="#" target="_blank" rel="noopener">
+                View your Local Visibility Report
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                  <path fill-rule="evenodd" d="M5 4a1 1 0 011-1h9a1 1 0 011 1v9a1 1 0 11-2 0V6.414l-8.293 8.293a1 1 0 11-1.414-1.414L12.586 5H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+              </a>
+              <p class="text-xs text-slate-400">Share this link with your team. It expires in 48 hours for your privacy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+
+  <script type="application/json" id="grader-config">
+    {JSON.stringify({ apiBase, recaptchaSiteKey })}
+  </script>
+  <script type="module">
+    const configEl = document.getElementById('grader-config');
+    const config = configEl ? JSON.parse(configEl.textContent) : {};
+    const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : '';
+
+    const form = document.getElementById('grader-form');
+    const warning = document.getElementById('grader-warning');
+    const progressSection = document.getElementById('grader-progress');
+    const stepsList = document.getElementById('progress-steps');
+    const statusEl = document.getElementById('progress-status');
+    const subtitleEl = document.getElementById('progress-subtitle');
+    const verifySection = document.getElementById('grader-verify');
+    const verifyForm = document.getElementById('verify-form');
+    const verifyCodeForm = document.getElementById('verify-code-form');
+    const verifyWarning = document.getElementById('verify-warning');
+    const resultSection = document.getElementById('grader-result');
+    const resultHeadline = document.getElementById('result-headline');
+    const resultLink = document.getElementById('result-link');
+
+    const stepOrder = ['queued', 'resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
+    let scanId = null;
+    let pollInterval = null;
+    let lastStatus = null;
+    let currentPhone = null;
+
+    function toggle(el, show) {
+      if (!el) return;
+      el.classList.toggle('hidden', !show);
+    }
+
+    function setStepStatus(step, completed) {
+      const item = stepsList?.querySelector(`[data-step="${step}"]`);
+      if (!item) return;
+      const indicator = item.querySelector('span');
+      if (indicator) {
+        indicator.classList.toggle('bg-pink-400', completed);
+        indicator.classList.toggle('bg-slate-500', !completed);
+      }
+      item.classList.toggle('border-pink-400', completed);
+    }
+
+    function markSteps(status) {
+      const currentIndex = stepOrder.indexOf(status);
+      stepOrder.forEach((step, index) => {
+        setStepStatus(step, index <= currentIndex);
+      });
+    }
+
+    function updateStatus(status) {
+      const labels = {
+        queued: 'Queued — warming up the APIs',
+        resolving: 'Finding your Google Business Profile…',
+        details: 'Pulling profile details…',
+        competitors: 'Comparing top competitors…',
+        performance: 'Running PageSpeed Insights…',
+        scoring: 'Calculating your score…',
+        done: 'Score ready! Verify your phone to unlock it.',
+        failed: 'We hit a snag. Our team will reach out.'
+      };
+
+      const subtitles = {
+        queued: 'We queue your grader and lock in a short-lived token.',
+        resolving: 'Matching your restaurant and location across Google APIs.',
+        details: 'Checking hours, CTA paths, photos, and menu coverage.',
+        competitors: 'Ranking nearby restaurants to benchmark visibility.',
+        performance: 'Testing mobile speed, responsiveness, and vitals.',
+        scoring: 'Rolling everything into a 0–100 score.',
+        done: 'Verify your phone to view the report and dollar impact.',
+        failed: 'Our Hudson County team will follow up with next steps.'
+      };
+
+      statusEl.textContent = labels[status] ?? 'Working…';
+      subtitleEl.textContent = subtitles[status] ?? '';
+      markSteps(status);
+    }
+
+    async function ensureRecaptchaScript() {
+      if (!config.recaptchaSiteKey) return;
+      if (window.grecaptcha) return;
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = `https://www.google.com/recaptcha/api.js?render=${config.recaptchaSiteKey}`;
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Failed to load reCAPTCHA.'));
+        document.head.appendChild(script);
+      });
+    }
+
+    async function getRecaptchaToken(action) {
+      if (!config.recaptchaSiteKey) {
+        return 'dev-bypass-token';
+      }
+      await ensureRecaptchaScript();
+      return new Promise((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha
+            .execute(config.recaptchaSiteKey, { action })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+    }
+
+    async function pollStatus(id) {
+      if (!apiBase) return;
+      try {
+        const res = await fetch(`${apiBase}/api/scan/${id}`);
+        if (!res.ok) throw new Error('Status request failed');
+        const data = await res.json();
+        if (data.status && data.status !== lastStatus) {
+          lastStatus = data.status;
+          updateStatus(data.status);
+          if (data.status === 'done') {
+            toggle(verifySection, true);
+            toggle(progressSection, true);
+            if (pollInterval) {
+              clearInterval(pollInterval);
+              pollInterval = null;
+            }
+          }
+          if (data.status === 'failed') {
+            if (pollInterval) {
+              clearInterval(pollInterval);
+              pollInterval = null;
+            }
+          }
+        }
+        if (typeof data.score === 'number' && data.status === 'done') {
+          resultHeadline.textContent = `Local Visibility Score: ${data.score}/100`;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (!apiBase) {
+      toggle(form, true);
+      warning.textContent = 'Set PUBLIC_API_BASE in Cloudflare Pages to connect the grader backend.';
+      warning.classList.remove('hidden');
+      form.querySelector('button')?.setAttribute('disabled', 'true');
+    }
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!apiBase) return;
+      warning.classList.add('hidden');
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      let recaptchaToken = null;
+      try {
+        recaptchaToken = await getRecaptchaToken('grader_start');
+      } catch (error) {
+        warning.textContent = 'Could not load reCAPTCHA. Please refresh and try again.';
+        warning.classList.remove('hidden');
+        return;
+      }
+
+      payload.recaptchaToken = recaptchaToken;
+
+      try {
+        const res = await fetch(`${apiBase}/api/scan/start`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const error = await res.json().catch(() => ({}));
+          warning.textContent = error.error === 'recaptcha_failed' ? 'We could not verify you are human. Reload and try again.' : 'Something went wrong starting your scan. Try again.';
+          warning.classList.remove('hidden');
+          return;
+        }
+
+        const data = await res.json();
+        scanId = data.scanId;
+        toggle(form, false);
+        toggle(progressSection, true);
+        updateStatus('queued');
+        markSteps('queued');
+
+        pollInterval = setInterval(() => pollStatus(scanId), 3000);
+        await pollStatus(scanId);
+      } catch (error) {
+        console.error(error);
+        warning.textContent = 'We could not start your scan. Check your connection and try again.';
+        warning.classList.remove('hidden');
+      }
+    });
+
+    verifyForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!apiBase || !scanId) return;
+      verifyWarning.classList.add('hidden');
+
+      const formData = new FormData(verifyForm);
+      const phone = formData.get('phone');
+
+      try {
+        const res = await fetch(`${apiBase}/api/verify/start`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ scanId, phone })
+        });
+
+        if (!res.ok) {
+          verifyWarning.textContent = 'We could not send the code. Double-check the number and try again.';
+          verifyWarning.classList.remove('hidden');
+          return;
+        }
+
+        currentPhone = phone;
+        toggle(verifyCodeForm, true);
+        verifyForm.querySelector('button')?.setAttribute('disabled', 'true');
+      } catch (error) {
+        console.error(error);
+        verifyWarning.textContent = 'Something went wrong sending the code. Try again in a minute.';
+        verifyWarning.classList.remove('hidden');
+      }
+    });
+
+    verifyCodeForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!apiBase || !scanId || !currentPhone) return;
+      verifyWarning.classList.add('hidden');
+
+      const formData = new FormData(verifyCodeForm);
+      const code = formData.get('code');
+
+      try {
+        const res = await fetch(`${apiBase}/api/verify/check`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ scanId, phone: currentPhone, code })
+        });
+
+        if (!res.ok) {
+          verifyWarning.textContent = res.status === 401 ? 'Code not recognized. Request a new code and try again.' : 'Verification failed. Try again shortly.';
+          verifyWarning.classList.remove('hidden');
+          return;
+        }
+
+        const data = await res.json();
+        resultLink.href = data.reportUrl;
+        toggle(resultSection, true);
+        toggle(verifySection, false);
+        if (pollInterval) {
+          clearInterval(pollInterval);
+          pollInterval = null;
+        }
+      } catch (error) {
+        console.error(error);
+        verifyWarning.textContent = 'Unexpected error unlocking the report. Try again or contact us.';
+        verifyWarning.classList.remove('hidden');
+      }
+    });
+  </script>
+</BaseLayout>
