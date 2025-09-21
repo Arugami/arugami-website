@@ -1,0 +1,21 @@
+{
+  "name": "local-visibility-grader-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env --watch src/worker.js",
+    "start": "node src/worker.js"
+  },
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^4.4.1",
+    "@supabase/supabase-js": "^2.47.10",
+    "bullmq": "^5.10.5",
+    "dotenv": "^16.4.7",
+    "node-cache": "^5.1.2",
+    "serpapi": "^1.15.0"
+  }
+}
