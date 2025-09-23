@@ -875,7 +875,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         return;
       }
 
-      if (!apiBase) {
+      const finalApiBase = apiBase || 'https://arugami-website-production.up.railway.app';
+      if (!finalApiBase) {
         const fallback = sampleSuggestions.filter((item) => {
           const label = (item.inputValue ?? item.name ?? '').toLowerCase();
           return label.includes(trimmed.toLowerCase());
@@ -889,7 +890,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
       try {
         searchController = new AbortController();
-        const res = await fetch(`${apiBase}/api/places/search?q=${encodeURIComponent(trimmed)}&limit=8`, {
+        const res = await fetch(`${finalApiBase}/api/places/search?q=${encodeURIComponent(trimmed)}&limit=8`, {
           signal: searchController.signal
         });
         
@@ -1372,12 +1373,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       }
     }
 
-    if (!apiBase) {
-      console.log('No API base found, showing warning');
-      toggle(form, true);
-      warning.textContent = 'API connection unavailable. Please try again later.';
-      warning.classList.remove('hidden');
-      form.querySelector('button')?.setAttribute('disabled', 'true');
+    if (!apiBase || apiBase.trim() === '') {
+      console.log('No API base found, using fallback');
+      // Don't show warning or disable form - let it work with fallback
+      console.log('API base will use fallback URL');
     } else {
       console.log('API base configured:', apiBase);
     }
@@ -1385,7 +1384,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     form?.addEventListener('submit', async (event) => {
       console.log('Form submitted!');
       event.preventDefault();
-      if (!apiBase) {
+      const finalApiBase = apiBase || 'https://arugami-website-production.up.railway.app';
+      if (!finalApiBase) {
         console.log('No API base configured');
         return;
       }
