@@ -938,14 +938,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         const value = businessInput.value ?? '';
         if (value.trim().length >= 2) {
           loadSuggestions(value);
-        } else if (value.trim().length === 0) {
-          // Only show sample suggestions if no API is available
-          if (!apiBase) {
-            renderSuggestions(sampleSuggestions, 'Start typing to find your exact listing.', 'sample', value);
-          }
-        }
+        // Don't show anything on focus with empty input
       });
-
       businessInput.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown' && currentSuggestions.length) {
           event.preventDefault();
