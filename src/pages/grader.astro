@@ -500,9 +500,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
   <script type="application/json" id="grader-config">{configJson}</script>
   <script type="module">
+    console.log('Grader script loading...');
     const configEl = document.getElementById('grader-config');
     const config = configEl ? JSON.parse(configEl.textContent) : {};
     const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : '';
+    console.log('Config loaded:', { apiBase, config });
 
     const form = document.getElementById('grader-form');
     const warning = document.getElementById('grader-warning');
@@ -520,6 +522,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     const businessInput = document.getElementById('businessName');
     const suggestionContainer = document.getElementById('search-suggestions');
     const suggestionList = document.getElementById('search-suggestion-list');
+    console.log('DOM elements found:', { businessInput, suggestionContainer, suggestionList });
     const suggestionHint = document.getElementById('suggestion-hint');
     const suggestionStatus = document.getElementById('suggestion-status');
     const manualTrigger = document.getElementById('manual-trigger');
