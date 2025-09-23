@@ -1,10 +1,19 @@
 import { Worker, QueueEvents, QueueScheduler } from 'bullmq';
-import { Client as MapsClient } from '@googlemaps/google-maps-services-js';
 
 import env from './config.js';
 import { updateScan, insertCompetitors } from './supabase.js';
 
 const queueName = 'local-visibility-scan';
+
+// Log REDIS_URL (masked) and validate presence before connecting
+console.log('Worker REDIS_URL at runtime:', (env.REDIS_URL || '').replace(/\/\/.*@/, '//***@'));
+if (!env.REDIS_URL) {
+  throw new Error('Missing REDIS_URL environment variable');
+}
+
+if (!env.GOOGLE_MAPS_API_KEY) {
+  throw new Error('Missing GOOGLE_MAPS_API_KEY environment variable');
+}
 
 const queueScheduler = new QueueScheduler(queueName, {
   connection: {
@@ -20,7 +29,119 @@ const queueEvents = new QueueEvents(queueName, {
 });
 await queueEvents.waitUntilReady();
 
-const mapsClient = new MapsClient({});
+const PLACES_API_BASE = 'https://places.googleapis.com/v1';
+
+function normalizeAddressComponents(components) {
+  if (!Array.isArray(components)) return [];
+  return components.map((component) => ({
+    long_name: component.long_name ?? component.longText ?? null,
+    short_name: component.short_name ?? component.shortText ?? null,
+    types: component.types ?? []
+  }));
+}
+
+function extractPlaceId(resource) {
+  if (!resource) return null;
+  if (resource.id) return resource.id;
+  if (typeof resource.name === 'string') {
+    const parts = resource.name.split('/');
+    return parts[parts.length - 1];
+  }
+  return null;
+}
+
+function normalizePlaceDetails(details) {
+  if (!details) return {};
+  const latitude = details.location?.latitude;
+  const longitude = details.location?.longitude;
+
+  return {
+    place_id: extractPlaceId(details),
+    name: details.displayName?.text ?? details.displayName ?? null,
+    formatted_address: details.formattedAddress ?? null,
+    formatted_phone_number: details.nationalPhoneNumber ?? details.formattedPhoneNumber ?? null,
+    international_phone_number: details.internationalPhoneNumber ?? null,
+    website: details.websiteUri ?? details.website ?? null,
+    url: details.googleMapsUri ?? details.url ?? null,
+    address_components: normalizeAddressComponents(details.addressComponents),
+    types: details.types ?? [],
+    rating: details.rating ?? null,
+    user_ratings_total: details.userRatingCount ?? null,
+    price_level: details.priceLevel ?? null,
+    opening_hours: details.regularOpeningHours
+      ? {
+          periods: details.regularOpeningHours.periods ?? null,
+          weekday_text: details.regularOpeningHours.weekdayDescriptions ?? []
+        }
+      : null,
+    reservable: details.reservable ?? null,
+    delivery: details.delivery ?? null,
+    photos: details.photos ?? [],
+    geometry:
+      typeof latitude === 'number' && typeof longitude === 'number'
+        ? { location: { lat: latitude, lng: longitude } }
+        : undefined,
+    editorial_summary: details.editorialSummary
+      ? {
+          overview: details.editorialSummary.overview ?? null,
+          review: details.editorialSummary.review ?? null
+        }
+      : null
+  };
+}
+
+function normalizeNearbyPlace(place) {
+  if (!place) return null;
+  return {
+    place_id: extractPlaceId(place),
+    name: place.displayName?.text ?? place.displayName ?? null,
+    rating: place.rating ?? null,
+    user_ratings_total: place.userRatingCount ?? null,
+    distance_m: place.distanceMeters ?? null
+  };
+}
+
+async function callPlacesApi(endpoint, { method = 'GET', body, query, fieldMask } = {}, signal) {
+  const url = new URL(`${PLACES_API_BASE}/${endpoint}`);
+  if (query) {
+    for (const [key, value] of Object.entries(query)) {
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(key, String(value));
+      }
+    }
+  }
+
+  const headers = {
+    'X-Goog-Api-Key': env.GOOGLE_MAPS_API_KEY
+  };
+
+  if (fieldMask) {
+    headers['X-Goog-FieldMask'] = fieldMask;
+  }
+
+  const init = {
+    method,
+    headers,
+    signal
+  };
+
+  if (body) {
+    headers['Content-Type'] = 'application/json';
+    init.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(url, init);
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error('Google Places API request failed');
+    error.status = response.status;
+    error.detail = payload;
+    throw error;
+  }
+
+  return payload;
+}
 
 function parseBusinessInput(raw) {
   if (!raw) return {};
@@ -35,49 +156,66 @@ async function resolvePlace(businessInput) {
   const queryParts = [businessInput.businessName, businessInput.city].filter(Boolean);
   const query = queryParts.join(', ');
 
-  const response = await mapsClient.textSearch({
-    params: {
-      query,
-      key: env.GOOGLE_MAPS_API_KEY
+  if (!query) return null;
+
+  const payload = await callPlacesApi('places:searchText', {
+    method: 'POST',
+    fieldMask: 'places.id,places.displayName,places.formattedAddress,places.location',
+    body: {
+      textQuery: query,
+      regionCode: 'US',
+      languageCode: 'en',
+      maxResultCount: 3
     }
   });
 
-  const place = response.data.results?.[0];
+  const place = payload.places?.[0];
   if (!place) {
     return null;
   }
 
   return {
-    placeId: place.place_id,
-    lat: place.geometry?.location?.lat ?? null,
-    lng: place.geometry?.location?.lng ?? null,
-    formattedAddress: place.formatted_address ?? null
+    placeId: extractPlaceId(place),
+    lat: place.location?.latitude ?? null,
+    lng: place.location?.longitude ?? null,
+    formattedAddress: place.formattedAddress ?? null
   };
 }
 
 async function fetchPlaceDetails(placeId) {
-  const response = await mapsClient.placeDetails({
-    params: {
-      place_id: placeId,
-      fields: ['name', 'formatted_address', 'formatted_phone_number', 'international_phone_number', 'website', 'opening_hours', 'rating', 'user_ratings_total', 'price_level', 'types', 'reservable', 'delivery', 'photos', 'editorial_summary'],
-      key: env.GOOGLE_MAPS_API_KEY
-    }
+  const payload = await callPlacesApi(`places/${placeId}`, {
+    fieldMask:
+      'id,displayName,formattedAddress,location,types,rating,userRatingCount,websiteUri,googleMapsUri,nationalPhoneNumber,internationalPhoneNumber,regularOpeningHours,addressComponents,priceLevel,reservable,delivery,photos,editorialSummary'
   });
 
-  return response.data.result;
+  return normalizePlaceDetails(payload);
 }
 
-async function fetchNearbyCompetitors(placeId) {
-  const response = await mapsClient.placeNearby({
-    params: {
-      place_id: placeId,
-      radius: 1500,
-      type: 'restaurant',
-      key: env.GOOGLE_MAPS_API_KEY
+async function fetchNearbyCompetitors({ lat, lng, excludePlaceId }) {
+  if (typeof lat !== 'number' || typeof lng !== 'number') return [];
+
+  const payload = await callPlacesApi('places:searchNearby', {
+    method: 'POST',
+    fieldMask: 'places.id,places.displayName,places.rating,places.userRatingCount,places.distanceMeters',
+    body: {
+      includedTypes: ['restaurant'],
+      maxResultCount: 20,
+      locationRestriction: {
+        circle: {
+          center: {
+            latitude: lat,
+            longitude: lng
+          },
+          radius: 1500
+        }
+      }
     }
   });
 
-  return response.data.results ?? [];
+  const places = Array.isArray(payload.places) ? payload.places : [];
+  return places
+    .map((place) => normalizeNearbyPlace(place))
+    .filter((item) => item && item.place_id && item.place_id !== excludePlaceId);
 }
 
 async function fetchPageSpeedInsights(url) {
@@ -168,11 +306,27 @@ async function processScan(job) {
     return null;
   });
 
+  const detailLat = details?.geometry?.location?.lat ?? null;
+  const detailLng = details?.geometry?.location?.lng ?? null;
+  const resolvedLat = typeof resolved.lat === 'number' ? resolved.lat : detailLat;
+  const resolvedLng = typeof resolved.lng === 'number' ? resolved.lng : detailLng;
+
+  if (resolvedLat !== resolved.lat || resolvedLng !== resolved.lng) {
+    await updateScan(scanId, {
+      lat: resolvedLat,
+      lng: resolvedLng
+    }).catch((error) => console.error('Failed to update coordinates after details', error));
+  }
+
   await updateScan(scanId, {
     status: 'competitors'
   });
 
-  const competitors = await fetchNearbyCompetitors(resolved.placeId).catch((error) => {
+  const competitors = await fetchNearbyCompetitors({
+    lat: resolvedLat,
+    lng: resolvedLng,
+    excludePlaceId: resolved.placeId
+  }).catch((error) => {
     console.error('Failed to fetch competitors', error);
     return [];
   });
