@@ -1,4 +1,4 @@
-import { Worker, QueueEvents, QueueScheduler } from 'bullmq';
+import { Worker, QueueEvents } from 'bullmq';
 
 import env from './config.js';
 import { updateScan, insertCompetitors } from './supabase.js';
@@ -26,13 +26,6 @@ console.log('Environment variables validated successfully');
 
 // Initialize queue components
 async function initializeWorker() {
-  const queueScheduler = new QueueScheduler(queueName, {
-    connection: {
-      url: env.REDIS_URL
-    }
-  });
-  await queueScheduler.waitUntilReady();
-
   const queueEvents = new QueueEvents(queueName, {
     connection: {
       url: env.REDIS_URL
@@ -40,7 +33,7 @@ async function initializeWorker() {
   });
   await queueEvents.waitUntilReady();
 
-  return { queueScheduler, queueEvents };
+  return { queueEvents };
 }
 
 const PLACES_API_BASE = 'https://places.googleapis.com/v1';
@@ -389,7 +382,7 @@ async function startWorker() {
   try {
     console.log('Initializing worker...');
     
-    const { queueScheduler, queueEvents } = await initializeWorker();
+    const { queueEvents } = await initializeWorker();
     console.log('Queue components initialized successfully');
   
   const worker = new Worker(queueName, processScan, {
@@ -423,7 +416,6 @@ async function startWorker() {
   process.on('SIGTERM', async () => {
     console.log('Received SIGTERM, shutting down gracefully...');
     await worker.close();
-    await queueScheduler.close();
     await queueEvents.close();
     process.exit(0);
   });
@@ -431,7 +423,6 @@ async function startWorker() {
   process.on('SIGINT', async () => {
     console.log('Received SIGINT, shutting down gracefully...');
     await worker.close();
-    await queueScheduler.close();
     await queueEvents.close();
     process.exit(0);
   });
