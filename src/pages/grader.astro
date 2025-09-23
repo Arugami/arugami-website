@@ -66,7 +66,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                       type="text"
                       required
                       autocomplete="off"
-                      list="hudson-sample-suggestions"
                       placeholder="eg. Ani Ramen Jersey City"
                       class="w-full rounded-xl border border-white/10 bg-slate-900/80 px-5 py-4 pr-12 text-white placeholder:text-slate-400 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300/50 focus:bg-slate-900 transition-all duration-200 text-base"
                     />
@@ -76,13 +75,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
                     </div>
-                    <datalist id="hudson-sample-suggestions">
-                      <option value="Ani Ramen Jersey City"></option>
-                      <option value="Bread & Salt Jersey City"></option>
-                      <option value="Los Cuernos Jersey City"></option>
-                      <option value="Rumba Cubana Guttenberg"></option>
-                      <option value="The Hutton Jersey City"></option>
-                    </datalist>
                   </div>
                 <div id="search-suggestions" class="mt-3 hidden overflow-hidden rounded-xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur animate-in fade-in slide-in-from-top-2 duration-200">
                   <div class="flex items-center justify-between border-b border-white/5 px-4 py-3">
@@ -92,7 +84,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                         <img src="https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png" alt="Powered by Google" class="h-3" />
                       </a>
                     </div>
-                    <span id="suggestion-status" class="rounded-full border border-pink-400/30 bg-pink-500/10 px-3 py-1 text-xs font-medium text-pink-200 transition-all duration-200">Sample data</span>
+                    <span id="suggestion-status" class="rounded-full border border-slate-400/30 bg-slate-500/10 px-3 py-1 text-xs font-medium text-slate-200 transition-all duration-200">Type to search</span>
                   </div>
                   <ul id="search-suggestion-list" role="listbox" class="max-h-80 overflow-y-auto px-2 py-2"></ul>
                   <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/5 px-4 py-3 text-xs text-slate-400">
@@ -525,53 +517,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     let currentPhone = null;
     let scanStartTime = null;
     let estimatedDuration = 35000; // 35 seconds
-    const sampleSuggestions = [
-      {
-        inputValue: 'Ani Ramen Jersey City',
-        name: 'Ani Ramen',
-        city: 'Jersey City, NJ',
-        neighborhood: 'Newark Ave Arts District',
-        category: 'Ramen · Japanese',
-        website: 'https://aniramen.com',
-        placeId: 'sample-ani'
-      },
-      {
-        inputValue: 'Bread & Salt Jersey City',
-        name: 'Bread & Salt',
-        city: 'Jersey City, NJ',
-        neighborhood: 'The Heights',
-        category: 'Bakery · Italian',
-        website: 'https://breadandsalt.com',
-        placeId: 'sample-bread'
-      },
-      {
-        inputValue: 'Los Cuernos Jersey City',
-        name: 'Los Cuernos',
-        city: 'Jersey City, NJ',
-        neighborhood: 'Harsimus Cove',
-        category: 'Mexican · Cantina',
-        website: 'https://loscuernos.com',
-        placeId: 'sample-cuernos'
-      },
-      {
-        inputValue: 'Rumba Cubana Guttenberg',
-        name: 'Rumba Cubana',
-        city: 'Guttenberg, NJ',
-        neighborhood: 'Bergenline Avenue',
-        category: 'Cuban · Cocktails',
-        website: 'https://rumbacubanarestaurant.com',
-        placeId: 'sample-rumba'
-      },
-      {
-        inputValue: 'The Hutton Jersey City',
-        name: 'The Hutton',
-        city: 'Jersey City, NJ',
-        neighborhood: 'Heights Riverview',
-        category: 'Gastropub · Brunch',
-        website: 'https://thehuttonjc.com',
-        placeId: 'sample-hutton'
-      }
-    ];
+    const sampleSuggestions = [];
     let suggestionTimeout = null;
     let currentSuggestions = [];
     let activeSuggestionIndex = -1;
@@ -640,13 +586,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         suggestionStatus.textContent = 'Searching…';
         showSearchSpinner();
       } else {
-        suggestionStatus.classList.add('bg-pink-500/15', 'text-pink-200', 'border-pink-400/40');
-        suggestionStatus.textContent = 'Sample data';
+        suggestionStatus.classList.add('bg-slate-800/80', 'text-slate-200', 'border-white/10');
+        suggestionStatus.textContent = 'Type to search';
         hideSearchSpinner();
       }
     }
 
-    updateSuggestionStatus('sample');
+    updateSuggestionStatus('empty');
     
     // Initialize suggestions on page load - only show when focused
     // Don't show sample suggestions immediately
@@ -662,7 +608,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         suggestionHint.textContent = 'Start typing to find your exact listing.';
       }
       if (!preserveStatus) {
-        updateSuggestionStatus('sample');
+        updateSuggestionStatus('empty');
       }
       currentSuggestions = [];
       activeSuggestionIndex = -1;

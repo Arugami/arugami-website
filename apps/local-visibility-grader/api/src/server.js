@@ -348,9 +348,9 @@ fastify.get(
     const apiKey = env.GOOGLE_MAPS_API_KEY;
 
     if (!apiKey) {
-      return reply.status(200).send({
-        results: SAMPLE_PLACES.slice(0, limit),
-        fallback: true
+      return reply.status(503).send({
+        error: 'service_unavailable',
+        message: 'Search service is temporarily unavailable. Please try again later.'
       });
     }
 
@@ -403,7 +403,7 @@ fastify.get(
       const finalResults = mapped.slice(0, limit);
 
       if (!finalResults.length) {
-        return reply.status(200).send({ results: SAMPLE_PLACES.slice(0, limit), fallback: true });
+        return reply.status(200).send({ results: [], fallback: false });
       }
 
       return reply.status(200).send({ results: finalResults, fallback: false });
