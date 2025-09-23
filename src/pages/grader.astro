@@ -53,18 +53,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
           </div>
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-sm" id="grader-card">
-          <div class="border-b border-white/10 px-6 py-6">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-pink-500/20">
-                <svg class="h-5 w-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <p class="text-sm font-medium uppercase tracking-[0.2em] text-pink-200">Start your scan</p>
-            </div>
-            <h2 class="text-xl font-semibold text-white leading-tight">Hudson County restaurants get priority processing.</h2>
-          </div>
+        <div class="rounded-2xl border border-white/10 bg-white/5 shadow-xl" id="grader-card">
           <div class="p-6" id="grader-form-container">
             <form id="grader-form" class="space-y-6">
               <div class="space-y-3">
@@ -108,13 +97,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                   <ul id="search-suggestion-list" role="listbox" class="max-h-80 overflow-y-auto px-2 py-2"></ul>
                   <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/5 px-4 py-3 text-xs text-slate-400">
                     <span id="suggestion-hint">Start typing to find your exact listing.</span>
-                    <button type="button" id="manual-trigger" class="inline-flex items-center gap-1 text-xs font-medium text-pink-300 hover:text-pink-200 focus:outline-none focus:ring-1 focus:ring-pink-300 transition-colors duration-150">
-                      <span>Can't find it? Add details manually.</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5">
-                        <path fill-rule="evenodd" d="M10.22 3.22a.75.75 0 011.06 0l5.5 5.5a.75.75 0 010 1.06l-5.5 5.5a.75.75 0 11-1.06-1.06L14.94 10l-4.72-4.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
-                        <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h11.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
-                      </svg>
-                    </button>
                   </div>
                 </div>
 
@@ -125,36 +107,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                 </ul>
               </div>
 
-              <div class="rounded-xl border border-white/10 bg-slate-900/70 p-4 text-xs text-slate-400">
-                <p class="text-sm font-semibold text-white">We only use public data until you verify ownership.</p>
-                <p class="mt-1">If we can’t match your spot, open the drawer below and drop in the details.</p>
-                <details id="manual-intake" class="mt-3 rounded-lg border border-white/5 bg-slate-950/60 p-3">
-                  <summary class="cursor-pointer text-sm font-semibold text-pink-200">Add details manually</summary>
-                  <div class="mt-3 grid gap-3 text-sm text-slate-200 sm:grid-cols-2">
-                    <div>
-                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="city">City</label>
-                      <input id="city" name="city" type="text" placeholder="Jersey City" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-                    </div>
-                    <div>
-                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="website">Website</label>
-                      <input id="website" name="website" type="url" placeholder="https://" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-                    </div>
-                    <div>
-                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="cuisine">Cuisine / focus</label>
-                      <input id="cuisine" name="cuisine" type="text" placeholder="Filipino brunch" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-                    </div>
-                    <div>
-                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="contactName">Your name</label>
-                      <input id="contactName" name="contactName" type="text" placeholder="Angel from Bread & Salt" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-                    </div>
-                    <div class="sm:col-span-2">
-                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="email">Email (optional)</label>
-                      <input id="email" name="email" type="email" placeholder="you@restaurant.com" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-                      <p class="mt-1 text-xs text-slate-500">Email helps us send the full Hudson County playbook after your scan.</p>
-                    </div>
-                  </div>
-                </details>
-              </div>
 
               <input type="hidden" name="placeId" id="placeId" />
 
@@ -1423,7 +1375,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     if (!apiBase) {
       console.log('No API base found, showing warning');
       toggle(form, true);
-      warning.textContent = 'Set PUBLIC_API_BASE in Cloudflare Pages to connect the grader backend.';
+      warning.textContent = 'API connection unavailable. Please try again later.';
       warning.classList.remove('hidden');
       form.querySelector('button')?.setAttribute('disabled', 'true');
     } else {
@@ -1440,11 +1392,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       hideSuggestions(true);
       warning.classList.add('hidden');
 
-      const manualOpen = manualIntake?.open ?? false;
-      const hasPlaceSelection = Boolean(placeIdInput && placeIdInput.value.trim().length > 0);
-
-      if (!manualOpen && !hasPlaceSelection) {
-        warning.textContent = 'Select your restaurant from the list before running the scan.';
+      const businessName = businessInput?.value?.trim();
+      if (!businessName || businessName.length < 2) {
+        warning.textContent = 'Please enter your restaurant name.';
         warning.classList.remove('hidden');
         businessInput?.focus({ preventScroll: true });
         return;
