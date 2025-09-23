@@ -754,15 +754,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         button.className = 'group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-left transition hover:border-pink-400/40 hover:bg-pink-500/10 focus:border-pink-400/60 focus:bg-pink-500/15 focus:outline-none';
         button.dataset.suggestionIndex = String(index);
 
-        const avatar = document.createElement('div');
-        avatar.className = 'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-slate-800 text-sm font-semibold text-pink-200 transition group-hover:bg-pink-500/20 group-hover:text-pink-100';
-        avatar.textContent = getInitials(displayName);
-        button.appendChild(avatar);
-
         const content = document.createElement('div');
-        content.className = 'flex-1 min-w-0';
+        content.className = 'flex-1 min-w-0 px-2';
         const title = document.createElement('p');
-        title.className = 'truncate text-sm font-semibold text-white';
+        title.className = 'text-sm font-medium text-white';
         if (highlightRegex) {
           const parts = displayName.split(highlightRegex);
           parts.forEach((part, partIndex) => {
@@ -779,23 +774,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         }
         content.appendChild(title);
 
+        // Only show location, no categories or badges
         const metaPieces = [item.neighborhood, item.city].filter(Boolean);
-        if (metaPieces.length || item.category) {
-          const metaWrap = document.createElement('div');
-          metaWrap.className = 'mt-1 flex flex-wrap items-center gap-2';
-          if (metaPieces.length) {
-            const meta = document.createElement('span');
-            meta.className = 'text-xs text-slate-400';
-            meta.textContent = metaPieces.join(' • ');
-            metaWrap.appendChild(meta);
-          }
-          if (item.category) {
-            const badge = document.createElement('span');
-            badge.className = 'rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[0.65rem] uppercase tracking-[0.25em] text-slate-300';
-            badge.textContent = item.category;
-            metaWrap.appendChild(badge);
-          }
-          content.appendChild(metaWrap);
+        if (metaPieces.length) {
+          const meta = document.createElement('p');
+          meta.className = 'text-xs text-slate-400 mt-0.5';
+          meta.textContent = metaPieces.join(' • ');
+          content.appendChild(meta);
         }
 
         button.appendChild(content);
@@ -1334,10 +1319,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     }
 
     if (!apiBase) {
+      console.log('No API base found, showing warning');
       toggle(form, true);
       warning.textContent = 'Set PUBLIC_API_BASE in Cloudflare Pages to connect the grader backend.';
       warning.classList.remove('hidden');
       form.querySelector('button')?.setAttribute('disabled', 'true');
+    } else {
+      console.log('API base configured:', apiBase);
     }
 
     form?.addEventListener('submit', async (event) => {
