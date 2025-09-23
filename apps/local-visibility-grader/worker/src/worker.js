@@ -15,19 +15,24 @@ if (!env.GOOGLE_MAPS_API_KEY) {
   throw new Error('Missing GOOGLE_MAPS_API_KEY environment variable');
 }
 
-const queueScheduler = new QueueScheduler(queueName, {
-  connection: {
-    url: env.REDIS_URL
-  }
-});
-await queueScheduler.waitUntilReady();
+// Initialize queue components
+async function initializeWorker() {
+  const queueScheduler = new QueueScheduler(queueName, {
+    connection: {
+      url: env.REDIS_URL
+    }
+  });
+  await queueScheduler.waitUntilReady();
 
-const queueEvents = new QueueEvents(queueName, {
-  connection: {
-    url: env.REDIS_URL
-  }
-});
-await queueEvents.waitUntilReady();
+  const queueEvents = new QueueEvents(queueName, {
+    connection: {
+      url: env.REDIS_URL
+    }
+  });
+  await queueEvents.waitUntilReady();
+
+  return { queueScheduler, queueEvents };
+}
 
 const PLACES_API_BASE = 'https://places.googleapis.com/v1';
 
@@ -370,27 +375,59 @@ async function processScan(job) {
   });
 }
 
-const worker = new Worker(queueName, processScan, {
-  connection: {
-    url: env.REDIS_URL
-  },
-  concurrency: env.concurrency
-});
+// Start the worker
+async function startWorker() {
+  console.log('Initializing worker...');
+  
+  const { queueScheduler, queueEvents } = await initializeWorker();
+  
+  const worker = new Worker(queueName, processScan, {
+    connection: {
+      url: env.REDIS_URL
+    },
+    concurrency: env.concurrency
+  });
 
-worker.on('completed', (job) => {
-  console.log(`[scan:${job.id}] completed`);
-});
+  worker.on('completed', (job) => {
+    console.log(`[scan:${job.id}] completed`);
+  });
 
-worker.on('failed', async (job, error) => {
-  console.error(`[scan:${job?.id}] failed`, error);
-  if (job?.data?.scanId) {
-    await updateScan(job.data.scanId, {
-      status: 'failed',
-      issues_json: [{ key: 'unexpected_error', label: 'We hit a snag while grading. Our team has been notified.' }]
-    }).catch((err) => console.error('Failed to mark scan failed', err));
-  }
-});
+  worker.on('failed', async (job, error) => {
+    console.error(`[scan:${job?.id}] failed`, error);
+    if (job?.data?.scanId) {
+      await updateScan(job.data.scanId, {
+        status: 'failed',
+        issues_json: [{ key: 'unexpected_error', label: 'We hit a snag while grading. Our team has been notified.' }]
+      }).catch((err) => console.error('Failed to mark scan failed', err));
+    }
+  });
 
-queueEvents.on('waiting', ({ jobId }) => {
-  console.log(`[scan:${jobId}] queued`);
+  queueEvents.on('waiting', ({ jobId }) => {
+    console.log(`[scan:${jobId}] queued`);
+  });
+
+  console.log('Worker started successfully');
+  
+  // Handle graceful shutdown
+  process.on('SIGTERM', async () => {
+    console.log('Received SIGTERM, shutting down gracefully...');
+    await worker.close();
+    await queueScheduler.close();
+    await queueEvents.close();
+    process.exit(0);
+  });
+
+  process.on('SIGINT', async () => {
+    console.log('Received SIGINT, shutting down gracefully...');
+    await worker.close();
+    await queueScheduler.close();
+    await queueEvents.close();
+    process.exit(0);
+  });
+}
+
+// Start the worker
+startWorker().catch((error) => {
+  console.error('Failed to start worker:', error);
+  process.exit(1);
 });

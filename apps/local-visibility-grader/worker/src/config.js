@@ -1,7 +1,14 @@
-if (process.env.NODE_ENV !== 'production') {
-  await import('dotenv/config');
-}
 import { z } from 'zod';
+
+// Load dotenv in non-production environments
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    const dotenv = await import('dotenv');
+    dotenv.config();
+  } catch (error) {
+    console.warn('Failed to load dotenv:', error.message);
+  }
+}
 
 const envSchema = z.object({
   REDIS_URL: z.string().url(),
