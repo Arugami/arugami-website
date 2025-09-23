@@ -1,4 +1,6 @@
-import 'dotenv/config';
+if (process.env.NODE_ENV !== 'production') {
+  await import('dotenv/config');
+}
 import { z } from 'zod';
 
 const bool = (value) => value === 'true' || value === '1';

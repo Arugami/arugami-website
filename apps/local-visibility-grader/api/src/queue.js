@@ -3,6 +3,13 @@ import env from './config.js';
 
 const queueName = 'local-visibility-scan';
 
+// Add logging to verify Redis URL at runtime
+console.log('REDIS_URL at runtime:', (env.REDIS_URL || '').replace(/\/\/.*@/, '//***@'));
+
+if (!env.REDIS_URL) {
+  throw new Error('Missing REDIS_URL environment variable');
+}
+
 export const scanQueue = new Queue(queueName, {
   connection: {
     url: env.REDIS_URL

@@ -59,96 +59,208 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
             <h2 class="mt-1 text-xl font-semibold text-white">Hudson County restaurants get priority processing.</h2>
           </div>
           <div class="p-6" id="grader-form-container">
-            <form id="grader-form" class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-slate-200" for="businessName">Restaurant name *</label>
-                <input id="businessName" name="businessName" type="text" required placeholder="eg. Ani Ramen Jersey City" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+            <form id="grader-form" class="space-y-6">
+              <div class="space-y-3">
+                <label class="block text-sm font-semibold text-white" for="businessName">What’s your restaurant called? *</label>
+                <div>
+                  <div class="relative">
+                    <input
+                      id="businessName"
+                      name="businessName"
+                      type="text"
+                      required
+                      autocomplete="off"
+                      list="hudson-sample-suggestions"
+                      placeholder="eg. Ani Ramen Jersey City"
+                      class="w-full rounded-xl border border-white/10 bg-slate-900 px-5 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                    />
+                    <datalist id="hudson-sample-suggestions">
+                      <option value="Ani Ramen Jersey City"></option>
+                      <option value="Bread & Salt Jersey City"></option>
+                      <option value="Los Cuernos Jersey City"></option>
+                      <option value="Rumba Cubana Guttenberg"></option>
+                      <option value="The Hutton Jersey City"></option>
+                    </datalist>
+                  </div>
+                <div id="search-suggestions" class="mt-2 hidden overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur">
+                  <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                    <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Hudson County restaurants</p>
+                    <span id="suggestion-status" class="rounded-full border border-pink-400/40 bg-pink-500/15 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.25em] text-pink-200">Sample data</span>
+                  </div>
+                  <ul id="search-suggestion-list" role="listbox" class="max-h-64 space-y-1 overflow-y-auto px-2 py-3"></ul>
+                  <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 px-4 py-3 text-xs text-slate-400">
+                    <span id="suggestion-hint">Start typing to find your exact listing.</span>
+                    <button type="button" id="manual-trigger" class="inline-flex items-center gap-1 text-xs font-semibold text-pink-200 hover:text-pink-100 focus:outline-none focus:ring-1 focus:ring-pink-300">
+                      <span>Can’t find it? Add details manually.</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
+                        <path fill-rule="evenodd" d="M10.22 3.22a.75.75 0 011.06 0l5.5 5.5a.75.75 0 010 1.06l-5.5 5.5a.75.75 0 11-1.06-1.06L14.94 10l-4.72-4.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h11.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <ul class="grid gap-2 rounded-xl border border-white/10 bg-slate-900/70 p-4 text-xs text-slate-300 sm:grid-cols-3">
+                  <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Live GBP screenshots</li>
+                  <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Hudson competitor map</li>
+                  <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Fix-it playbook in 2 minutes</li>
+                </ul>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-200" for="city">City</label>
-                <input id="city" name="city" type="text" placeholder="Jersey City" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+
+              <div class="rounded-xl border border-white/10 bg-slate-900/70 p-4 text-xs text-slate-400">
+                <p class="text-sm font-semibold text-white">We only use public data until you verify ownership.</p>
+                <p class="mt-1">If we can’t match your spot, open the drawer below and drop in the details.</p>
+                <details id="manual-intake" class="mt-3 rounded-lg border border-white/5 bg-slate-950/60 p-3">
+                  <summary class="cursor-pointer text-sm font-semibold text-pink-200">Add details manually</summary>
+                  <div class="mt-3 grid gap-3 text-sm text-slate-200 sm:grid-cols-2">
+                    <div>
+                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="city">City</label>
+                      <input id="city" name="city" type="text" placeholder="Jersey City" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="website">Website</label>
+                      <input id="website" name="website" type="url" placeholder="https://" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="cuisine">Cuisine / focus</label>
+                      <input id="cuisine" name="cuisine" type="text" placeholder="Filipino brunch" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="contactName">Your name</label>
+                      <input id="contactName" name="contactName" type="text" placeholder="Angel from Bread & Salt" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                    </div>
+                    <div class="sm:col-span-2">
+                      <label class="block text-xs uppercase tracking-[0.15em] text-slate-400" for="email">Email (optional)</label>
+                      <input id="email" name="email" type="email" placeholder="you@restaurant.com" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-2 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                      <p class="mt-1 text-xs text-slate-500">Email helps us send the full Hudson County playbook after your scan.</p>
+                    </div>
+                  </div>
+                </details>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-200" for="website">Website</label>
-                <input id="website" name="website" type="url" placeholder="https://" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-200" for="cuisine">Cuisine / focus</label>
-                <input id="cuisine" name="cuisine" type="text" placeholder="Filipino brunch" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-200" for="contactName">Your name</label>
-                <input id="contactName" name="contactName" type="text" placeholder="Angel from Bread & Salt" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-200" for="email">Email (optional)</label>
-                <input id="email" name="email" type="email" placeholder="you@restaurant.com" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
-              </div>
-              <p class="text-xs text-slate-400">We send the report to your phone—email helps us follow up with more ideas.</p>
+
+              <input type="hidden" name="placeId" id="placeId" />
+
               <button type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Run my free audit</button>
               <p class="hidden text-xs text-amber-300" id="grader-warning"></p>
             </form>
 
-            <div id="grader-progress" class="hidden space-y-5">
-              <div class="rounded-xl bg-slate-900/70 p-4">
+            <div id="grader-progress" class="hidden space-y-6">
+              <div class="rounded-xl bg-slate-900/70 p-5">
                 <p class="text-sm font-semibold text-pink-200">Status</p>
                 <p id="progress-status" class="mt-1 text-lg font-semibold text-white">Preparing your scan…</p>
                 <p id="progress-subtitle" class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">We queue your grader in Hudson County</p>
               </div>
-              <ol class="space-y-3 text-sm" id="progress-steps">
-                <li data-step="queued" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                  <div>
-                    <p class="font-semibold text-white">Queued</p>
-                    <p class="text-xs text-slate-400">We lock in your spot and prep the Google APIs.</p>
+              <div class="flex flex-col gap-5 lg:flex-row">
+                <div class="space-y-3 lg:w-72" aria-live="polite">
+                  <ol class="space-y-3 text-sm" id="progress-steps">
+                    <li data-step="queued" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                      <div>
+                        <p class="font-semibold text-white">Queued up</p>
+                        <p class="text-xs text-slate-400">Holding your spot and warming the APIs.</p>
+                      </div>
+                    </li>
+                    <li data-step="resolving" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                      <div>
+                        <p class="font-semibold text-white">Matching your restaurant</p>
+                        <p class="text-xs text-slate-400">Cross-checking Google, Yelp, and local directories.</p>
+                      </div>
+                    </li>
+                    <li data-step="details" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                      <div>
+                        <p class="font-semibold text-white">Pulling details</p>
+                        <p class="text-xs text-slate-400">Hours, menu links, call-to-actions, and photos.</p>
+                      </div>
+                    </li>
+                    <li data-step="competitors" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                      <div>
+                        <p class="font-semibold text-white">Sizing competitors</p>
+                        <p class="text-xs text-slate-400">Mapping top spots in Hudson County for your cuisine.</p>
+                      </div>
+                    </li>
+                    <li data-step="performance" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                      <div>
+                        <p class="font-semibold text-white">Testing mobile speed</p>
+                        <p class="text-xs text-slate-400">Running Google PageSpeed Insights against your website.</p>
+                      </div>
+                    </li>
+                    <li data-step="scoring" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                      <div>
+                        <p class="font-semibold text-white">Scoring your visibility</p>
+                        <p class="text-xs text-slate-400">Building the 0–100 score, impact estimate, and top fixes.</p>
+                      </div>
+                    </li>
+                    <li data-step="done" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
+                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
+                      <div>
+                        <p class="font-semibold text-white">Score ready</p>
+                        <p class="text-xs text-slate-400">Verify your phone to unlock the full report.</p>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+                <div class="flex-1 space-y-4" id="progress-previews">
+                  <div data-preview-step="resolving" class="hidden rounded-2xl border border-white/10 bg-slate-900/70 p-4 text-sm text-slate-300">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-pink-200">Google Business Profile</p>
+                        <p class="mt-1 text-base font-semibold text-white">Ani Ramen Jersey City</p>
+                        <p class="text-xs text-slate-400">218 Newark Ave · Open until 11PM · (201) 408-2222</p>
+                      </div>
+                      <span class="rounded-full bg-pink-500/20 px-2 py-1 text-xs font-semibold text-pink-200">Preview</span>
+                    </div>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                      <div class="aspect-[4/3] rounded-xl bg-gradient-to-br from-slate-800 to-slate-900"></div>
+                      <div class="space-y-2 text-xs text-slate-400">
+                        <p>“Best noodles in town. Staff is always friendly.” — 5★ Google review (July)</p>
+                        <p>Latest photo: Posted 3 weeks ago · 1080×1080</p>
+                      </div>
+                    </div>
                   </div>
-                </li>
-                <li data-step="resolving" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                  <div>
-                    <p class="font-semibold text-white">Resolving your listing</p>
-                    <p class="text-xs text-slate-400">Matching your restaurant with Google Business Profile and map data.</p>
+                  <div data-preview-step="competitors" class="hidden rounded-2xl border border-white/10 bg-slate-900/70 p-4 text-sm text-slate-300">
+                    <p class="text-xs uppercase tracking-[0.2em] text-pink-200">Hudson County Rivals</p>
+                    <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                      <div class="rounded-lg border border-white/10 bg-slate-950/80 p-3">
+                        <p class="text-sm font-semibold text-white">Orale Mexican Kitchen</p>
+                        <p class="text-xs text-slate-400">★ 4.6 · 3,012 reviews · 0.4 mi away</p>
+                        <p class="mt-2 text-xs text-slate-500">Owns “late night tacos jersey city” & “mezcal flights jc”.</p>
+                      </div>
+                      <div class="rounded-lg border border-white/10 bg-slate-950/80 p-3">
+                        <p class="text-sm font-semibold text-white">Taqueria Downtown</p>
+                        <p class="text-xs text-slate-400">★ 4.5 · 2,148 reviews · 0.6 mi away</p>
+                        <p class="mt-2 text-xs text-slate-500">Dominates “taco tuesday jersey city”.</p>
+                      </div>
+                    </div>
+                    <div class="mt-3 rounded-lg border border-dashed border-pink-400/40 bg-pink-500/5 px-4 py-3 text-xs text-pink-200">Map your top 3 competitors within a 1 mile radius.</div>
                   </div>
-                </li>
-                <li data-step="details" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                  <div>
-                    <p class="font-semibold text-white">Pulling profile details</p>
-                    <p class="text-xs text-slate-400">Gathering hours, services, photos, and review velocity.</p>
+                  <div data-preview-step="performance" class="hidden rounded-2xl border border-white/10 bg-slate-900/70 p-4 text-sm text-slate-300">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-pink-200">Mobile Speed Scan</p>
+                        <p class="mt-1 text-base font-semibold text-white">PageSpeed score: 48/100</p>
+                        <p class="text-xs text-slate-400">Hero image blocking render for 3.6s. CTA below the fold.</p>
+                      </div>
+                      <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-300">Needs attention</span>
+                    </div>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-[160px_1fr]">
+                      <div class="aspect-[9/19] rounded-xl bg-gradient-to-b from-slate-800 to-slate-900"></div>
+                      <ul class="space-y-2 text-xs text-slate-400">
+                        <li><span class="text-pink-200">•</span> Move “Order now” button above the fold on mobile.</li>
+                        <li><span class="text-pink-200">•</span> Compress hero image to under 250 KB.</li>
+                        <li><span class="text-pink-200">•</span> Add `ReservationAction` schema for Google “Reserve a table” cards.</li>
+                      </ul>
+                    </div>
                   </div>
-                </li>
-                <li data-step="competitors" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                  <div>
-                    <p class="font-semibold text-white">Mapping local competitors</p>
-                    <p class="text-xs text-slate-400">Finding who outranks you and what they do better.</p>
-                  </div>
-                </li>
-                <li data-step="performance" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                  <div>
-                    <p class="font-semibold text-white">Testing mobile speed</p>
-                    <p class="text-xs text-slate-400">Running Google PageSpeed Insights against your website.</p>
-                  </div>
-                </li>
-                <li data-step="scoring" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                  <div>
-                    <p class="font-semibold text-white">Scoring your visibility</p>
-                    <p class="text-xs text-slate-400">Building the 0–100 score, impact estimate, and top fixes.</p>
-                  </div>
-                </li>
-                <li data-step="done" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                  <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                  <div>
-                    <p class="font-semibold text-white">Score ready</p>
-                    <p class="text-xs text-slate-400">Verify your phone to unlock the full report.</p>
-                  </div>
-                </li>
-              </ol>
+                </div>
+              </div>
             </div>
 
-            <div id="grader-verify" class="hidden space-y-4">
+<div id="grader-verify" class="hidden space-y-4">
               <div class="rounded-xl bg-slate-900/70 p-4">
                 <p class="text-sm font-semibold text-pink-200">Verify your phone</p>
                 <p class="mt-1 text-sm text-slate-300">We text a 6-digit code to unlock the full report and dollar impact. No spam—just the playbook.</p>
@@ -170,17 +282,84 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
               <p class="hidden text-xs text-amber-300" id="verify-warning"></p>
             </div>
 
-            <div id="grader-result" class="hidden space-y-4 rounded-xl bg-slate-900/70 p-4">
-              <p class="text-sm font-semibold text-pink-200">Report unlocked</p>
-              <p class="text-lg font-semibold text-white" id="result-headline">Your score is loading…</p>
-              <a id="result-link" class="inline-flex items-center gap-2 text-sm font-semibold text-pink-200 underline underline-offset-4" href="#" target="_blank" rel="noopener">
-                View your Local Visibility Report
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
-                  <path fill-rule="evenodd" d="M5 4a1 1 0 011-1h9a1 1 0 011 1v9a1 1 0 11-2 0V6.414l-8.293 8.293a1 1 0 11-1.414-1.414L12.586 5H6a1 1 0 01-1-1z" clip-rule="evenodd" />
-                </svg>
-              </a>
-              <p class="text-xs text-slate-400">Share this link with your team. It expires in 48 hours for your privacy.</p>
+            <div id="grader-result" class="hidden space-y-6">
+              <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
+                <div class="flex flex-col gap-6 lg:flex-row">
+                  <div class="space-y-4 lg:w-80">
+                    <p class="text-sm font-semibold text-pink-200">Report unlocked</p>
+                    <div class="rounded-2xl border border-white/10 bg-slate-950/70 p-5 text-center">
+                      <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Local Visibility Score</p>
+                      <p id="result-headline" class="mt-2 text-3xl font-semibold text-white">Your score is loading…</p>
+                      <div id="score-meter" class="mx-auto mt-4 flex h-32 w-32 items-center justify-center rounded-full border-4 border-pink-400/60 bg-slate-900 text-3xl font-bold text-pink-200">--</div>
+                      <ul id="score-breakdown" class="mt-4 space-y-2 text-left text-sm text-slate-300">
+                        <li class="flex items-center justify-between"><span>Search results</span><span class="text-pink-200">38 / 100</span></li>
+                        <li class="flex items-center justify-between"><span>Website experience</span><span class="text-pink-200">52 / 100</span></li>
+                        <li class="flex items-center justify-between"><span>Local listings</span><span class="text-pink-200">56 / 100</span></li>
+                      </ul>
+                    </div>
+                    <a id="result-link" class="inline-flex items-center gap-2 rounded-xl border border-pink-400/50 bg-pink-500/10 px-4 py-3 text-sm font-semibold text-pink-200 transition hover:bg-pink-500/20" href="#" target="_blank" rel="noopener">
+                      View your Local Visibility Report
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                        <path fill-rule="evenodd" d="M5 4a1 1 0 011-1h9a1 1 0 011 1v9a1 1 0 11-2 0V6.414l-8.293 8.293a1 1 0 11-1.414-1.414L12.586 5H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                      </svg>
+                    </a>
+                    <p class="text-xs text-slate-400">Share this link with your team. It expires in 48 hours for your privacy.</p>
+                  </div>
+                  <div class="flex-1 space-y-4">
+                    <div class="rounded-2xl border border-white/10 bg-slate-950/70 p-4">
+                      <div class="flex flex-wrap gap-2" role="tablist">
+                        <button type="button" data-evidence-tab="search" class="evidence-tab rounded-full border border-pink-400/40 bg-pink-500/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-pink-200" aria-selected="true">Search</button>
+                        <button type="button" data-evidence-tab="website" class="evidence-tab rounded-full border border-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">Website</button>
+                        <button type="button" data-evidence-tab="reviews" class="evidence-tab rounded-full border border-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">Reviews</button>
+                        <button type="button" data-evidence-tab="automation" class="evidence-tab rounded-full border border-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">Automation</button>
+                      </div>
+                    </div>
+                    <div id="evidence-content" class="space-y-4 rounded-2xl border border-white/10 bg-slate-950/70 p-5 text-sm text-slate-200">
+                      <div data-evidence-panel="search" class="space-y-3">
+                        <p class="text-base font-semibold text-white">Hudson County diners see competitors first.</p>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                          <li>• Google calls you “Mexican Restaurant · Jersey City”. Last photo update: 7 months ago.</li>
+                          <li>• First clicks tonight go to Orale (4.6★ · 3k reviews) and Taqueria Downtown (4.5★ · 2.1k reviews).</li>
+                          <li>• Missing keywords: “late night tacos jersey city”, “rooftop margaritas jersey city”.</li>
+                        </ul>
+                      </div>
+                      <div data-evidence-panel="website" class="hidden space-y-3">
+                        <p class="text-base font-semibold text-white">Mobile visitors bounce before ordering.</p>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                          <li>• PageSpeed mobile score: 48. Hero image blocks render for 3.6s.</li>
+                          <li>• Order button appears after 2 scrolls on mobile. Move it above the fold.</li>
+                          <li>• Add `ReservationAction` schema so Google can surface “Reserve a table”.</li>
+                        </ul>
+                      </div>
+                      <div data-evidence-panel="reviews" class="hidden space-y-3">
+                        <p class="text-base font-semibold text-white">Review freshness is slipping.</p>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                          <li>• Average rating 4.1★ vs Hudson County leaders at 4.6★.</li>
+                          <li>• No new Google reviews in 24 days; Yelp picked up 2 in the last week.</li>
+                          <li>• Top friction keyword: “slow service” (6 mentions in 90 days). Trigger AI inbox alerts.</li>
+                        </ul>
+                      </div>
+                      <div data-evidence-panel="automation" class="hidden space-y-3">
+                        <p class="text-base font-semibold text-white">Follow-up gaps cost repeat covers.</p>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                          <li>• Missed-call text-back not detected. Diners call 1.8× before booking elsewhere.</li>
+                          <li>• No Instagram DM auto-response. Add Arugami Inbox to capture after-hours leads.</li>
+                          <li>• Menu schema missing. Add `Menu` markup to feed Google Restaurant results.</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-4 rounded-2xl border border-white/10 bg-slate-950/70 p-4 text-sm text-slate-200">
+                      <div class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-pink-500 to-purple-600"></div>
+                      <div>
+                        <p class="text-sm font-semibold text-white">Alyssa Garcia · Arugami Strategy</p>
+                        <p class="text-xs text-slate-400">“We’ve run 42 Hudson County audits this summer. The fixes above put tables back in play within 30 days.”</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+</div>
           </div>
         </div>
       </div>
@@ -207,12 +386,504 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     const resultSection = document.getElementById('grader-result');
     const resultHeadline = document.getElementById('result-headline');
     const resultLink = document.getElementById('result-link');
+    const businessInput = document.getElementById('businessName');
+    const suggestionContainer = document.getElementById('search-suggestions');
+    const suggestionList = document.getElementById('search-suggestion-list');
+    const suggestionHint = document.getElementById('suggestion-hint');
+    const suggestionStatus = document.getElementById('suggestion-status');
+    const manualTrigger = document.getElementById('manual-trigger');
+    const manualIntake = document.getElementById('manual-intake');
+    const cityInput = document.getElementById('city');
+    const websiteInput = document.getElementById('website');
+    const placeIdInput = document.getElementById('placeId');
+    const progressPreviews = document.getElementById('progress-previews');
+    const previewCards = progressPreviews ? progressPreviews.querySelectorAll('[data-preview-step]') : [];
+    const scoreMeter = document.getElementById('score-meter');
+    const scoreBreakdown = document.getElementById('score-breakdown');
+    const evidenceTabs = document.querySelectorAll('.evidence-tab');
+    const evidencePanels = document.querySelectorAll('[data-evidence-panel]');
 
     const stepOrder = ['queued', 'resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
     let scanId = null;
     let pollInterval = null;
     let lastStatus = null;
     let currentPhone = null;
+    const sampleSuggestions = [
+      {
+        inputValue: 'Ani Ramen Jersey City',
+        name: 'Ani Ramen',
+        city: 'Jersey City, NJ',
+        neighborhood: 'Newark Ave Arts District',
+        category: 'Ramen · Japanese',
+        website: 'https://aniramen.com',
+        placeId: 'sample-ani'
+      },
+      {
+        inputValue: 'Bread & Salt Jersey City',
+        name: 'Bread & Salt',
+        city: 'Jersey City, NJ',
+        neighborhood: 'The Heights',
+        category: 'Bakery · Italian',
+        website: 'https://breadandsalt.com',
+        placeId: 'sample-bread'
+      },
+      {
+        inputValue: 'Los Cuernos Jersey City',
+        name: 'Los Cuernos',
+        city: 'Jersey City, NJ',
+        neighborhood: 'Harsimus Cove',
+        category: 'Mexican · Cantina',
+        website: 'https://loscuernos.com',
+        placeId: 'sample-cuernos'
+      },
+      {
+        inputValue: 'Rumba Cubana Guttenberg',
+        name: 'Rumba Cubana',
+        city: 'Guttenberg, NJ',
+        neighborhood: 'Bergenline Avenue',
+        category: 'Cuban · Cocktails',
+        website: 'https://rumbacubanarestaurant.com',
+        placeId: 'sample-rumba'
+      },
+      {
+        inputValue: 'The Hutton Jersey City',
+        name: 'The Hutton',
+        city: 'Jersey City, NJ',
+        neighborhood: 'Heights Riverview',
+        category: 'Gastropub · Brunch',
+        website: 'https://thehuttonjc.com',
+        placeId: 'sample-hutton'
+      }
+    ];
+    let suggestionTimeout = null;
+    let currentSuggestions = [];
+    let activeSuggestionIndex = -1;
+    let manualMode = false;
+
+    function getInitials(value) {
+      if (!value) return '??';
+      const words = value.split(/\s+/).filter(Boolean);
+      const first = words[0]?.[0] ?? '';
+      const second = words.length > 1 ? words[words.length - 1]?.[0] : words[0]?.[1] ?? '';
+      return `${first}${second}`.toUpperCase();
+    }
+
+    function formatCategory(value) {
+      if (!value) return '';
+      return value
+        .toString()
+        .replace(/_/g, ' ')
+        .trim()
+        .replace(/([a-z])/g, (match) => match.toUpperCase());
+    }
+
+    function escapeRegExp(value) {
+      return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function updateSuggestionStatus(state) {
+      if (!suggestionStatus) return;
+      suggestionStatus.classList.remove(
+        'bg-pink-500/15',
+        'text-pink-200',
+        'border-pink-400/40',
+        'bg-green-500/15',
+        'text-green-200',
+        'border-green-400/40',
+        'bg-amber-500/10',
+        'text-amber-200',
+        'border-amber-400/30',
+        'bg-slate-800/80',
+        'text-slate-200',
+        'border-white/10'
+      );
+
+      if (state === 'live') {
+        suggestionStatus.classList.add('bg-green-500/15', 'text-green-200', 'border-green-400/40');
+        suggestionStatus.textContent = 'Live data';
+      } else if (state === 'empty') {
+        suggestionStatus.classList.add('bg-amber-500/10', 'text-amber-200', 'border-amber-400/30');
+        suggestionStatus.textContent = 'No matches';
+      } else if (state === 'loading') {
+        suggestionStatus.classList.add('bg-slate-800/80', 'text-slate-200', 'border-white/10');
+        suggestionStatus.textContent = 'Searching…';
+      } else {
+        suggestionStatus.classList.add('bg-pink-500/15', 'text-pink-200', 'border-pink-400/40');
+        suggestionStatus.textContent = 'Sample data';
+      }
+    }
+
+    updateSuggestionStatus('sample');
+
+    function hideSuggestions(preserveStatus = false) {
+      if (suggestionContainer) {
+        suggestionContainer.classList.add('hidden');
+      }
+      if (suggestionList) {
+        suggestionList.innerHTML = '';
+      }
+      if (suggestionHint && !preserveStatus) {
+        suggestionHint.textContent = 'Start typing to find your exact listing.';
+      }
+      if (!preserveStatus) {
+        updateSuggestionStatus('sample');
+      }
+      currentSuggestions = [];
+      activeSuggestionIndex = -1;
+    }
+
+    function applySuggestion(suggestion) {
+      if (!suggestion) return;
+      if (businessInput) {
+        businessInput.value = suggestion.inputValue ?? suggestion.name ?? '';
+      }
+      if (cityInput && suggestion.city) {
+        cityInput.value = suggestion.city;
+      }
+      if (websiteInput && suggestion.website) {
+        websiteInput.value = suggestion.website;
+      }
+      if (placeIdInput && suggestion.placeId) {
+        placeIdInput.value = suggestion.placeId;
+      }
+      manualMode = false;
+      if (manualIntake) {
+        manualIntake.open = false;
+      }
+      if (suggestionHint) {
+        suggestionHint.textContent = 'We’ll scan this listing next.';
+      }
+      updateSuggestionStatus(suggestion.placeId ? 'live' : 'sample');
+      setActiveSuggestion(-1);
+      if (businessInput) {
+        businessInput.focus({ preventScroll: true });
+      }
+      hideSuggestions(true);
+    }
+
+    function renderSuggestions(items, hint, state = 'sample', query = '') {
+      if (!suggestionContainer || !suggestionList) return;
+      currentSuggestions = Array.isArray(items)
+        ? items.filter((item) => item && (item.name || item.inputValue))
+        : [];
+      activeSuggestionIndex = -1;
+      suggestionList.innerHTML = '';
+
+      const trimmedQuery = query.trim();
+      const highlightRegex = trimmedQuery ? new RegExp(`(${escapeRegExp(trimmedQuery)})`, 'ig') : null;
+
+      if (!currentSuggestions.length) {
+        const empty = document.createElement('li');
+        empty.className = 'list-none rounded-xl border border-white/5 bg-slate-900/70 px-4 py-4 text-xs text-slate-400';
+        empty.textContent = 'No matches yet. Add details manually below.';
+        suggestionList.appendChild(empty);
+        suggestionContainer.classList.remove('hidden');
+        if (suggestionHint) {
+          suggestionHint.textContent = 'No matches yet—add details manually below.';
+        }
+        updateSuggestionStatus(state === 'loading' ? 'loading' : 'empty');
+        return;
+      }
+
+      currentSuggestions.forEach((item, index) => {
+        const displayName = item.name ?? item.inputValue ?? '';
+        const li = document.createElement('li');
+        li.className = 'list-none';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-left transition hover:border-pink-400/40 hover:bg-pink-500/10 focus:border-pink-400/60 focus:bg-pink-500/15 focus:outline-none';
+        button.dataset.suggestionIndex = String(index);
+
+        const avatar = document.createElement('div');
+        avatar.className = 'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-slate-800 text-sm font-semibold text-pink-200 transition group-hover:bg-pink-500/20 group-hover:text-pink-100';
+        avatar.textContent = getInitials(displayName);
+        button.appendChild(avatar);
+
+        const content = document.createElement('div');
+        content.className = 'flex-1 min-w-0';
+        const title = document.createElement('p');
+        title.className = 'truncate text-sm font-semibold text-white';
+        if (highlightRegex) {
+          const parts = displayName.split(highlightRegex);
+          parts.forEach((part, partIndex) => {
+            if (!part) return;
+            const span = document.createElement('span');
+            if (trimmedQuery && partIndex % 2 === 1) {
+              span.className = 'text-pink-200';
+            }
+            span.textContent = part;
+            title.appendChild(span);
+          });
+        } else {
+          title.textContent = displayName;
+        }
+        content.appendChild(title);
+
+        const metaPieces = [item.neighborhood, item.city].filter(Boolean);
+        if (metaPieces.length || item.category) {
+          const metaWrap = document.createElement('div');
+          metaWrap.className = 'mt-1 flex flex-wrap items-center gap-2';
+          if (metaPieces.length) {
+            const meta = document.createElement('span');
+            meta.className = 'text-xs text-slate-400';
+            meta.textContent = metaPieces.join(' • ');
+            metaWrap.appendChild(meta);
+          }
+          if (item.category) {
+            const badge = document.createElement('span');
+            badge.className = 'rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[0.65rem] uppercase tracking-[0.25em] text-slate-300';
+            badge.textContent = item.category;
+            metaWrap.appendChild(badge);
+          }
+          content.appendChild(metaWrap);
+        }
+
+        button.appendChild(content);
+
+        const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        chevron.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        chevron.setAttribute('viewBox', '0 0 20 20');
+        chevron.classList.add('h-4', 'w-4', 'text-pink-200', 'transition', 'group-hover:translate-x-1');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('fill-rule', 'evenodd');
+        path.setAttribute('clip-rule', 'evenodd');
+        path.setAttribute('d', 'M7.293 4.293a1 1 0 011.414 0L13.414 9l-4.707 4.707a1 1 0 01-1.414-1.414L10.586 9 7.293 5.707a1 1 0 010-1.414z');
+        chevron.appendChild(path);
+        button.appendChild(chevron);
+
+        button.addEventListener('mouseenter', () => setActiveSuggestion(index));
+        button.addEventListener('focus', () => setActiveSuggestion(index));
+        button.addEventListener('click', () => applySuggestion(item));
+
+        li.appendChild(button);
+        suggestionList.appendChild(li);
+      });
+
+      if (suggestionHint) {
+        suggestionHint.textContent = hint ?? 'Select your restaurant to speed up the scan.';
+      }
+      updateSuggestionStatus(state);
+      suggestionContainer.classList.remove('hidden');
+      setActiveSuggestion(state === 'empty' ? -1 : 0);
+      suggestionList.scrollTop = 0;
+    }
+
+    function setActiveSuggestion(index) {
+      if (!suggestionList) return;
+      const buttons = suggestionList.querySelectorAll('[data-suggestion-index]');
+      if (!buttons.length) {
+        activeSuggestionIndex = -1;
+        return;
+      }
+
+      if (index < 0) {
+        activeSuggestionIndex = -1;
+        buttons.forEach((button) => {
+          button.classList.remove('border-pink-400/60', 'bg-pink-500/15');
+          button.classList.add('border-transparent');
+        });
+        return;
+      }
+
+      const maxIndex = buttons.length - 1;
+      const nextIndex = Math.max(0, Math.min(index, maxIndex));
+      activeSuggestionIndex = nextIndex;
+      buttons.forEach((button, idx) => {
+        if (idx === activeSuggestionIndex) {
+          button.classList.add('border-pink-400/60', 'bg-pink-500/15');
+          button.classList.remove('border-transparent');
+        } else {
+          button.classList.remove('border-pink-400/60', 'bg-pink-500/15');
+          button.classList.add('border-transparent');
+        }
+      });
+    }
+
+    async function loadSuggestions(query) {
+      const trimmed = query.trim();
+      if (placeIdInput) {
+        placeIdInput.value = '';
+      }
+      manualMode = false;
+      if (manualIntake) {
+        manualIntake.open = false;
+      }
+
+      if (trimmed.length === 0) {
+        renderSuggestions(sampleSuggestions, 'Start typing to find your exact listing.', 'sample', trimmed);
+        return;
+      }
+
+      if (!apiBase) {
+        const fallback = sampleSuggestions.filter((item) => {
+          const label = (item.inputValue ?? item.name ?? '').toLowerCase();
+          return label.includes(trimmed.toLowerCase());
+        });
+        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample Hudson County matches', 'sample', trimmed);
+        return;
+      }
+
+      updateSuggestionStatus('loading');
+      if (suggestionHint) {
+        suggestionHint.textContent = 'Searching Hudson County listings…';
+      }
+
+      try {
+        const res = await fetch(`${apiBase}/api/places/search?q=${encodeURIComponent(trimmed)}&limit=6`);
+        if (!res.ok) throw new Error('Suggestion lookup failed');
+        const data = await res.json();
+
+        if (Array.isArray(data?.results) && data.results.length) {
+          const state = data.fallback ? 'sample' : 'live';
+          const hint = data.fallback ? 'Sample Hudson County matches' : 'Live data from Google and local directories';
+          renderSuggestions(data.results, hint, state, trimmed);
+        } else {
+          renderSuggestions([], 'No matches yet—add details manually below.', 'empty', trimmed);
+        }
+      } catch (error) {
+        console.error(error);
+        const fallback = sampleSuggestions.filter((item) => {
+          const label = (item.inputValue ?? item.name ?? '').toLowerCase();
+          return label.includes(trimmed.toLowerCase());
+        });
+        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample Hudson County matches', 'sample', trimmed);
+      }
+    }
+
+    function activateEvidenceTab(target) {
+      if (!target) return;
+      evidenceTabs.forEach((btn) => {
+        const value = btn.getAttribute('data-evidence-tab');
+        const isActive = value === target;
+        if (isActive) {
+          btn.classList.add('border-pink-400/40', 'bg-pink-500/15', 'text-pink-200');
+          btn.classList.remove('border-white/10', 'text-slate-200');
+          btn.setAttribute('aria-selected', 'true');
+        } else {
+          btn.classList.add('border-white/10', 'text-slate-200');
+          btn.classList.remove('border-pink-400/40', 'bg-pink-500/15', 'text-pink-200');
+          btn.setAttribute('aria-selected', 'false');
+        }
+      });
+      evidencePanels.forEach((panel) => {
+        const value = panel.getAttribute('data-evidence-panel');
+        panel.classList.toggle('hidden', value !== target);
+      });
+    }
+
+    evidenceTabs.forEach((btn) => {
+      btn.addEventListener('click', () => activateEvidenceTab(btn.getAttribute('data-evidence-tab')));
+    });
+    if (evidenceTabs.length) {
+      activateEvidenceTab('search');
+    }
+
+    if (businessInput) {
+      businessInput.addEventListener('input', (event) => {
+        const value = event.target.value ?? '';
+        if (suggestionTimeout) {
+          clearTimeout(suggestionTimeout);
+        }
+        manualMode = false;
+        setActiveSuggestion(-1);
+        suggestionTimeout = window.setTimeout(() => loadSuggestions(value), 200);
+      });
+
+      businessInput.addEventListener('focus', () => {
+        const value = businessInput.value ?? '';
+        renderSuggestions(sampleSuggestions, 'Start typing to find your exact listing.', 'sample', value);
+        if (apiBase && value.trim().length >= 1) {
+          loadSuggestions(value);
+        }
+      });
+
+      businessInput.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown' && currentSuggestions.length) {
+          event.preventDefault();
+          const nextIndex = activeSuggestionIndex >= currentSuggestions.length - 1 || activeSuggestionIndex < 0
+            ? 0
+            : activeSuggestionIndex + 1;
+          setActiveSuggestion(nextIndex);
+          return;
+        }
+        if (event.key === 'ArrowUp' && currentSuggestions.length) {
+          event.preventDefault();
+          const nextIndex = activeSuggestionIndex <= 0
+            ? currentSuggestions.length - 1
+            : activeSuggestionIndex - 1;
+          setActiveSuggestion(nextIndex);
+          return;
+        }
+        if (event.key === 'Enter') {
+          if (!manualMode && currentSuggestions.length && activeSuggestionIndex >= 0) {
+            event.preventDefault();
+            const selected = currentSuggestions[activeSuggestionIndex];
+            if (selected) {
+              applySuggestion(selected);
+            }
+            return;
+          }
+        }
+        if (event.key === 'Escape') {
+          hideSuggestions();
+        }
+      });
+
+      businessInput.addEventListener('change', () => {
+        const value = businessInput.value?.trim().toLowerCase() ?? '';
+        if (!value) return;
+        const match = currentSuggestions.find((item) => (item.inputValue ?? item.name ?? '').toLowerCase() === value)
+          ?? sampleSuggestions.find((item) => (item.inputValue ?? item.name ?? '').toLowerCase() === value);
+        if (match) {
+          applySuggestion(match);
+        }
+      });
+    }
+
+    manualTrigger?.addEventListener('click', () => {
+      if (manualIntake) {
+        manualIntake.open = true;
+        manualIntake.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const manualInput = manualIntake.querySelector('input');
+        manualInput?.focus({ preventScroll: true });
+      }
+      manualMode = true;
+      if (placeIdInput) {
+        placeIdInput.value = '';
+      }
+      if (suggestionHint) {
+        suggestionHint.textContent = 'Drop your details below and we’ll still guide the scan.';
+      }
+      hideSuggestions();
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!suggestionContainer || !businessInput) return;
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (target === businessInput) return;
+      if (suggestionContainer.contains(target)) return;
+      hideSuggestions();
+    });
+
+    manualIntake?.addEventListener('toggle', () => {
+      manualMode = manualIntake.open;
+      if (manualMode) {
+        if (placeIdInput) {
+          placeIdInput.value = '';
+        }
+        hideSuggestions();
+      }
+    });
+
+    manualIntake?.querySelectorAll('input').forEach((input) => {
+      input.addEventListener('input', () => {
+        manualMode = true;
+        if (placeIdInput) {
+          placeIdInput.value = '';
+        }
+      });
+    });
 
     function toggle(el, show) {
       if (!el) return;
@@ -230,11 +901,32 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       item.classList.toggle('border-pink-400', completed);
     }
 
+    function revealPreviews(currentIndex) {
+      if (!previewCards || previewCards.length === 0) return;
+      previewCards.forEach((card) => {
+        const step = card.getAttribute('data-preview-step');
+        const stepIndex = stepOrder.indexOf(step ?? '');
+        if (stepIndex !== -1 && stepIndex <= currentIndex) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
     function markSteps(status) {
       const currentIndex = stepOrder.indexOf(status);
       stepOrder.forEach((step, index) => {
         setStepStatus(step, index <= currentIndex);
       });
+      revealPreviews(currentIndex);
+    }
+
+    function describeScore(score) {
+      if (score >= 85) return 'Excellent';
+      if (score >= 70) return 'Solid';
+      if (score >= 50) return 'Needs Work';
+      return 'Foundation at Risk';
     }
 
     function updateStatus(status) {
@@ -318,7 +1010,26 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
           }
         }
         if (typeof data.score === 'number' && data.status === 'done') {
-          resultHeadline.textContent = `Local Visibility Score: ${data.score}/100`;
+          const label = describeScore(data.score);
+          resultHeadline.textContent = `${data.score}/100 — ${label}`;
+          if (scoreMeter) {
+            scoreMeter.textContent = data.score;
+          }
+        }
+        if (Array.isArray(data.breakdown) && data.breakdown.length && scoreBreakdown) {
+          scoreBreakdown.innerHTML = '';
+          data.breakdown.forEach((item) => {
+            if (!item) return;
+            const li = document.createElement('li');
+            li.className = 'flex items-center justify-between';
+            const label = document.createElement('span');
+            label.textContent = item.label ?? item.name ?? 'Category';
+            const value = document.createElement('span');
+            value.className = 'text-pink-200';
+            value.textContent = typeof item.score === 'number' ? `${item.score} / 100` : item.value ?? '';
+            li.append(label, value);
+            scoreBreakdown.appendChild(li);
+          });
         }
       } catch (error) {
         console.error(error);
@@ -335,7 +1046,18 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     form?.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!apiBase) return;
+      hideSuggestions(true);
       warning.classList.add('hidden');
+
+      const manualOpen = manualIntake?.open ?? false;
+      const hasPlaceSelection = Boolean(placeIdInput && placeIdInput.value.trim().length > 0);
+
+      if (!manualOpen && !hasPlaceSelection) {
+        warning.textContent = 'Select your restaurant from the list before running the scan.';
+        warning.classList.remove('hidden');
+        businessInput?.focus({ preventScroll: true });
+        return;
+      }
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
