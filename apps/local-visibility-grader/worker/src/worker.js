@@ -5,15 +5,24 @@ import { updateScan, insertCompetitors } from './supabase.js';
 
 const queueName = 'local-visibility-scan';
 
+// Log environment info for debugging
+console.log('Worker starting up...');
+console.log('Node version:', process.version);
+console.log('Environment:', process.env.NODE_ENV || 'development');
+
 // Log REDIS_URL (masked) and validate presence before connecting
 console.log('Worker REDIS_URL at runtime:', (env.REDIS_URL || '').replace(/\/\/.*@/, '//***@'));
 if (!env.REDIS_URL) {
+  console.error('REDIS_URL is missing or empty');
   throw new Error('Missing REDIS_URL environment variable');
 }
 
 if (!env.GOOGLE_MAPS_API_KEY) {
+  console.error('GOOGLE_MAPS_API_KEY is missing or empty');
   throw new Error('Missing GOOGLE_MAPS_API_KEY environment variable');
 }
+
+console.log('Environment variables validated successfully');
 
 // Initialize queue components
 async function initializeWorker() {
@@ -377,9 +386,11 @@ async function processScan(job) {
 
 // Start the worker
 async function startWorker() {
-  console.log('Initializing worker...');
-  
-  const { queueScheduler, queueEvents } = await initializeWorker();
+  try {
+    console.log('Initializing worker...');
+    
+    const { queueScheduler, queueEvents } = await initializeWorker();
+    console.log('Queue components initialized successfully');
   
   const worker = new Worker(queueName, processScan, {
     connection: {
@@ -424,6 +435,12 @@ async function startWorker() {
     await queueEvents.close();
     process.exit(0);
   });
+  
+  } catch (error) {
+    console.error('Failed to start worker:', error);
+    console.error('Error stack:', error.stack);
+    process.exit(1);
+  }
 }
 
 // Start the worker
