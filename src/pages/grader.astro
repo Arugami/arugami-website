@@ -704,7 +704,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     }
 
     function renderSuggestions(items, hint, state = 'sample', query = '') {
-      if (!suggestionContainer || !suggestionList) return;
+      console.log('renderSuggestions called', { items, hint, state, query });
+      if (!suggestionContainer || !suggestionList) {
+        console.log('Missing elements:', { suggestionContainer, suggestionList });
+        return;
+      }
       currentSuggestions = Array.isArray(items)
         ? items.filter((item) => item && (item.name || item.inputValue))
         : [];
@@ -806,6 +810,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       }
       updateSuggestionStatus(state);
       suggestionContainer.classList.remove('hidden');
+      console.log('Showing suggestions container, hidden class removed');
       setActiveSuggestion(state === 'empty' ? -1 : 0);
       suggestionList.scrollTop = 0;
     }
@@ -932,6 +937,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       });
 
       businessInput.addEventListener('focus', () => {
+        console.log('Input focused, showing suggestions');
         const value = businessInput.value ?? '';
         renderSuggestions(sampleSuggestions, 'Start typing to find your exact listing.', 'sample', value);
         if (apiBase && value.trim().length >= 1) {
