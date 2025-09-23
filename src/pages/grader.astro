@@ -72,8 +72,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                       autocomplete="off"
                       list="hudson-sample-suggestions"
                       placeholder="eg. Ani Ramen Jersey City"
-                      class="w-full rounded-xl border border-white/10 bg-slate-900 px-5 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                      class="w-full rounded-xl border border-white/10 bg-slate-900 px-5 py-3 pr-12 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all duration-200"
                     />
+                    <div id="search-spinner" class="absolute right-3 top-1/2 -translate-y-1/2 hidden">
+                      <svg class="h-5 w-5 animate-spin text-pink-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </div>
                     <datalist id="hudson-sample-suggestions">
                       <option value="Ani Ramen Jersey City"></option>
                       <option value="Bread & Salt Jersey City"></option>
@@ -82,7 +88,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                       <option value="The Hutton Jersey City"></option>
                     </datalist>
                   </div>
-                <div id="search-suggestions" class="mt-2 hidden overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur">
+                <div id="search-suggestions" class="mt-2 hidden overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur animate-in fade-in slide-in-from-top-2 duration-200">
                   <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
                     <div class="flex items-center gap-3">
                       <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Business matches</p>
@@ -90,14 +96,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                         <img src="https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png" alt="Powered by Google" class="h-3" />
                       </a>
                     </div>
-                    <span id="suggestion-status" class="rounded-full border border-pink-400/40 bg-pink-500/15 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.25em] text-pink-200">Sample data</span>
+                    <span id="suggestion-status" class="rounded-full border border-pink-400/40 bg-pink-500/15 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.25em] text-pink-200 transition-all duration-200">Sample data</span>
                   </div>
-                  <ul id="search-suggestion-list" role="listbox" class="max-h-64 space-y-1 overflow-y-auto px-2 py-3"></ul>
+                  <ul id="search-suggestion-list" role="listbox" class="max-h-80 space-y-1 overflow-y-auto px-2 py-3 scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-slate-600"></ul>
                   <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 px-4 py-3 text-xs text-slate-400">
                     <span id="suggestion-hint">Start typing to find your exact listing.</span>
-                    <button type="button" id="manual-trigger" class="inline-flex items-center gap-1 text-xs font-semibold text-pink-200 hover:text-pink-100 focus:outline-none focus:ring-1 focus:ring-pink-300">
-                      <span>Can’t find it? Add details manually.</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
+                    <button type="button" id="manual-trigger" class="inline-flex items-center gap-1 text-xs font-semibold text-pink-200 hover:text-pink-100 focus:outline-none focus:ring-1 focus:ring-pink-300 transition-colors duration-150">
+                      <span>Can't find it? Add details manually.</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5">
                         <path fill-rule="evenodd" d="M10.22 3.22a.75.75 0 011.06 0l5.5 5.5a.75.75 0 010 1.06l-5.5 5.5a.75.75 0 11-1.06-1.06L14.94 10l-4.72-4.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
                         <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h11.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
                       </svg>
@@ -535,6 +541,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     console.log('DOM elements found:', { businessInput, suggestionContainer, suggestionList });
     const suggestionHint = document.getElementById('suggestion-hint');
     const suggestionStatus = document.getElementById('suggestion-status');
+    const searchSpinner = document.getElementById('search-spinner');
     const manualTrigger = document.getElementById('manual-trigger');
     const manualIntake = document.getElementById('manual-intake');
     const cityInput = document.getElementById('city');
@@ -631,6 +638,18 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
+    function showSearchSpinner() {
+      if (searchSpinner) {
+        searchSpinner.classList.remove('hidden');
+      }
+    }
+
+    function hideSearchSpinner() {
+      if (searchSpinner) {
+        searchSpinner.classList.add('hidden');
+      }
+    }
+
     function updateSuggestionStatus(state) {
       if (!suggestionStatus) return;
       suggestionStatus.classList.remove(
@@ -651,15 +670,19 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       if (state === 'live') {
         suggestionStatus.classList.add('bg-green-500/15', 'text-green-200', 'border-green-400/40');
         suggestionStatus.textContent = 'Live data';
+        hideSearchSpinner();
       } else if (state === 'empty') {
         suggestionStatus.classList.add('bg-amber-500/10', 'text-amber-200', 'border-amber-400/30');
         suggestionStatus.textContent = 'No matches';
+        hideSearchSpinner();
       } else if (state === 'loading') {
         suggestionStatus.classList.add('bg-slate-800/80', 'text-slate-200', 'border-white/10');
         suggestionStatus.textContent = 'Searching…';
+        showSearchSpinner();
       } else {
         suggestionStatus.classList.add('bg-pink-500/15', 'text-pink-200', 'border-pink-400/40');
         suggestionStatus.textContent = 'Sample data';
+        hideSearchSpinner();
       }
     }
 
@@ -734,12 +757,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
       if (!currentSuggestions.length) {
         const empty = document.createElement('li');
-        empty.className = 'list-none rounded-xl border border-white/5 bg-slate-900/70 px-4 py-4 text-xs text-slate-400';
-        empty.textContent = 'No matches yet. Add details manually below.';
+        empty.className = 'list-none rounded-xl border border-white/5 bg-slate-900/70 px-4 py-4 text-xs text-slate-400 animate-in fade-in duration-200';
+        empty.textContent = state === 'loading' ? 'Searching restaurants...' : 'No matches yet. Add details manually below.';
         suggestionList.appendChild(empty);
         suggestionContainer.classList.remove('hidden');
         if (suggestionHint) {
-          suggestionHint.textContent = 'No matches yet—add details manually below.';
+          suggestionHint.textContent = state === 'loading' ? 'Searching listings…' : 'No matches yet—add details manually below.';
         }
         updateSuggestionStatus(state === 'loading' ? 'loading' : 'empty');
         return;
@@ -748,23 +771,32 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       currentSuggestions.forEach((item, index) => {
         const displayName = item.name ?? item.inputValue ?? '';
         const li = document.createElement('li');
-        li.className = 'list-none';
+        li.className = 'list-none animate-in fade-in slide-in-from-left-1 duration-200';
+        li.style.animationDelay = `${index * 50}ms`;
+        
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-left transition hover:border-pink-400/40 hover:bg-pink-500/10 focus:border-pink-400/60 focus:bg-pink-500/15 focus:outline-none';
+        button.className = 'group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-left transition-all duration-150 hover:border-pink-400/40 hover:bg-pink-500/10 focus:border-pink-400/60 focus:bg-pink-500/15 focus:outline-none hover:scale-[1.02] active:scale-[0.98]';
         button.dataset.suggestionIndex = String(index);
 
+        // Add business icon/avatar
+        const avatar = document.createElement('div');
+        avatar.className = 'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-purple-600 text-sm font-bold text-white';
+        avatar.textContent = getInitials(displayName);
+        button.appendChild(avatar);
+
         const content = document.createElement('div');
-        content.className = 'flex-1 min-w-0 px-2';
+        content.className = 'flex-1 min-w-0';
+        
         const title = document.createElement('p');
-        title.className = 'text-sm font-medium text-white';
+        title.className = 'text-sm font-medium text-white truncate';
         if (highlightRegex) {
           const parts = displayName.split(highlightRegex);
           parts.forEach((part, partIndex) => {
             if (!part) return;
             const span = document.createElement('span');
             if (trimmedQuery && partIndex % 2 === 1) {
-              span.className = 'text-pink-200';
+              span.className = 'text-pink-200 bg-pink-500/20 px-0.5 rounded';
             }
             span.textContent = part;
             title.appendChild(span);
@@ -774,21 +806,46 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         }
         content.appendChild(title);
 
-        // Only show location, no categories or badges
-        const metaPieces = [item.neighborhood, item.city].filter(Boolean);
-        if (metaPieces.length) {
-          const meta = document.createElement('p');
-          meta.className = 'text-xs text-slate-400 mt-0.5';
-          meta.textContent = metaPieces.join(' • ');
-          content.appendChild(meta);
+        // Enhanced metadata with rating and category
+        const metaContainer = document.createElement('div');
+        metaContainer.className = 'flex items-center gap-2 mt-1';
+        
+        if (item.rating && item.ratingsTotal) {
+          const rating = document.createElement('div');
+          rating.className = 'flex items-center gap-1 text-xs text-amber-400';
+          rating.innerHTML = `
+            <svg class="h-3 w-3 fill-current" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            <span>${item.rating}</span>
+            <span class="text-slate-500">(${item.ratingsTotal > 1000 ? `${Math.round(item.ratingsTotal/1000)}k` : item.ratingsTotal})</span>
+          `;
+          metaContainer.appendChild(rating);
         }
 
+        const metaPieces = [item.category, item.neighborhood, item.city].filter(Boolean);
+        if (metaPieces.length) {
+          const meta = document.createElement('p');
+          meta.className = 'text-xs text-slate-400 truncate';
+          meta.textContent = metaPieces.join(' • ');
+          metaContainer.appendChild(meta);
+        }
+
+        // Hudson County badge
+        if (item.withinHudsonCounty) {
+          const badge = document.createElement('span');
+          badge.className = 'inline-flex items-center rounded-full bg-green-500/20 px-2 py-0.5 text-xs font-medium text-green-300 border border-green-500/30';
+          badge.textContent = 'Hudson County';
+          metaContainer.appendChild(badge);
+        }
+
+        content.appendChild(metaContainer);
         button.appendChild(content);
 
         const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         chevron.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         chevron.setAttribute('viewBox', '0 0 20 20');
-        chevron.classList.add('h-4', 'w-4', 'text-pink-200', 'transition', 'group-hover:translate-x-1');
+        chevron.classList.add('h-5', 'w-5', 'text-pink-300', 'transition-transform', 'duration-150', 'group-hover:translate-x-1', 'opacity-60', 'group-hover:opacity-100');
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('fill-rule', 'evenodd');
         path.setAttribute('clip-rule', 'evenodd');
@@ -845,8 +902,17 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       });
     }
 
+    let searchController = null;
+    
     async function loadSuggestions(query) {
       const trimmed = query.trim();
+      
+      // Cancel previous request if still pending
+      if (searchController) {
+        searchController.abort();
+        searchController = null;
+      }
+      
       if (placeIdInput) {
         placeIdInput.value = '';
       }
@@ -860,6 +926,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         return;
       }
 
+      if (trimmed.length < 2) {
+        renderSuggestions([], 'Keep typing to search restaurants...', 'loading', trimmed);
+        return;
+      }
+
       if (!apiBase) {
         const fallback = sampleSuggestions.filter((item) => {
           const label = (item.inputValue ?? item.name ?? '').toLowerCase();
@@ -869,30 +940,57 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         return;
       }
 
-      updateSuggestionStatus('loading');
-      if (suggestionHint) {
-        suggestionHint.textContent = 'Searching listings…';
-      }
+      // Show loading state immediately
+      renderSuggestions([], 'Searching restaurants...', 'loading', trimmed);
 
       try {
-        const res = await fetch(`${apiBase}/api/places/search?q=${encodeURIComponent(trimmed)}&limit=6`);
+        searchController = new AbortController();
+        const res = await fetch(`${apiBase}/api/places/search?q=${encodeURIComponent(trimmed)}&limit=8`, {
+          signal: searchController.signal
+        });
+        
         if (!res.ok) throw new Error('Suggestion lookup failed');
         const data = await res.json();
 
-        if (Array.isArray(data?.results) && data.results.length) {
+        // Sort results to prioritize Hudson County
+        let results = Array.isArray(data?.results) ? data.results : [];
+        if (results.length > 0) {
+          results = results.sort((a, b) => {
+            // Hudson County restaurants first
+            if (a.withinHudsonCounty && !b.withinHudsonCounty) return -1;
+            if (!a.withinHudsonCounty && b.withinHudsonCounty) return 1;
+            // Then by rating
+            const ratingA = a.rating || 0;
+            const ratingB = b.rating || 0;
+            return ratingB - ratingA;
+          });
+        }
+
+        if (results.length) {
           const state = data.fallback ? 'sample' : 'live';
-          const hint = data.fallback ? 'Sample matches' : 'Live data from Google and local directories';
-          renderSuggestions(data.results, hint, state, trimmed);
+          const hudsonCount = results.filter(r => r.withinHudsonCounty).length;
+          const hint = data.fallback 
+            ? 'Sample matches' 
+            : hudsonCount > 0 
+              ? `Found ${hudsonCount} Hudson County restaurant${hudsonCount === 1 ? '' : 's'}`
+              : 'Live results from Google Places';
+          renderSuggestions(results, hint, state, trimmed);
         } else {
-          renderSuggestions([], 'No matches yet—add details manually below.', 'empty', trimmed);
+          renderSuggestions([], 'No restaurants found. Try a different search or add details manually.', 'empty', trimmed);
         }
       } catch (error) {
-        console.error(error);
+        if (error.name === 'AbortError') {
+          return; // Request was cancelled, ignore
+        }
+        
+        console.error('Search error:', error);
         const fallback = sampleSuggestions.filter((item) => {
           const label = (item.inputValue ?? item.name ?? '').toLowerCase();
           return label.includes(trimmed.toLowerCase());
         });
-        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample matches', 'sample', trimmed);
+        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Using sample data (search unavailable)', 'sample', trimmed);
+      } finally {
+        searchController = null;
       }
     }
 
@@ -933,7 +1031,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         }
         manualMode = false;
         setActiveSuggestion(-1);
-        suggestionTimeout = window.setTimeout(() => loadSuggestions(value), 100);
+        
+        // Show immediate feedback for short queries
+        if (value.trim().length > 0 && value.trim().length < 2) {
+          renderSuggestions([], 'Keep typing to search restaurants...', 'loading', value);
+        }
+        
+        // Debounce search with different delays based on query length
+        const delay = value.trim().length < 3 ? 300 : 150;
+        suggestionTimeout = window.setTimeout(() => loadSuggestions(value), delay);
       });
 
       businessInput.addEventListener('focus', () => {
