@@ -288,7 +288,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
               <form id="verify-form" class="space-y-4">
                 <div>
                   <label class="block text-sm font-medium text-slate-200" for="verifyPhone">Phone number *</label>
-                  <input id="verifyPhone" name="phone" type="tel" placeholder="201-555-0123" required class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
+                  <input id="verifyPhone" name="phone" type="tel" placeholder="201-555-0123" class="mt-1 w-full rounded-lg border border-white/10 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-pink-400 focus:outline-none" />
                 </div>
                 <button type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Text me the code</button>
               </form>
@@ -502,7 +502,17 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
   <script type="module">
     console.log('Grader script loading...');
     const configEl = document.getElementById('grader-config');
-    const config = configEl ? JSON.parse(configEl.textContent) : {};
+    console.log('Config element:', configEl);
+    console.log('Config text content:', configEl?.textContent);
+    
+    let config = {};
+    try {
+      config = configEl ? JSON.parse(configEl.textContent) : {};
+    } catch (error) {
+      console.error('JSON parse error:', error);
+      config = { apiBase: '', recaptchaSiteKey: '' };
+    }
+    
     const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : '';
     console.log('Config loaded:', { apiBase, config });
 
@@ -1331,8 +1341,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     }
 
     form?.addEventListener('submit', async (event) => {
+      console.log('Form submitted!');
       event.preventDefault();
-      if (!apiBase) return;
+      if (!apiBase) {
+        console.log('No API base configured');
+        return;
+      }
       hideSuggestions(true);
       warning.classList.add('hidden');
 
