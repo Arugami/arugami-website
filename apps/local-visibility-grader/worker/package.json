@@ -15,6 +15,6 @@
     "bullmq": "^5.10.5",
     "dotenv": "^16.4.7",
     "node-cache": "^5.1.2",
-    "serpapi": "^1.15.0"
+    "serpapi": "^2.2.0"
   }
 }
