@@ -657,6 +657,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     
     // Initialize suggestions on page load
     if (suggestionContainer && suggestionList) {
+      console.log('Initializing suggestions on page load');
       renderSuggestions(sampleSuggestions, 'Start typing to find your exact listing.', 'sample', '');
     }
 
@@ -929,6 +930,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     }
 
     if (businessInput) {
+      console.log('Attaching event listeners to businessInput');
       businessInput.addEventListener('input', (event) => {
         const value = event.target.value ?? '';
         if (suggestionTimeout) {
