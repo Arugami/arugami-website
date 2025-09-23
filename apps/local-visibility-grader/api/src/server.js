@@ -399,8 +399,8 @@ fastify.get(
         })
       );
 
-      const hudsonResults = mapped.filter((item) => item.withinHudsonCounty);
-      const finalResults = (hudsonResults.length ? hudsonResults : mapped).slice(0, limit);
+      // Do not bias to Hudson County; return mapped results in API order
+      const finalResults = mapped.slice(0, limit);
 
       if (!finalResults.length) {
         return reply.status(200).send({ results: SAMPLE_PLACES.slice(0, limit), fallback: true });

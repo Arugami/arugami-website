@@ -84,7 +84,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
                   </div>
                 <div id="search-suggestions" class="mt-2 hidden overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur">
                   <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
-                    <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Hudson County restaurants</p>
+                    <div class="flex items-center gap-3">
+                      <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Business matches</p>
+                      <a href="https://maps.google.com" target="_blank" rel="noopener" class="opacity-70 transition hover:opacity-100" aria-label="Powered by Google">
+                        <img src="https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png" alt="Powered by Google" class="h-3" />
+                      </a>
+                    </div>
                     <span id="suggestion-status" class="rounded-full border border-pink-400/40 bg-pink-500/15 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.25em] text-pink-200">Sample data</span>
                   </div>
                   <ul id="search-suggestion-list" role="listbox" class="max-h-64 space-y-1 overflow-y-auto px-2 py-3"></ul>
@@ -144,123 +149,138 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
               <p class="hidden text-xs text-amber-300" id="grader-warning"></p>
             </form>
 
-            <div id="grader-progress" class="hidden space-y-6">
-              <div class="rounded-xl bg-slate-900/70 p-5">
-                <p class="text-sm font-semibold text-pink-200">Status</p>
-                <p id="progress-status" class="mt-1 text-lg font-semibold text-white">Preparing your scan…</p>
-                <p id="progress-subtitle" class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">We queue your grader in Hudson County</p>
-              </div>
-              <div class="flex flex-col gap-5 lg:flex-row">
-                <div class="space-y-3 lg:w-72" aria-live="polite">
-                  <ol class="space-y-3 text-sm" id="progress-steps">
-                    <li data-step="queued" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                      <div>
-                        <p class="font-semibold text-white">Queued up</p>
-                        <p class="text-xs text-slate-400">Holding your spot and warming the APIs.</p>
-                      </div>
-                    </li>
-                    <li data-step="resolving" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                      <div>
-                        <p class="font-semibold text-white">Matching your restaurant</p>
-                        <p class="text-xs text-slate-400">Cross-checking Google, Yelp, and local directories.</p>
-                      </div>
-                    </li>
-                    <li data-step="details" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                      <div>
-                        <p class="font-semibold text-white">Pulling details</p>
-                        <p class="text-xs text-slate-400">Hours, menu links, call-to-actions, and photos.</p>
-                      </div>
-                    </li>
-                    <li data-step="competitors" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                      <div>
-                        <p class="font-semibold text-white">Sizing competitors</p>
-                        <p class="text-xs text-slate-400">Mapping top spots in Hudson County for your cuisine.</p>
-                      </div>
-                    </li>
-                    <li data-step="performance" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                      <div>
-                        <p class="font-semibold text-white">Testing mobile speed</p>
-                        <p class="text-xs text-slate-400">Running Google PageSpeed Insights against your website.</p>
-                      </div>
-                    </li>
-                    <li data-step="scoring" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                      <div>
-                        <p class="font-semibold text-white">Scoring your visibility</p>
-                        <p class="text-xs text-slate-400">Building the 0–100 score, impact estimate, and top fixes.</p>
-                      </div>
-                    </li>
-                    <li data-step="done" class="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-3">
-                      <span class="mt-1 h-3 w-3 rounded-full bg-slate-500"></span>
-                      <div>
-                        <p class="font-semibold text-white">Score ready</p>
-                        <p class="text-xs text-slate-400">Verify your phone to unlock the full report.</p>
-                      </div>
-                    </li>
-                  </ol>
+            <!-- Scanning View: Map-first with left sticky rail -->
+            <div id="grader-progress" class="hidden">
+              <!-- Top search bar (persistent) -->
+              <div class="mb-6 flex items-center justify-center">
+                <div class="flex items-center gap-3 rounded-full border border-white/10 bg-slate-900/80 px-6 py-3 backdrop-blur">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-pink-400">
+                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                  </svg>
+                  <span id="scanning-query" class="text-sm font-medium text-white">Scanning your restaurant...</span>
                 </div>
-                <div class="flex-1 space-y-4" id="progress-previews">
-                  <div data-preview-step="resolving" class="hidden rounded-2xl border border-white/10 bg-slate-900/70 p-4 text-sm text-slate-300">
-                    <div class="flex items-start justify-between gap-4">
-                      <div>
-                        <p class="text-xs uppercase tracking-[0.2em] text-pink-200">Google Business Profile</p>
-                        <p class="mt-1 text-base font-semibold text-white">Ani Ramen Jersey City</p>
-                        <p class="text-xs text-slate-400">218 Newark Ave · Open until 11PM · (201) 408-2222</p>
+              </div>
+
+              <!-- Main scanning layout -->
+              <div class="flex gap-6">
+                <!-- Left sticky rail -->
+                <div class="w-80 flex-shrink-0">
+                  <div class="sticky top-6 space-y-4">
+                    <!-- Scanning header -->
+                    <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-5">
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-white">Scanning...</h3>
+                        <div class="flex items-center gap-2 text-xs text-slate-400">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3 w-3">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+                          </svg>
+                          <span id="scan-timer">~30 seconds remaining</span>
+                        </div>
                       </div>
-                      <span class="rounded-full bg-pink-500/20 px-2 py-1 text-xs font-semibold text-pink-200">Preview</span>
                     </div>
-                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                      <div class="aspect-[4/3] rounded-xl bg-gradient-to-br from-slate-800 to-slate-900"></div>
-                      <div class="space-y-2 text-xs text-slate-400">
-                        <p>“Best noodles in town. Staff is always friendly.” — 5★ Google review (July)</p>
-                        <p>Latest photo: Posted 3 weeks ago · 1080×1080</p>
+
+                    <!-- Progress steps -->
+                    <div class="space-y-3" aria-live="polite" id="progress-steps">
+                      <div data-step="resolving" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                        <div class="flex h-6 w-6 items-center justify-center">
+                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                        </div>
+                        <div class="flex-1">
+                          <p class="text-sm font-medium text-white">Who/Name & competitors</p>
+                        </div>
+                      </div>
+                      <div data-step="details" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                        <div class="flex h-6 w-6 items-center justify-center">
+                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                        </div>
+                        <div class="flex-1">
+                          <p class="text-sm font-medium text-white">Google Business profile</p>
+                        </div>
+                      </div>
+                      <div data-step="competitors" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                        <div class="flex h-6 w-6 items-center justify-center">
+                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                        </div>
+                        <div class="flex-1">
+                          <p class="text-sm font-medium text-white">Web conversion path</p>
+                        </div>
+                      </div>
+                      <div data-step="performance" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                        <div class="flex h-6 w-6 items-center justify-center">
+                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                        </div>
+                        <div class="flex-1">
+                          <p class="text-sm font-medium text-white">Photo quality and quantity</p>
+                        </div>
+                      </div>
+                      <div data-step="scoring" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                        <div class="flex h-6 w-6 items-center justify-center">
+                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                        </div>
+                        <div class="flex-1">
+                          <p class="text-sm font-medium text-white">Mobile experience</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div data-preview-step="competitors" class="hidden rounded-2xl border border-white/10 bg-slate-900/70 p-4 text-sm text-slate-300">
-                    <p class="text-xs uppercase tracking-[0.2em] text-pink-200">Hudson County Rivals</p>
-                    <div class="mt-3 grid gap-3 sm:grid-cols-2">
-                      <div class="rounded-lg border border-white/10 bg-slate-950/80 p-3">
-                        <p class="text-sm font-semibold text-white">Orale Mexican Kitchen</p>
-                        <p class="text-xs text-slate-400">★ 4.6 · 3,012 reviews · 0.4 mi away</p>
-                        <p class="mt-2 text-xs text-slate-500">Owns “late night tacos jersey city” & “mezcal flights jc”.</p>
+                </div>
+
+                <!-- Map canvas -->
+                <div class="flex-1">
+                  <div class="rounded-2xl border border-white/10 bg-slate-900/50 overflow-hidden">
+                    <div id="scanning-map" class="relative h-[500px] bg-gradient-to-br from-slate-800 to-slate-900">
+                      <!-- Map placeholder with competitor pins -->
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center">
+                          <div class="mx-auto mb-4 h-12 w-12 rounded-full bg-pink-500/20 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-6 w-6 text-pink-400">
+                              <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.646 7.584.829.8 1.654 1.381 2.274 1.765a11.25 11.25 0 00.757.433 5.708 5.708 0 00.281.14l.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                          <p class="text-sm text-slate-400">Loading Hudson County map...</p>
+                        </div>
                       </div>
-                      <div class="rounded-lg border border-white/10 bg-slate-950/80 p-3">
-                        <p class="text-sm font-semibold text-white">Taqueria Downtown</p>
-                        <p class="text-xs text-slate-400">★ 4.5 · 2,148 reviews · 0.6 mi away</p>
-                        <p class="mt-2 text-xs text-slate-500">Dominates “taco tuesday jersey city”.</p>
-                      </div>
-                    </div>
-                    <div class="mt-3 rounded-lg border border-dashed border-pink-400/40 bg-pink-500/5 px-4 py-3 text-xs text-pink-200">Map your top 3 competitors within a 1 mile radius.</div>
-                  </div>
-                  <div data-preview-step="performance" class="hidden rounded-2xl border border-white/10 bg-slate-900/70 p-4 text-sm text-slate-300">
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div>
-                        <p class="text-xs uppercase tracking-[0.2em] text-pink-200">Mobile Speed Scan</p>
-                        <p class="mt-1 text-base font-semibold text-white">PageSpeed score: 48/100</p>
-                        <p class="text-xs text-slate-400">Hero image blocking render for 3.6s. CTA below the fold.</p>
-                      </div>
-                      <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-300">Needs attention</span>
-                    </div>
-                    <div class="mt-4 grid gap-3 sm:grid-cols-[160px_1fr]">
-                      <div class="aspect-[9/19] rounded-xl bg-gradient-to-b from-slate-800 to-slate-900"></div>
-                      <ul class="space-y-2 text-xs text-slate-400">
-                        <li><span class="text-pink-200">•</span> Move “Order now” button above the fold on mobile.</li>
-                        <li><span class="text-pink-200">•</span> Compress hero image to under 250 KB.</li>
-                        <li><span class="text-pink-200">•</span> Add `ReservationAction` schema for Google “Reserve a table” cards.</li>
-                      </ul>
+                      
+                      <!-- Competitor pins will be added dynamically -->
+                      <div id="competitor-pins" class="absolute inset-0"></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-<div id="grader-verify" class="hidden space-y-4">
+            <!-- Unlock Modal (mid-scan gate) -->
+            <div id="unlock-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
+              <div class="relative mx-4 max-w-md rounded-2xl border border-white/10 bg-slate-900/95 p-6 shadow-2xl backdrop-blur">
+                <div class="text-center">
+                  <div class="mx-auto mb-4 h-16 w-16 rounded-full bg-pink-500/20 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-8 w-8 text-pink-400">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-semibold text-white mb-2">Unlock your free report</h3>
+                  <p class="text-sm text-slate-300 mb-6">Your scan is complete! Verify your phone to unlock the full Hudson County visibility report and dollar impact analysis.</p>
+                  
+                  <!-- reCAPTCHA placeholder -->
+                  <div class="mb-4 flex items-center justify-center">
+                    <div class="rounded border border-white/10 bg-slate-800/50 px-4 py-3 text-xs text-slate-400">
+                      <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="unlock-recaptcha" class="rounded border-white/20 bg-slate-700 text-pink-500 focus:ring-pink-400">
+                        <span>I'm not a robot</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <button id="unlock-continue" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Continue to verification
+                  </button>
+                  
+                  <p class="mt-4 text-xs text-slate-500">We only use this to prevent spam and ensure you get your personalized Hudson County report.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="grader-verify" class="hidden space-y-4">
               <div class="rounded-xl bg-slate-900/70 p-4">
                 <p class="text-sm font-semibold text-pink-200">Verify your phone</p>
                 <p class="mt-1 text-sm text-slate-300">We text a 6-digit code to unlock the full report and dollar impact. No spam—just the playbook.</p>
@@ -282,77 +302,188 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
               <p class="hidden text-xs text-amber-300" id="verify-warning"></p>
             </div>
 
-            <div id="grader-result" class="hidden space-y-6">
-              <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
-                <div class="flex flex-col gap-6 lg:flex-row">
-                  <div class="space-y-4 lg:w-80">
-                    <p class="text-sm font-semibold text-pink-200">Report unlocked</p>
-                    <div class="rounded-2xl border border-white/10 bg-slate-950/70 p-5 text-center">
-                      <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Local Visibility Score</p>
-                      <p id="result-headline" class="mt-2 text-3xl font-semibold text-white">Your score is loading…</p>
-                      <div id="score-meter" class="mx-auto mt-4 flex h-32 w-32 items-center justify-center rounded-full border-4 border-pink-400/60 bg-slate-900 text-3xl font-bold text-pink-200">--</div>
-                      <ul id="score-breakdown" class="mt-4 space-y-2 text-left text-sm text-slate-300">
-                        <li class="flex items-center justify-between"><span>Search results</span><span class="text-pink-200">38 / 100</span></li>
-                        <li class="flex items-center justify-between"><span>Website experience</span><span class="text-pink-200">52 / 100</span></li>
-                        <li class="flex items-center justify-between"><span>Local listings</span><span class="text-pink-200">56 / 100</span></li>
-                      </ul>
+            <div id="grader-result" class="hidden">
+              <div class="flex gap-6">
+                <!-- Left sticky rail: Score gauge -->
+                <div class="w-80 flex-shrink-0">
+                  <div class="sticky top-6 space-y-4">
+                    <!-- Score gauge -->
+                    <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6 text-center">
+                      <div class="relative mx-auto mb-4 h-32 w-32">
+                        <!-- Donut gauge background -->
+                        <svg class="h-32 w-32 transform -rotate-90" viewBox="0 0 120 120">
+                          <circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" class="text-slate-700" />
+                          <circle id="score-arc" cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round" 
+                                  class="text-pink-400 transition-all duration-1000" stroke-dasharray="0 314" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <div class="text-center">
+                            <div id="score-meter" class="text-3xl font-bold text-white">--</div>
+                            <div class="text-xs text-slate-400">/ 100</div>
+                          </div>
+                        </div>
+                      </div>
+                      <p id="result-headline" class="text-lg font-semibold text-white mb-4">Your score is loading…</p>
+                      
+                      <!-- Category breakdown -->
+                      <div class="space-y-2 text-sm" id="score-breakdown">
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-pink-400"></div>
+                            <span class="text-slate-300">Search Results</span>
+                          </div>
+                          <span class="text-white font-medium">--</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-green-400"></div>
+                            <span class="text-slate-300">Website Basics</span>
+                          </div>
+                          <span class="text-white font-medium">--</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <div class="h-2 w-2 rounded-full bg-blue-400"></div>
+                            <span class="text-slate-300">Local Listings</span>
+                          </div>
+                          <span class="text-white font-medium">--</span>
+                        </div>
+                      </div>
                     </div>
-                    <a id="result-link" class="inline-flex items-center gap-2 rounded-xl border border-pink-400/50 bg-pink-500/10 px-4 py-3 text-sm font-semibold text-pink-200 transition hover:bg-pink-500/20" href="#" target="_blank" rel="noopener">
-                      View your Local Visibility Report
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
-                        <path fill-rule="evenodd" d="M5 4a1 1 0 011-1h9a1 1 0 011 1v9a1 1 0 11-2 0V6.414l-8.293 8.293a1 1 0 11-1.414-1.414L12.586 5H6a1 1 0 01-1-1z" clip-rule="evenodd" />
-                      </svg>
-                    </a>
-                    <p class="text-xs text-slate-400">Share this link with your team. It expires in 48 hours for your privacy.</p>
+
+                    <!-- Primary CTA -->
+                    <button class="w-full rounded-xl bg-pink-500 px-6 py-4 text-sm font-semibold text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">
+                      Talk to a Hudson County expert
+                    </button>
                   </div>
-                  <div class="flex-1 space-y-4">
-                    <div class="rounded-2xl border border-white/10 bg-slate-950/70 p-4">
-                      <div class="flex flex-wrap gap-2" role="tablist">
-                        <button type="button" data-evidence-tab="search" class="evidence-tab rounded-full border border-pink-400/40 bg-pink-500/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-pink-200" aria-selected="true">Search</button>
-                        <button type="button" data-evidence-tab="website" class="evidence-tab rounded-full border border-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">Website</button>
-                        <button type="button" data-evidence-tab="reviews" class="evidence-tab rounded-full border border-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">Reviews</button>
-                        <button type="button" data-evidence-tab="automation" class="evidence-tab rounded-full border border-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-200">Automation</button>
+                </div>
+
+                <!-- Right content: Cards with chips -->
+                <div class="flex-1 space-y-6">
+                  <!-- Problems summary card -->
+                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
+                    <div class="flex items-start gap-4">
+                      <div class="flex-shrink-0 rounded-full bg-red-500/20 p-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-red-400">
+                          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                        </svg>
                       </div>
-                    </div>
-                    <div id="evidence-content" class="space-y-4 rounded-2xl border border-white/10 bg-slate-950/70 p-5 text-sm text-slate-200">
-                      <div data-evidence-panel="search" class="space-y-3">
-                        <p class="text-base font-semibold text-white">Hudson County diners see competitors first.</p>
-                        <ul class="space-y-2 text-sm text-slate-300">
-                          <li>• Google calls you “Mexican Restaurant · Jersey City”. Last photo update: 7 months ago.</li>
-                          <li>• First clicks tonight go to Orale (4.6★ · 3k reviews) and Taqueria Downtown (4.5★ · 2.1k reviews).</li>
-                          <li>• Missing keywords: “late night tacos jersey city”, “rooftop margaritas jersey city”.</li>
-                        </ul>
-                      </div>
-                      <div data-evidence-panel="website" class="hidden space-y-3">
-                        <p class="text-base font-semibold text-white">Mobile visitors bounce before ordering.</p>
-                        <ul class="space-y-2 text-sm text-slate-300">
-                          <li>• PageSpeed mobile score: 48. Hero image blocks render for 3.6s.</li>
-                          <li>• Order button appears after 2 scrolls on mobile. Move it above the fold.</li>
-                          <li>• Add `ReservationAction` schema so Google can surface “Reserve a table”.</li>
-                        </ul>
-                      </div>
-                      <div data-evidence-panel="reviews" class="hidden space-y-3">
-                        <p class="text-base font-semibold text-white">Review freshness is slipping.</p>
-                        <ul class="space-y-2 text-sm text-slate-300">
-                          <li>• Average rating 4.1★ vs Hudson County leaders at 4.6★.</li>
-                          <li>• No new Google reviews in 24 days; Yelp picked up 2 in the last week.</li>
-                          <li>• Top friction keyword: “slow service” (6 mentions in 90 days). Trigger AI inbox alerts.</li>
-                        </ul>
-                      </div>
-                      <div data-evidence-panel="automation" class="hidden space-y-3">
-                        <p class="text-base font-semibold text-white">Follow-up gaps cost repeat covers.</p>
-                        <ul class="space-y-2 text-sm text-slate-300">
-                          <li>• Missed-call text-back not detected. Diners call 1.8× before booking elsewhere.</li>
-                          <li>• No Instagram DM auto-response. Add Arugami Inbox to capture after-hours leads.</li>
-                          <li>• Menu schema missing. Add `Menu` markup to feed Google Restaurant results.</li>
+                      <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-white mb-2">6 problems are costing you $947/month</h3>
+                        <ul class="space-y-1 text-sm text-slate-300">
+                          <li class="flex items-center gap-2">
+                            <span class="text-red-400">•</span>
+                            <span>Website fails to load order button above fold on mobile</span>
+                          </li>
+                          <li class="flex items-center gap-2">
+                            <span class="text-red-400">•</span>
+                            <span>Missing from "late night tacos jersey city" searches</span>
+                          </li>
+                          <li class="flex items-center gap-2">
+                            <span class="text-red-400">•</span>
+                            <span>No missed-call text-back system detected</span>
+                          </li>
                         </ul>
                       </div>
                     </div>
-                    <div class="flex items-center gap-4 rounded-2xl border border-white/10 bg-slate-950/70 p-4 text-sm text-slate-200">
-                      <div class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-pink-500 to-purple-600"></div>
+                  </div>
+
+                  <!-- Competitor ranking card -->
+                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">You're ranking below 6 competitors</h3>
+                    <div class="space-y-3">
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-3">
+                        <div>
+                          <p class="font-medium text-white">Orale Mexican Kitchen</p>
+                          <p class="text-xs text-slate-400">4.6★ • 3,012 reviews</p>
+                        </div>
+                        <div class="text-right">
+                          <div class="text-sm font-medium text-green-400">#1</div>
+                          <div class="text-xs text-slate-500">Map pack</div>
+                        </div>
+                      </div>
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-3">
+                        <div>
+                          <p class="font-medium text-white">Taqueria Downtown</p>
+                          <p class="text-xs text-slate-400">4.5★ • 2,148 reviews</p>
+                        </div>
+                        <div class="text-right">
+                          <div class="text-sm font-medium text-green-400">#2</div>
+                          <div class="text-xs text-slate-500">Map pack</div>
+                        </div>
+                      </div>
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-3">
+                        <div>
+                          <p class="font-medium text-white">Los Cuernos Cantina</p>
+                          <p class="text-xs text-slate-400">4.4★ • 1,847 reviews</p>
+                        </div>
+                        <div class="text-right">
+                          <div class="text-sm font-medium text-amber-400">#3</div>
+                          <div class="text-xs text-slate-500">Map pack</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Evidence table with chips -->
+                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">This is how you're doing online</h3>
+                    <div class="space-y-3">
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
+                        <div class="flex items-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
+                            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="text-sm text-slate-300">Best match for "tacos jersey city"</span>
+                        </div>
+                        <span class="rounded-full bg-red-500/20 px-2 py-1 text-xs font-medium text-red-300">Not ranking</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
+                        <div class="flex items-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                          </svg>
+                          <span class="text-sm text-slate-300">Mobile order button visibility</span>
+                        </div>
+                        <span class="rounded-full bg-red-500/20 px-2 py-1 text-xs font-medium text-red-300">Below fold</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
+                        <div class="flex items-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
+                            <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.896 28.896 0 003.105 2.289z" />
+                          </svg>
+                          <span class="text-sm text-slate-300">Missed call text-back system</span>
+                        </div>
+                        <span class="rounded-full bg-red-500/20 px-2 py-1 text-xs font-medium text-red-300">Not detected</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
+                        <div class="flex items-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
+                            <path fill-rule="evenodd" d="M1 6a3 3 0 013-3h12a3 3 0 013 3v8a3 3 0 01-3 3H4a3 3 0 01-3-3V6zm4 1.5a2 2 0 114 0 2 2 0 01-4 0zm2 3a4 4 0 00-3.665 2.395.75.75 0 00.416 1A8.98 8.98 0 007 14a8.98 8.98 0 003.249-.604.75.75 0 00.416-1A4 4 0 007 10.5zm5-3.25a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75zm0 2.5a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="text-sm text-slate-300">Google Business Profile photos</span>
+                        </div>
+                        <span class="rounded-full bg-amber-500/20 px-2 py-1 text-xs font-medium text-amber-300">Needs refresh</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
+                        <div class="flex items-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
+                            <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="text-sm text-slate-300">Recent Google reviews</span>
+                        </div>
+                        <span class="rounded-full bg-green-500/20 px-2 py-1 text-xs font-medium text-green-300">Active</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Expert testimonial -->
+                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
+                    <div class="flex items-start gap-4">
+                      <div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-pink-500 to-purple-600"></div>
                       <div>
-                        <p class="text-sm font-semibold text-white">Alyssa Garcia · Arugami Strategy</p>
-                        <p class="text-xs text-slate-400">“We’ve run 42 Hudson County audits this summer. The fixes above put tables back in play within 30 days.”</p>
+                        <p class="font-semibold text-white">Alyssa Garcia · Arugami Strategy</p>
+                        <p class="mt-1 text-sm text-slate-300">"We've run 42 Hudson County audits this summer. The fixes above put tables back in play within 30 days."</p>
                       </div>
                     </div>
                   </div>
@@ -402,12 +533,18 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     const scoreBreakdown = document.getElementById('score-breakdown');
     const evidenceTabs = document.querySelectorAll('.evidence-tab');
     const evidencePanels = document.querySelectorAll('[data-evidence-panel]');
+    const unlockModal = document.getElementById('unlock-modal');
+    const unlockRecaptcha = document.getElementById('unlock-recaptcha');
+    const unlockContinue = document.getElementById('unlock-continue');
 
-    const stepOrder = ['queued', 'resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
+    const stepOrder = ['resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
     let scanId = null;
     let pollInterval = null;
+    let timerInterval = null;
     let lastStatus = null;
     let currentPhone = null;
+    let scanStartTime = null;
+    let estimatedDuration = 35000; // 35 seconds
     const sampleSuggestions = [
       {
         inputValue: 'Ani Ramen Jersey City',
@@ -514,6 +651,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     }
 
     updateSuggestionStatus('sample');
+    
+    // Initialize suggestions on page load
+    if (suggestionContainer && suggestionList) {
+      renderSuggestions(sampleSuggestions, 'Start typing to find your exact listing.', 'sample', '');
+    }
 
     function hideSuggestions(preserveStatus = false) {
       if (suggestionContainer) {
@@ -719,13 +861,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
           const label = (item.inputValue ?? item.name ?? '').toLowerCase();
           return label.includes(trimmed.toLowerCase());
         });
-        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample Hudson County matches', 'sample', trimmed);
+        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample matches', 'sample', trimmed);
         return;
       }
 
       updateSuggestionStatus('loading');
       if (suggestionHint) {
-        suggestionHint.textContent = 'Searching Hudson County listings…';
+        suggestionHint.textContent = 'Searching listings…';
       }
 
       try {
@@ -735,7 +877,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
         if (Array.isArray(data?.results) && data.results.length) {
           const state = data.fallback ? 'sample' : 'live';
-          const hint = data.fallback ? 'Sample Hudson County matches' : 'Live data from Google and local directories';
+          const hint = data.fallback ? 'Sample matches' : 'Live data from Google and local directories';
           renderSuggestions(data.results, hint, state, trimmed);
         } else {
           renderSuggestions([], 'No matches yet—add details manually below.', 'empty', trimmed);
@@ -746,7 +888,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
           const label = (item.inputValue ?? item.name ?? '').toLowerCase();
           return label.includes(trimmed.toLowerCase());
         });
-        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample Hudson County matches', 'sample', trimmed);
+        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample matches', 'sample', trimmed);
       }
     }
 
@@ -786,7 +928,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         }
         manualMode = false;
         setActiveSuggestion(-1);
-        suggestionTimeout = window.setTimeout(() => loadSuggestions(value), 200);
+        suggestionTimeout = window.setTimeout(() => loadSuggestions(value), 100);
       });
 
       businessInput.addEventListener('focus', () => {
@@ -890,6 +1032,99 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       el.classList.toggle('hidden', !show);
     }
 
+    // Timer functions
+    function startScanTimer() {
+      const timerEl = document.getElementById('scan-timer');
+      if (!timerEl) return;
+      
+      scanStartTime = Date.now();
+      timerInterval = setInterval(() => {
+        const elapsed = Date.now() - scanStartTime;
+        const remaining = Math.max(0, estimatedDuration - elapsed);
+        const seconds = Math.ceil(remaining / 1000);
+        
+        if (seconds > 0) {
+          timerEl.textContent = `~${seconds} seconds remaining`;
+        } else {
+          timerEl.textContent = 'Finishing up...';
+        }
+      }, 1000);
+    }
+
+    function stopScanTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    // Competitor pin functions
+    function addCompetitorPin(competitor, index) {
+      const pinsContainer = document.getElementById('competitor-pins');
+      if (!pinsContainer) return;
+
+      // Create pin element
+      const pin = document.createElement('div');
+      pin.className = 'absolute transform -translate-x-1/2 -translate-y-full opacity-0 transition-all duration-500';
+      pin.style.left = `${20 + (index * 15)}%`;
+      pin.style.top = `${30 + (index * 12)}%`;
+      
+      pin.innerHTML = `
+        <div class="flex flex-col items-center">
+          <div class="bg-red-500 border-2 border-white rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
+            <div class="w-2 h-2 bg-white rounded-full"></div>
+          </div>
+          <div class="mt-1 bg-slate-900/90 border border-white/20 rounded px-2 py-1 text-xs text-white whitespace-nowrap">
+            <div class="font-medium">${competitor.name || 'Competitor'}</div>
+            <div class="text-slate-300">${competitor.rating || '4.5'}★ • ${competitor.reviews || '1.2k'} reviews</div>
+          </div>
+        </div>
+      `;
+
+      pinsContainer.appendChild(pin);
+
+      // Animate in after a delay
+      setTimeout(() => {
+        pin.classList.remove('opacity-0');
+        pin.classList.add('opacity-100');
+      }, index * 800 + 500);
+    }
+
+    // Update scanning query display
+    function updateScanningQuery(businessName) {
+      const queryEl = document.getElementById('scanning-query');
+      if (queryEl && businessName) {
+        queryEl.textContent = businessName;
+      }
+    }
+
+    // Unlock modal functions
+    function showUnlockModal() {
+      if (unlockModal) {
+        unlockModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function hideUnlockModal() {
+      if (unlockModal) {
+        unlockModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Handle unlock modal interactions
+    if (unlockRecaptcha && unlockContinue) {
+      unlockRecaptcha.addEventListener('change', () => {
+        unlockContinue.disabled = !unlockRecaptcha.checked;
+      });
+
+      unlockContinue.addEventListener('click', () => {
+        hideUnlockModal();
+        toggle(verifySection, true);
+      });
+    }
+
     function setStepStatus(step, completed) {
       const item = stepsList?.querySelector(`[data-step="${step}"]`);
       if (!item) return;
@@ -991,44 +1226,85 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         const res = await fetch(`${apiBase}/api/scan/${id}`);
         if (!res.ok) throw new Error('Status request failed');
         const data = await res.json();
+        
         if (data.status && data.status !== lastStatus) {
           lastStatus = data.status;
-          updateStatus(data.status);
+          markSteps(data.status);
+          
           if (data.status === 'done') {
-            toggle(verifySection, true);
-            toggle(progressSection, true);
+            stopScanTimer();
+            showUnlockModal();
             if (pollInterval) {
               clearInterval(pollInterval);
               pollInterval = null;
             }
           }
           if (data.status === 'failed') {
+            stopScanTimer();
             if (pollInterval) {
               clearInterval(pollInterval);
               pollInterval = null;
             }
           }
         }
+
+        // Add competitor pins when competitors data arrives
+        if (Array.isArray(data.competitors) && data.competitors.length) {
+          const pinsContainer = document.getElementById('competitor-pins');
+          if (pinsContainer && !pinsContainer.hasChildNodes()) {
+            data.competitors.forEach((competitor, index) => {
+              addCompetitorPin(competitor, index);
+            });
+          }
+        }
+
         if (typeof data.score === 'number' && data.status === 'done') {
           const label = describeScore(data.score);
           resultHeadline.textContent = `${data.score}/100 — ${label}`;
           if (scoreMeter) {
             scoreMeter.textContent = data.score;
           }
+          
+          // Animate donut gauge
+          const scoreArc = document.getElementById('score-arc');
+          if (scoreArc) {
+            const circumference = 2 * Math.PI * 50; // radius = 50
+            const offset = circumference - (data.score / 100) * circumference;
+            scoreArc.style.strokeDasharray = `${circumference} ${circumference}`;
+            scoreArc.style.strokeDashoffset = offset;
+          }
         }
+        
         if (Array.isArray(data.breakdown) && data.breakdown.length && scoreBreakdown) {
+          const categories = [
+            { key: 'search', label: 'Search Results', color: 'bg-pink-400' },
+            { key: 'website', label: 'Website Basics', color: 'bg-green-400' },
+            { key: 'listings', label: 'Local Listings', color: 'bg-blue-400' }
+          ];
+          
           scoreBreakdown.innerHTML = '';
-          data.breakdown.forEach((item) => {
-            if (!item) return;
-            const li = document.createElement('li');
-            li.className = 'flex items-center justify-between';
+          categories.forEach((category, index) => {
+            const item = data.breakdown[index];
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between';
+            
+            const leftSide = document.createElement('div');
+            leftSide.className = 'flex items-center gap-2';
+            
+            const dot = document.createElement('div');
+            dot.className = `h-2 w-2 rounded-full ${category.color}`;
+            
             const label = document.createElement('span');
-            label.textContent = item.label ?? item.name ?? 'Category';
-            const value = document.createElement('span');
-            value.className = 'text-pink-200';
-            value.textContent = typeof item.score === 'number' ? `${item.score} / 100` : item.value ?? '';
-            li.append(label, value);
-            scoreBreakdown.appendChild(li);
+            label.className = 'text-slate-300';
+            label.textContent = category.label;
+            
+            const score = document.createElement('span');
+            score.className = 'text-white font-medium';
+            score.textContent = item && typeof item.score === 'number' ? item.score.toString() : '--';
+            
+            leftSide.append(dot, label);
+            div.append(leftSide, score);
+            scoreBreakdown.appendChild(div);
           });
         }
       } catch (error) {
@@ -1090,12 +1366,19 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
         const data = await res.json();
         scanId = data.scanId;
+        
+        // Update scanning query with business name
+        const businessName = payload.businessName || 'Your restaurant';
+        updateScanningQuery(businessName);
+        
         toggle(form, false);
         toggle(progressSection, true);
-        updateStatus('queued');
-        markSteps('queued');
+        
+        // Start timer and polling
+        startScanTimer();
+        markSteps('resolving');
 
-        pollInterval = setInterval(() => pollStatus(scanId), 3000);
+        pollInterval = setInterval(() => pollStatus(scanId), 1000);
         await pollStatus(scanId);
       } catch (error) {
         console.error(error);
