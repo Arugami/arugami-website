@@ -455,7 +455,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
   </main>
   <Footer />
 
-  <script type="application/json" id="grader-config">{configJson}</script>
+  <script type="application/json" id="grader-config" set:html={configJson}></script>
   <script type="module">
     console.log('Grader script loading...');
     const configEl = document.getElementById('grader-config');
