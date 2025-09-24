@@ -530,7 +530,58 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     let currentPhone = null;
     let scanStartTime = null;
     let estimatedDuration = 35000; // 35 seconds
-    const sampleSuggestions = [];
+    const sampleSuggestions = [
+      {
+        inputValue: "Ani Ramen Jersey City",
+        name: "Ani Ramen Jersey City",
+        city: "Jersey City",
+        neighborhood: "Downtown",
+        withinHudsonCounty: true,
+        rating: 4.5,
+        ratingsTotal: 1200,
+        category: "Japanese Restaurant"
+      },
+      {
+        inputValue: "Taco Bell Hoboken",
+        name: "Taco Bell Hoboken", 
+        city: "Hoboken",
+        neighborhood: "Midtown",
+        withinHudsonCounty: true,
+        rating: 4.2,
+        ratingsTotal: 800,
+        category: "Fast Food Restaurant"
+      },
+      {
+        inputValue: "Liberty House Restaurant",
+        name: "Liberty House Restaurant",
+        city: "Jersey City", 
+        neighborhood: "Liberty State Park",
+        withinHudsonCounty: true,
+        rating: 4.6,
+        ratingsTotal: 2100,
+        category: "American Restaurant"
+      },
+      {
+        inputValue: "Orale Mexican Kitchen",
+        name: "Orale Mexican Kitchen",
+        city: "Jersey City",
+        neighborhood: "Downtown", 
+        withinHudsonCounty: true,
+        rating: 4.6,
+        ratingsTotal: 3012,
+        category: "Mexican Restaurant"
+      },
+      {
+        inputValue: "Los Cuernos Cantina",
+        name: "Los Cuernos Cantina",
+        city: "Hoboken",
+        neighborhood: "Uptown",
+        withinHudsonCounty: true,
+        rating: 4.4,
+        ratingsTotal: 1847,
+        category: "Mexican Restaurant"
+      }
+    ];
     let suggestionTimeout = null;
     let currentSuggestions = [];
     let activeSuggestionIndex = -1;
@@ -949,9 +1000,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       businessInput.addEventListener('focus', () => {
         console.log('Input focused');
         const value = businessInput.value ?? '';
-        if (value.trim().length >= 2) {
-          loadSuggestions(value);
-        // Don't show anything on focus with empty input
+        // Always call loadSuggestions - it handles empty input by showing sample suggestions
+        loadSuggestions(value);
       });
       businessInput.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown' && currentSuggestions.length) {
