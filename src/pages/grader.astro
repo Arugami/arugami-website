@@ -474,7 +474,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     console.log('Config loaded:', { apiBase, config });
     console.log('API Base available:', !!apiBase);
 
-    const form = document.getElementById('grader-form');
+    try {
+      console.log('Starting DOM element selection...');
+      const form = document.getElementById('grader-form');
+      console.log('Form found:', !!form);
     const warning = document.getElementById('grader-warning');
     const progressSection = document.getElementById('grader-progress');
     const stepsList = document.getElementById('progress-steps');
@@ -491,6 +494,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     const suggestionContainer = document.getElementById('search-suggestions');
     const suggestionList = document.getElementById('search-suggestion-list');
     console.log('DOM elements found:', { businessInput, suggestionContainer, suggestionList });
+    console.log('Business input element:', businessInput);
+    
+    if (!businessInput) {
+      console.error('CRITICAL: businessInput element not found!');
+      return;
+    }
     const suggestionHint = document.getElementById('suggestion-hint');
     const suggestionStatus = document.getElementById('suggestion-status');
     const searchSpinner = document.getElementById('search-spinner');
@@ -1462,5 +1471,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         verifyWarning.classList.remove('hidden');
       }
     });
+    
+    } catch (error) {
+      console.error('JavaScript error in grader script:', error);
+      console.error('Error stack:', error.stack);
+    }
   </script>
 </BaseLayout>
