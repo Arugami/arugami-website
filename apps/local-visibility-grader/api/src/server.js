@@ -112,6 +112,40 @@ function deriveCategory(types = []) {
   return preferred || null;
 }
 
+function getAddressComponentValue(components, types) {
+  if (!Array.isArray(components) || !components.length) return null;
+  for (const component of components) {
+    const componentTypes = component.types ?? [];
+    if (types.some((type) => componentTypes.includes(type))) {
+      return component.long_name ?? component.longText ?? component.short_name ?? component.shortText ?? null;
+    }
+  }
+  return null;
+}
+
+function extractCity(components) {
+  return (
+    getAddressComponentValue(components, ['locality']) ??
+    getAddressComponentValue(components, ['postal_town']) ??
+    getAddressComponentValue(components, ['administrative_area_level_2']) ??
+    null
+  );
+}
+
+function extractNeighborhood(components) {
+  return (
+    getAddressComponentValue(components, ['neighborhood']) ??
+    getAddressComponentValue(components, ['sublocality_level_1']) ??
+    getAddressComponentValue(components, ['sublocality']) ??
+    null
+  );
+}
+
+function formatTypes(types = []) {
+  if (!Array.isArray(types)) return null;
+  return deriveCategory(types) ?? (types[0]?.replace(/_/g, ' ') ?? null);
+}
+
 function normalizeAddressComponents(components) {
   if (!Array.isArray(components)) return [];
   return components.map((component) => ({
@@ -419,7 +453,7 @@ fastify.get(
               lng: details.location?.longitude || null,
               rating: details.rating || null,
               ratingsTotal: details.userRatingCount || null,
-              withinHudsonCounty: isWithinHudsonCounty(details.addressComponents || [])
+              withinHudsonCounty: isWithinHudsonCounty(details.location?.latitude ?? null, details.location?.longitude ?? null)
             };
           } catch (error) {
             request.log.warn(
@@ -441,7 +475,7 @@ fastify.get(
               rating: null,
               ratingsTotal: null,
               withinHudsonCounty: false,
-              category: prediction.types?.[0] || 'establishment'
+              category: formatTypes(prediction.types || []) ?? 'establishment'
             };
           }
         })
