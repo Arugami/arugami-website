@@ -12,11 +12,21 @@ export default defineConfig({
   ],
   output: 'static',
   build: {
-    inlineStylesheets: 'auto'
+    inlineStylesheets: 'auto',
+    // Force cache busting with timestamp
+    assets: `_astro_${Date.now()}`
   },
   vite: {
     build: {
-      cssCodeSplit: false
+      cssCodeSplit: false,
+      // Add cache busting to JS/CSS files
+      rollupOptions: {
+        output: {
+          entryFileNames: `[name]-${Date.now()}.js`,
+          chunkFileNames: `[name]-${Date.now()}.js`,
+          assetFileNames: `[name]-${Date.now()}.[ext]`
+        }
+      }
     }
   }
 });

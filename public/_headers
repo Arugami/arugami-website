@@ -1,0 +1,21 @@
+# Cache busting for HTML files
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Cache busting for the grader page specifically
+/grader
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Allow caching for static assets but with shorter TTL
+/_astro/*
+  Cache-Control: public, max-age=3600
+
+# API endpoints should never be cached
+/api/*
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
