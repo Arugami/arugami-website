@@ -469,11 +469,11 @@ fastify.post('/api/scan/start', async (request, reply) => {
     created_at: now
   });
 
-  await enqueueScanJob(scan);
-
+  const queueResult = await enqueueScanJob(scan);
+  
   return reply.status(202).send({
     scanId: scan.id,
-    status: 'queued'
+    status: queueResult ? 'queued' : 'created'
   });
 });
 
