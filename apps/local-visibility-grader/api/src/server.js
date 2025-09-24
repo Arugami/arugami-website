@@ -67,6 +67,7 @@ const placeSearchQuerySchema = z.object({
 });
 
 const PLACES_API_BASE = 'https://places.googleapis.com/v1';
+const LEGACY_PLACES_API_BASE = 'https://maps.googleapis.com/maps/api/place';
 
 function parseBusinessInput(raw) {
   if (!raw) return {};
@@ -228,6 +229,27 @@ async function callPlacesApi(endpoint, { method = 'GET', body, query, fieldMask 
   return payload;
 }
 
+async function callLegacyPlacesAutocomplete(input, apiKey, signal) {
+  const url = new URL(`${LEGACY_PLACES_API_BASE}/autocomplete/json`);
+  url.searchParams.set('input', input);
+  url.searchParams.set('types', 'establishment');
+  url.searchParams.set('location', '40.7282,-74.0776'); // Hudson County center
+  url.searchParams.set('radius', '50000'); // 50km radius
+  url.searchParams.set('key', apiKey);
+
+  const response = await fetch(url, { signal });
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error('Google Places Autocomplete API request failed');
+    error.status = response.status;
+    error.detail = payload;
+    throw error;
+  }
+
+  return payload;
+}
+
 async function fetchPlaceDetails(placeId, apiKey) {
   if (!apiKey || !placeId) return {};
 
@@ -355,45 +377,72 @@ fastify.get(
     }
 
     try {
-      const maxResultCount = Math.min(limit * 2, 20);
-
-      const payload = await callPlacesApi(
-        'places:searchText',
-        {
-          method: 'POST',
-          fieldMask: 'places.id,places.displayName,places.formattedAddress,places.location,places.types,places.rating,places.userRatingCount',
-          body: {
-            textQuery: q,
-            regionCode: 'US',
-            languageCode: 'en',
-            maxResultCount
-          }
-        },
-        apiKey
-      );
-
-      const results = Array.isArray(payload.places) ? payload.places.slice(0, maxResultCount) : [];
+      // Use legacy Places Autocomplete API for instant suggestions
+      const payload = await callLegacyPlacesAutocomplete(q, apiKey);
+      
+      const predictions = Array.isArray(payload.predictions) ? payload.predictions : [];
+      const maxResults = Math.min(limit, predictions.length);
 
       const mapped = await Promise.all(
-        results.slice(0, limit).map(async (place) => {
+        predictions.slice(0, maxResults).map(async (prediction) => {
           try {
-            const placeId = extractPlaceId(place);
+            const placeId = prediction.place_id;
             if (!placeId) {
-              return mapPlaceResult(place);
+              // Fallback to basic prediction data
+              return {
+                inputValue: prediction.description || '',
+                name: prediction.structured_formatting?.main_text || prediction.description || '',
+                address: prediction.structured_formatting?.secondary_text || '',
+                placeId: '',
+                lat: null,
+                lng: null,
+                rating: null,
+                ratingsTotal: null,
+                withinHudsonCounty: false,
+                category: prediction.types?.[0] || 'establishment'
+              };
             }
 
             const details = await fetchPlaceDetails(placeId, apiKey);
-            return mapPlaceResult(place, details);
+            
+            // Map the prediction + details to our expected format
+            return {
+              inputValue: prediction.description || '',
+              name: details.displayName?.text || prediction.structured_formatting?.main_text || '',
+              city: extractCity(details.addressComponents || []),
+              neighborhood: extractNeighborhood(details.addressComponents || []),
+              category: formatTypes(details.types || prediction.types || []),
+              website: details.websiteUri || null,
+              placeId: placeId,
+              address: details.formattedAddress || prediction.structured_formatting?.secondary_text || '',
+              lat: details.location?.latitude || null,
+              lng: details.location?.longitude || null,
+              rating: details.rating || null,
+              ratingsTotal: details.userRatingCount || null,
+              withinHudsonCounty: isWithinHudsonCounty(details.addressComponents || [])
+            };
           } catch (error) {
             request.log.warn(
               {
                 error: error?.message,
-                placeId: extractPlaceId(place),
+                placeId: prediction.place_id,
                 detail: error?.detail?.error ?? null
               },
               'Failed to load place details'
             );
-            return mapPlaceResult(place);
+            // Return basic prediction data on error
+            return {
+              inputValue: prediction.description || '',
+              name: prediction.structured_formatting?.main_text || prediction.description || '',
+              address: prediction.structured_formatting?.secondary_text || '',
+              placeId: prediction.place_id || '',
+              lat: null,
+              lng: null,
+              rating: null,
+              ratingsTotal: null,
+              withinHudsonCounty: false,
+              category: prediction.types?.[0] || 'establishment'
+            };
           }
         })
       );
