@@ -459,6 +459,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
   <script type="application/json" id="grader-config" set:html={configJson}></script>
   <script type="module">
     console.log('Grader script loading...');
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing grader...');
     const configEl = document.getElementById('grader-config');
     console.log('Config element:', configEl);
     console.log('Config text content:', configEl ? configEl.textContent : null);
@@ -1477,5 +1480,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       console.error('JavaScript error in grader script:', error);
       console.error('Error stack:', error.stack);
     }
+    
+    }); // End DOMContentLoaded
   </script>
 </BaseLayout>
