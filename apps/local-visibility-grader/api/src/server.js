@@ -366,7 +366,6 @@ fastify.get(
             textQuery: q,
             regionCode: 'US',
             languageCode: 'en',
-            includedTypes: ['restaurant'],
             maxResultCount
           }
         },
