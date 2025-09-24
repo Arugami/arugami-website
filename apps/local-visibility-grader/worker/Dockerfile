@@ -1,5 +1,5 @@
-# Use Node.js 20 LTS
-FROM node:20-alpine
+# Use Node.js 20 LTS from AWS's Docker Hub mirror to avoid unauthenticated rate limits
+FROM public.ecr.aws/docker/library/node:20-alpine
 
 # Set working directory
 WORKDIR /app
