@@ -499,7 +499,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     
     if (!businessInput) {
       console.error('CRITICAL: businessInput element not found!');
-      return;
+      throw new Error('businessInput element not found');
     }
     const suggestionHint = document.getElementById('suggestion-hint');
     const suggestionStatus = document.getElementById('suggestion-status');
