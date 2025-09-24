@@ -474,9 +474,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       config = { apiBase: '', recaptchaSiteKey: '' };
     }
     
-    const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : '';
+    const FALLBACK_API_BASE = 'https://arugami-website-production.up.railway.app';
+    const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
+    const usingFallbackApi = !config.apiBase;
     console.log('Config loaded:', { apiBase, config });
-    console.log('API Base available:', !!apiBase);
+    console.log('API Base source:', usingFallbackApi ? 'fallback' : 'config');
 
     try {
       console.log('Starting DOM element selection...');
@@ -885,7 +887,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
         return;
       }
 
-      const finalApiBase = apiBase || 'https://arugami-website-production.up.railway.app';
+      const finalApiBase = apiBase || FALLBACK_API_BASE;
       if (!finalApiBase) {
         const fallback = sampleSuggestions.filter((item) => {
           const label = (item.inputValue ?? item.name ?? '').toLowerCase();
@@ -1376,10 +1378,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       }
     }
 
-    if (!apiBase || apiBase.trim() === '') {
+    if (usingFallbackApi) {
       console.log('No API base found, using fallback');
       // Don't show warning or disable form - let it work with fallback
-      console.log('API base will use fallback URL');
+      console.log('API base will use fallback URL:', apiBase);
     } else {
       console.log('API base configured:', apiBase);
     }
@@ -1387,7 +1389,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     form?.addEventListener('submit', async (event) => {
       console.log('Form submitted!');
       event.preventDefault();
-      const finalApiBase = apiBase || 'https://arugami-website-production.up.railway.app';
+      const finalApiBase = apiBase || FALLBACK_API_BASE;
       if (!finalApiBase) {
         console.log('No API base configured');
         return;
@@ -1417,7 +1419,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       payload.recaptchaToken = recaptchaToken;
 
       try {
-        const res = await fetch(`${apiBase}/api/scan/start`, {
+        const res = await fetch(`${finalApiBase}/api/scan/start`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -1457,14 +1459,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
     verifyForm?.addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (!apiBase || !scanId) return;
+      const finalApiBase = apiBase || FALLBACK_API_BASE;
+      if (!finalApiBase || !scanId) return;
       verifyWarning.classList.add('hidden');
 
       const formData = new FormData(verifyForm);
       const phone = formData.get('phone');
 
       try {
-        const res = await fetch(`${apiBase}/api/verify/start`, {
+        const res = await fetch(`${finalApiBase}/api/verify/start`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -1490,14 +1493,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
     verifyCodeForm?.addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (!apiBase || !scanId || !currentPhone) return;
+      const finalApiBase = apiBase || FALLBACK_API_BASE;
+      if (!finalApiBase || !scanId || !currentPhone) return;
       verifyWarning.classList.add('hidden');
 
       const formData = new FormData(verifyCodeForm);
       const code = formData.get('code');
 
       try {
-        const res = await fetch(`${apiBase}/api/verify/check`, {
+        const res = await fetch(`${finalApiBase}/api/verify/check`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
