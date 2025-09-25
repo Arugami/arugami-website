@@ -1,7 +1,7 @@
 import { Worker, QueueEvents } from 'bullmq';
 
 import env from './config.js';
-import { updateScan, insertCompetitors } from './supabase.js';
+import { updateScan, insertCompetitors, isDuplicateScanError, markScanDuplicate } from './supabase.js';
 
 const queueName = 'local-visibility-scan';
 
@@ -300,16 +300,29 @@ async function processScan(job) {
     return;
   }
 
-  await updateScan(scanId, {
-    status: 'details',
-    place_id: resolved.placeId,
-    lat: resolved.lat,
-    lng: resolved.lng,
-    city: parsedInput.city ?? null
-  });
+  try {
+    await updateScan(scanId, {
+      status: 'details',
+      place_id: resolved.placeId,
+      lat: resolved.lat,
+      lng: resolved.lng,
+      city: parsedInput.city ?? null
+    });
+  } catch (error) {
+    if (isDuplicateScanError(error)) {
+      console.warn(`[scan:${scanId}] duplicate scan detected for place ${resolved.placeId}`);
+      await markScanDuplicate(scanId);
+      return;
+    }
+    throw error;
+  }
 
   const details = await fetchPlaceDetails(resolved.placeId).catch((error) => {
-    console.error('Failed to fetch place details', error);
+    console.error('Failed to fetch place details', {
+      message: error?.message,
+      status: error?.status,
+      detail: error?.detail
+    });
     return null;
   });
 
@@ -334,7 +347,11 @@ async function processScan(job) {
     lng: resolvedLng,
     excludePlaceId: resolved.placeId
   }).catch((error) => {
-    console.error('Failed to fetch competitors', error);
+    console.error('Failed to fetch competitors', {
+      message: error?.message,
+      status: error?.status,
+      detail: error?.detail
+    });
     return [];
   });
 

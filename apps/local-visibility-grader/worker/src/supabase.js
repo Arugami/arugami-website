@@ -19,6 +19,26 @@ export async function updateScan(scanId, payload) {
   }
 }
 
+export function isDuplicateScanError(error) {
+  if (!error) return false;
+  const message = error.message ?? '';
+  return error.code === '23505' && message.includes('scan_place_id_daily_idx');
+}
+
+export async function markScanDuplicate(scanId) {
+  await updateScan(scanId, {
+    status: 'duplicate',
+    issues_json: [
+      {
+        key: 'duplicate_scan',
+        label: 'Looks like we already graded this profile today. Check your existing report or try again tomorrow.'
+      }
+    ],
+    top_issues: [],
+    completed_at: new Date().toISOString()
+  });
+}
+
 export async function insertCompetitors(records) {
   if (!records.length) return;
 
