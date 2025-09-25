@@ -199,7 +199,10 @@ async function fetchPlaceDetails(placeId) {
 }
 
 async function fetchNearbyCompetitors({ lat, lng, excludePlaceId }) {
-  if (typeof lat !== 'number' || typeof lng !== 'number') return [];
+  if (typeof lat !== 'number' || Number.isNaN(lat) || typeof lng !== 'number' || Number.isNaN(lng)) {
+    console.warn('Skipping competitor fetch due to missing coordinates', { lat, lng, excludePlaceId });
+    return [];
+  }
 
   const payload = await callPlacesApi('places:searchNearby', {
     method: 'POST',
@@ -348,6 +351,7 @@ async function processScan(job) {
     excludePlaceId: resolved.placeId
   }).catch((error) => {
     console.error('Failed to fetch competitors', {
+      payload: { lat: resolvedLat, lng: resolvedLng, excludePlaceId: resolved.placeId },
       message: error?.message,
       status: error?.status,
       detail: error?.detail
