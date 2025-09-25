@@ -37,6 +37,7 @@ async function initializeWorker() {
 }
 
 const PLACES_API_BASE = 'https://places.googleapis.com/v1';
+const EARTH_RADIUS_METERS = 6371000;
 
 function normalizeAddressComponents(components) {
   if (!Array.isArray(components)) return [];
@@ -97,18 +98,43 @@ function normalizePlaceDetails(details) {
   };
 }
 
-function normalizeNearbyPlace(place) {
+function calculateDistanceMeters(origin, target) {
+  if (!origin || !target) return null;
+  const { lat: lat1, lng: lng1 } = origin;
+  const { lat: lat2, lng: lng2 } = target;
+
+  if ([lat1, lng1, lat2, lng2].some((value) => typeof value !== 'number' || Number.isNaN(value))) {
+    return null;
+  }
+
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+  const phi1 = toRadians(lat1);
+  const phi2 = toRadians(lat2);
+  const deltaPhi = toRadians(lat2 - lat1);
+  const deltaLambda = toRadians(lng2 - lng1);
+
+  const a =
+    Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+    Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return EARTH_RADIUS_METERS * c;
+}
+
+function normalizeNearbyPlace(place, origin) {
   if (!place) return null;
-  const rawDistance =
-    place.distance?.value !== undefined ? place.distance.value : place.distanceMeters ?? null;
-  const numericDistance =
-    typeof rawDistance === 'string' ? Number.parseFloat(rawDistance) : rawDistance;
+  const latitude = place.location?.latitude ?? null;
+  const longitude = place.location?.longitude ?? null;
+  const targetLocation =
+    typeof latitude === 'number' && typeof longitude === 'number'
+      ? { lat: latitude, lng: longitude }
+      : null;
+  const distance = calculateDistanceMeters(origin, targetLocation);
   return {
     place_id: extractPlaceId(place),
     name: place.displayName?.text ?? place.displayName ?? null,
     rating: place.rating ?? null,
     user_ratings_total: place.userRatingCount ?? null,
-    distance_m: Number.isFinite(numericDistance) ? Math.round(numericDistance) : null
+    distance_m: Number.isFinite(distance) ? Math.round(distance) : null
   };
 }
 
@@ -210,7 +236,7 @@ async function fetchNearbyCompetitors({ lat, lng, excludePlaceId }) {
 
   const payload = await callPlacesApi('places:searchNearby', {
     method: 'POST',
-    fieldMask: 'places.id,places.displayName,places.rating,places.userRatingCount,places.distance',
+    fieldMask: 'places.id,places.displayName,places.rating,places.userRatingCount,places.location',
     body: {
       maxResultCount: 20,
       locationRestriction: {
@@ -225,9 +251,10 @@ async function fetchNearbyCompetitors({ lat, lng, excludePlaceId }) {
     }
   });
 
+  const origin = { lat, lng };
   const places = Array.isArray(payload.places) ? payload.places : [];
   return places
-    .map((place) => normalizeNearbyPlace(place))
+    .map((place) => normalizeNearbyPlace(place, origin))
     .filter((item) => item && item.place_id && item.place_id !== excludePlaceId);
 }
 
