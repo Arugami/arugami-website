@@ -1307,6 +1307,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
           console.log('Scan status update:', data.status, data);
           lastStatus = data.status;
           markSteps(data.status);
+          updateStatus(data.status);
           
           if (data.status === 'done') {
             stopScanTimer();
@@ -1360,36 +1361,49 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
           }
         }
         
-        if (Array.isArray(data.breakdown) && data.breakdown.length && scoreBreakdown) {
-          const categories = [
-            { key: 'search', label: 'Search Results', color: 'bg-pink-400' },
-            { key: 'website', label: 'Website Basics', color: 'bg-green-400' },
-            { key: 'listings', label: 'Local Listings', color: 'bg-blue-400' }
-          ];
-          
+        const breakdownData = data.scoreBreakdown || data.breakdown;
+        if (breakdownData && scoreBreakdown) {
+          const labelMap = {
+            gbp: { label: 'Google Profile', color: 'bg-pink-400' },
+            reviews: { label: 'Reviews & Reputation', color: 'bg-green-400' },
+            photos: { label: 'Photos & Media', color: 'bg-blue-400' },
+            performance: { label: 'Website Performance', color: 'bg-purple-400' },
+            rankings: { label: 'Local Rankings', color: 'bg-amber-400' }
+          };
+
+          const entries = Array.isArray(breakdownData)
+            ? breakdownData.map((item, index) => [`bucket-${index + 1}`, typeof item === 'number' ? item : item?.score ?? item])
+            : Object.entries(breakdownData);
+
           scoreBreakdown.innerHTML = '';
-          categories.forEach((category, index) => {
-            const item = data.breakdown[index];
-            const div = document.createElement('div');
-            div.className = 'flex items-center justify-between';
-            
-            const leftSide = document.createElement('div');
-            leftSide.className = 'flex items-center gap-2';
-            
+
+          entries.forEach(([key, rawValue]) => {
+            const numericValue = typeof rawValue === 'number' ? rawValue : Number.parseFloat(rawValue) || 0;
+            const meta = labelMap[key] ?? {
+              label: key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()),
+              color: 'bg-slate-500'
+            };
+
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between';
+
+            const left = document.createElement('div');
+            left.className = 'flex items-center gap-2';
+
             const dot = document.createElement('div');
-            dot.className = `h-2 w-2 rounded-full ${category.color}`;
-            
+            dot.className = `h-2 w-2 rounded-full ${meta.color}`;
+
             const label = document.createElement('span');
             label.className = 'text-slate-300';
-            label.textContent = category.label;
-            
+            label.textContent = meta.label;
+
             const score = document.createElement('span');
             score.className = 'text-white font-medium';
-            score.textContent = item && typeof item.score === 'number' ? item.score.toString() : '--';
-            
-            leftSide.append(dot, label);
-            div.append(leftSide, score);
-            scoreBreakdown.appendChild(div);
+            score.textContent = Math.round(numericValue).toString();
+
+            left.append(dot, label);
+            row.append(left, score);
+            scoreBreakdown.appendChild(row);
           });
         }
       } catch (error) {
@@ -1466,6 +1480,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         // Start timer and polling
         startScanTimer();
         markSteps('resolving');
+        updateStatus('resolving');
 
         pollInterval = setInterval(() => pollStatus(scanId), 1000);
         await pollStatus(scanId);
@@ -1537,8 +1552,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
 
           const data = await res.json();
           resultLink.href = data.reportUrl;
-          toggle(resultSection, true);
+          hideUnlockModal();
+          stopScanTimer();
+          toggle(progressSection, false);
           toggle(verifySection, false);
+          toggle(resultSection, true);
           if (pollInterval) {
             clearInterval(pollInterval);
             pollInterval = null;
