@@ -1310,8 +1310,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
             stopScanTimer();
             if (verificationDisabled) {
               hideUnlockModal();
+              toggle(progressSection, false);
               toggle(verifySection, false);
               toggle(resultSection, true);
+              resultSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
               showUnlockModal();
             }
