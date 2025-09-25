@@ -208,7 +208,6 @@ async function fetchNearbyCompetitors({ lat, lng, excludePlaceId }) {
     method: 'POST',
     fieldMask: 'places.id,places.displayName,places.rating,places.userRatingCount,places.distanceMeters',
     body: {
-      includedTypes: ['restaurant'],
       maxResultCount: 20,
       locationRestriction: {
         circle: {
