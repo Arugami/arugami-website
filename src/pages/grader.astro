@@ -1296,9 +1296,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     }
 
     async function pollStatus(id) {
-      if (!apiBase) return;
+      const finalApiBase = apiBase || FALLBACK_API_BASE;
+      if (!finalApiBase) return;
       try {
-        const res = await fetch(`${apiBase}/api/scan/${id}`);
+        const res = await fetch(`${finalApiBase}/api/scan/${id}`);
         if (!res.ok) throw new Error('Status request failed');
         const data = await res.json();
         
