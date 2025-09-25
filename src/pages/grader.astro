@@ -1303,6 +1303,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         const data = await res.json();
         
         if (data.status && data.status !== lastStatus) {
+          console.log('Scan status update:', data.status, data);
           lastStatus = data.status;
           markSteps(data.status);
           
