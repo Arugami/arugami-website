@@ -259,8 +259,14 @@ function calculateScore({ details, psi, competitors }) {
     rankings: rankingScore
   };
 
-  const total = Object.values(breakdown).reduce((sum, part) => sum + part, 0);
-  return { total: Math.min(total, 100), breakdown };
+  const rawTotal = Object.values(breakdown).reduce((sum, part) => sum + part, 0);
+  const cappedTotal = Math.min(rawTotal, 100);
+
+  return {
+    total: Math.round(cappedTotal),
+    breakdown,
+    rawTotal
+  };
 }
 
 async function persistCompetitors(scanId, competitors) {
