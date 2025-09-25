@@ -99,12 +99,13 @@ function normalizePlaceDetails(details) {
 
 function normalizeNearbyPlace(place) {
   if (!place) return null;
+  const distance = place.distanceMeters;
   return {
     place_id: extractPlaceId(place),
     name: place.displayName?.text ?? place.displayName ?? null,
     rating: place.rating ?? null,
     user_ratings_total: place.userRatingCount ?? null,
-    distance_m: place.distanceMeters ?? null
+    distance_m: Number.isFinite(distance) ? Math.round(distance) : null
   };
 }
 
@@ -355,11 +356,12 @@ async function processScan(job) {
     lng: resolvedLng,
     excludePlaceId: resolved.placeId
   }).catch((error) => {
+    const detail = error?.detail ? JSON.stringify(error.detail, null, 2) : null;
     console.error('Failed to fetch competitors', {
       payload: { lat: resolvedLat, lng: resolvedLng, excludePlaceId: resolved.placeId },
       message: error?.message,
       status: error?.status,
-      detail: error?.detail
+      detail
     });
     return [];
   });
