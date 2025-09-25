@@ -99,13 +99,16 @@ function normalizePlaceDetails(details) {
 
 function normalizeNearbyPlace(place) {
   if (!place) return null;
-  const distance = place.distanceMeters;
+  const rawDistance =
+    place.distance?.value !== undefined ? place.distance.value : place.distanceMeters ?? null;
+  const numericDistance =
+    typeof rawDistance === 'string' ? Number.parseFloat(rawDistance) : rawDistance;
   return {
     place_id: extractPlaceId(place),
     name: place.displayName?.text ?? place.displayName ?? null,
     rating: place.rating ?? null,
     user_ratings_total: place.userRatingCount ?? null,
-    distance_m: Number.isFinite(distance) ? Math.round(distance) : null
+    distance_m: Number.isFinite(numericDistance) ? Math.round(numericDistance) : null
   };
 }
 
@@ -207,7 +210,7 @@ async function fetchNearbyCompetitors({ lat, lng, excludePlaceId }) {
 
   const payload = await callPlacesApi('places:searchNearby', {
     method: 'POST',
-    fieldMask: 'places.id,places.displayName,places.rating,places.userRatingCount,places.distanceMeters',
+    fieldMask: 'places.id,places.displayName,places.rating,places.userRatingCount,places.distance',
     body: {
       maxResultCount: 20,
       locationRestriction: {
