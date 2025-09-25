@@ -9,7 +9,8 @@ const description = 'Run a 60-second local visibility audit for your restaurant.
 // Cache busting deployment - September 24, 2025
 const apiBase = import.meta.env.PUBLIC_API_BASE ?? 'https://arugami-website-production.up.railway.app';
 const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
-const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
+const disableVerification = (import.meta.env.PUBLIC_DISABLE_VERIFICATION ?? 'true') === 'true';
+const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerification });
 ---
 
 <BaseLayout title={pageTitle} description={description}>
@@ -477,8 +478,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     const FALLBACK_API_BASE = 'https://arugami-website-production.up.railway.app';
     const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
     const usingFallbackApi = !config.apiBase;
+    const verificationDisabled = Boolean(config.disableVerification);
     console.log('Config loaded:', { apiBase, config });
     console.log('API Base source:', usingFallbackApi ? 'fallback' : 'config');
+    console.log('Verification disabled:', verificationDisabled);
 
     try {
       console.log('Starting DOM element selection...');
@@ -523,6 +526,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
     const unlockModal = document.getElementById('unlock-modal');
     const unlockRecaptcha = document.getElementById('unlock-recaptcha');
     const unlockContinue = document.getElementById('unlock-continue');
+    
+    if (verificationDisabled) {
+      verifySection?.classList.add('hidden');
+      unlockModal?.classList.add('hidden');
+    }
 
     const stepOrder = ['resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
     let scanId = null;
@@ -1166,6 +1174,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
 
     // Unlock modal functions
     function showUnlockModal() {
+      if (verificationDisabled) return;
       if (unlockModal) {
         unlockModal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -1299,7 +1308,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
           
           if (data.status === 'done') {
             stopScanTimer();
-            showUnlockModal();
+            if (verificationDisabled) {
+              hideUnlockModal();
+              toggle(verifySection, false);
+              toggle(resultSection, true);
+            } else {
+              showUnlockModal();
+            }
             if (pollInterval) {
               clearInterval(pollInterval);
               pollInterval = null;
@@ -1457,78 +1472,80 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey });
       }
     });
 
-    verifyForm?.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const finalApiBase = apiBase || FALLBACK_API_BASE;
-      if (!finalApiBase || !scanId) return;
-      verifyWarning.classList.add('hidden');
+    if (!verificationDisabled) {
+      verifyForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const finalApiBase = apiBase || FALLBACK_API_BASE;
+        if (!finalApiBase || !scanId) return;
+        verifyWarning.classList.add('hidden');
 
-      const formData = new FormData(verifyForm);
-      const phone = formData.get('phone');
+        const formData = new FormData(verifyForm);
+        const phone = formData.get('phone');
 
-      try {
-        const res = await fetch(`${finalApiBase}/api/verify/start`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ scanId, phone })
-        });
+        try {
+          const res = await fetch(`${finalApiBase}/api/verify/start`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ scanId, phone })
+          });
 
-        if (!res.ok) {
-          verifyWarning.textContent = 'We could not send the code. Double-check the number and try again.';
+          if (!res.ok) {
+            verifyWarning.textContent = 'We could not send the code. Double-check the number and try again.';
+            verifyWarning.classList.remove('hidden');
+            return;
+          }
+
+          currentPhone = phone;
+          toggle(verifyCodeForm, true);
+          verifyForm.querySelector('button')?.setAttribute('disabled', 'true');
+        } catch (error) {
+          console.error(error);
+          verifyWarning.textContent = 'Something went wrong sending the code. Try again in a minute.';
           verifyWarning.classList.remove('hidden');
-          return;
         }
+      });
 
-        currentPhone = phone;
-        toggle(verifyCodeForm, true);
-        verifyForm.querySelector('button')?.setAttribute('disabled', 'true');
-      } catch (error) {
-        console.error(error);
-        verifyWarning.textContent = 'Something went wrong sending the code. Try again in a minute.';
-        verifyWarning.classList.remove('hidden');
-      }
-    });
+      verifyCodeForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const finalApiBase = apiBase || FALLBACK_API_BASE;
+        if (!finalApiBase || !scanId || !currentPhone) return;
+        verifyWarning.classList.add('hidden');
 
-    verifyCodeForm?.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const finalApiBase = apiBase || FALLBACK_API_BASE;
-      if (!finalApiBase || !scanId || !currentPhone) return;
-      verifyWarning.classList.add('hidden');
+        const formData = new FormData(verifyCodeForm);
+        const code = formData.get('code');
 
-      const formData = new FormData(verifyCodeForm);
-      const code = formData.get('code');
+        try {
+          const res = await fetch(`${finalApiBase}/api/verify/check`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ scanId, phone: currentPhone, code })
+          });
 
-      try {
-        const res = await fetch(`${finalApiBase}/api/verify/check`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ scanId, phone: currentPhone, code })
-        });
+          if (!res.ok) {
+            verifyWarning.textContent = res.status === 401 ? 'Code not recognized. Request a new code and try again.' : 'Verification failed. Try again shortly.';
+            verifyWarning.classList.remove('hidden');
+            return;
+          }
 
-        if (!res.ok) {
-          verifyWarning.textContent = res.status === 401 ? 'Code not recognized. Request a new code and try again.' : 'Verification failed. Try again shortly.';
+          const data = await res.json();
+          resultLink.href = data.reportUrl;
+          toggle(resultSection, true);
+          toggle(verifySection, false);
+          if (pollInterval) {
+            clearInterval(pollInterval);
+            pollInterval = null;
+          }
+        } catch (error) {
+          console.error(error);
+          verifyWarning.textContent = 'Unexpected error unlocking the report. Try again or contact us.';
           verifyWarning.classList.remove('hidden');
-          return;
         }
-
-        const data = await res.json();
-        resultLink.href = data.reportUrl;
-        toggle(resultSection, true);
-        toggle(verifySection, false);
-        if (pollInterval) {
-          clearInterval(pollInterval);
-          pollInterval = null;
-        }
-      } catch (error) {
-        console.error(error);
-        verifyWarning.textContent = 'Unexpected error unlocking the report. Try again or contact us.';
-        verifyWarning.classList.remove('hidden');
-      }
-    });
+      });
+    }
     
     } catch (error) {
       console.error('JavaScript error in grader script:', error);
