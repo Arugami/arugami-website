@@ -1108,6 +1108,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     function toggle(el, show) {
       if (!el) return;
       el.classList.toggle('hidden', !show);
+      console.log('toggle()', { id: el.id, show, classes: el.className });
     }
 
     // Timer functions
