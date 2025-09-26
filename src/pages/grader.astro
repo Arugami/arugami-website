@@ -1107,8 +1107,19 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
 
     function toggle(el, show) {
       if (!el) return;
+      const before = el.classList.contains('hidden');
       el.classList.toggle('hidden', !show);
-      console.log('toggle()', { id: el.id, show, classes: el.className });
+      const after = el.classList.contains('hidden');
+      const tracked = ['grader-progress', 'grader-verify', 'grader-result'];
+      if (before !== after || tracked.includes(el.id)) {
+        console.log('toggle()', {
+          target: el.id || '(no-id)',
+          show,
+          beforeHidden: before,
+          afterHidden: after,
+          classList: el.className
+        });
+      }
     }
 
     // Timer functions
