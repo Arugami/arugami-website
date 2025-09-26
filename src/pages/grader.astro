@@ -106,7 +106,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
 
                 <input type="hidden" name="placeId" id="placeId" />
 
-                <button id="run-audit" type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Run my free audit</button>
+                <button id="run-audit" type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-pink-500">Run my free audit</button>
                 <p class="hidden text-xs text-amber-300" id="grader-warning"></p>
               </div>
             </form>
@@ -510,6 +510,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     const businessInput = document.getElementById('businessName');
     const suggestionContainer = document.getElementById('search-suggestions');
     const suggestionList = document.getElementById('search-suggestion-list');
+    const runAuditButton = document.getElementById('run-audit');
     console.log('DOM elements found:', { businessInput, suggestionContainer, suggestionList });
     console.log('Business input element:', businessInput);
     
@@ -534,10 +535,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     const unlockModal = document.getElementById('unlock-modal');
     const unlockRecaptcha = document.getElementById('unlock-recaptcha');
     const unlockContinue = document.getElementById('unlock-continue');
-    
+
     if (verificationDisabled) {
       verifySection?.classList.add('hidden');
       unlockModal?.classList.add('hidden');
+    }
+
+    if (runAuditButton && !(placeIdInput?.value?.trim())) {
+      runAuditButton.disabled = true;
     }
 
     const stepOrder = ['resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
@@ -604,6 +609,52 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     let currentSuggestions = [];
     let activeSuggestionIndex = -1;
     let manualMode = false;
+
+    let selectedPlace = null;
+
+    function resolvePlaceId(item) {
+      if (!item) return '';
+      return item.placeId ?? item.place_id ?? item.id ?? '';
+    }
+
+    function resolveDisplayLabel(item) {
+      if (!item) return '';
+      return (item.description ?? item.inputValue ?? item.name ?? item.label ?? '').toString().trim();
+    }
+
+    function clearPlaceSelection({ silent } = {}) {
+      const hadSelection = Boolean(selectedPlace) || Boolean(placeIdInput?.value);
+      selectedPlace = null;
+      if (placeIdInput) {
+        placeIdInput.value = '';
+      }
+      if (runAuditButton) {
+        runAuditButton.disabled = true;
+      }
+      if (hadSelection && !silent) {
+        console.log('[grader] selection cleared');
+      }
+    }
+
+    function setPlaceSelection(item) {
+      const placeId = resolvePlaceId(item);
+      if (placeId) {
+        selectedPlace = { ...item, placeId };
+        if (placeIdInput) {
+          placeIdInput.value = placeId;
+        }
+        const label = resolveDisplayLabel(item);
+        if (businessInput && label) {
+          businessInput.value = label;
+        }
+        if (runAuditButton) {
+          runAuditButton.disabled = false;
+        }
+        console.log('[grader] selection set', { placeId, label });
+      } else {
+        clearPlaceSelection();
+      }
+    }
 
     function getInitials(value) {
       if (!value) return '??';
@@ -698,17 +749,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
 
     function applySuggestion(suggestion) {
       if (!suggestion) return;
-      if (businessInput) {
-        businessInput.value = suggestion.inputValue ?? suggestion.name ?? '';
-      }
+      setPlaceSelection(suggestion);
       if (cityInput && suggestion.city) {
         cityInput.value = suggestion.city;
       }
       if (websiteInput && suggestion.website) {
         websiteInput.value = suggestion.website;
-      }
-      if (placeIdInput && suggestion.placeId) {
-        placeIdInput.value = suggestion.placeId;
       }
       manualMode = false;
       if (manualIntake) {
@@ -717,7 +763,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
       if (suggestionHint) {
         suggestionHint.textContent = 'We’ll scan this listing next.';
       }
-      updateSuggestionStatus(suggestion.placeId ? 'live' : 'sample');
+      updateSuggestionStatus(resolvePlaceId(suggestion) ? 'live' : 'sample');
       setActiveSuggestion(-1);
       if (businessInput) {
         businessInput.focus({ preventScroll: true });
@@ -825,9 +871,17 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         chevron.appendChild(path);
         button.appendChild(chevron);
 
+        button.dataset.placeId = resolvePlaceId(item) ?? '';
+        button.dataset.label = displayName;
         button.addEventListener('mouseenter', () => setActiveSuggestion(index));
         button.addEventListener('focus', () => setActiveSuggestion(index));
         button.addEventListener('click', () => applySuggestion(item));
+        button.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            applySuggestion(item);
+          }
+        });
 
         li.appendChild(button);
         suggestionList.appendChild(li);
@@ -885,9 +939,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         searchController = null;
       }
       
-      if (placeIdInput) {
-        placeIdInput.value = '';
-      }
       manualMode = false;
       if (manualIntake) {
         manualIntake.open = false;
@@ -999,6 +1050,11 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
       console.log('Attaching event listeners to businessInput');
       businessInput.addEventListener('input', (event) => {
         const value = event.target.value ?? '';
+        if (selectedPlace) {
+          clearPlaceSelection();
+        } else if (runAuditButton) {
+          runAuditButton.disabled = true;
+        }
         if (suggestionTimeout) {
           clearTimeout(suggestionTimeout);
         }
@@ -1072,9 +1128,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         manualInput?.focus({ preventScroll: true });
       }
       manualMode = true;
-      if (placeIdInput) {
-        placeIdInput.value = '';
-      }
+      clearPlaceSelection({ silent: true });
       if (suggestionHint) {
         suggestionHint.textContent = 'Drop your details below and we’ll still guide the scan.';
       }
@@ -1093,9 +1147,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     manualIntake?.addEventListener('toggle', () => {
       manualMode = manualIntake.open;
       if (manualMode) {
-        if (placeIdInput) {
-          placeIdInput.value = '';
-        }
+        clearPlaceSelection({ silent: true });
         hideSuggestions();
       }
     });
@@ -1103,9 +1155,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     manualIntake?.querySelectorAll('input').forEach((input) => {
       input.addEventListener('input', () => {
         manualMode = true;
-        if (placeIdInput) {
-          placeIdInput.value = '';
-        }
+        clearPlaceSelection({ silent: true });
       });
     });
 
@@ -1484,6 +1534,18 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         return;
       }
 
+      const placeId = placeIdInput?.value?.trim();
+      if (!placeId) {
+        console.warn('[grader] blocked submit: missing placeId');
+        warning.textContent = 'Select your restaurant from the list so we can run the audit.';
+        warning.classList.remove('hidden');
+        if (runAuditButton) {
+          runAuditButton.disabled = true;
+        }
+        businessInput?.focus({ preventScroll: true });
+        return;
+      }
+
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
       let recaptchaToken = null;
@@ -1498,6 +1560,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
       payload.recaptchaToken = recaptchaToken;
 
       try {
+        console.log('[grader] submitting scan for', { placeId, businessName });
         const res = await fetch(`${finalApiBase}/api/scan/start`, {
           method: 'POST',
           headers: {
