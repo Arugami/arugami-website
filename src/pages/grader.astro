@@ -58,7 +58,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         <div class="rounded-2xl border border-white/10 bg-white/5 shadow-xl" id="grader-card">
           <div class="p-6" id="grader-form-container">
             <form id="grader-form" class="space-y-6">
-              <div class="space-y-3">
+              <div id="grader-intake" class="space-y-6">
+                <div class="space-y-3">
                 <label class="block text-sm font-semibold text-white" for="businessName">What’s your restaurant called? *</label>
                 <div>
                   <div class="relative">
@@ -94,18 +95,18 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
                   </div>
                 </div>
 
-                <ul class="grid gap-2 rounded-xl border border-white/10 bg-slate-900/70 p-4 text-xs text-slate-300 sm:grid-cols-3">
-                  <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Live GBP screenshots</li>
-                  <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Hudson competitor map</li>
-                  <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Fix-it playbook in 2 minutes</li>
-                </ul>
+                  <ul class="grid gap-2 rounded-xl border border-white/10 bg-slate-900/70 p-4 text-xs text-slate-300 sm:grid-cols-3">
+                    <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Live GBP screenshots</li>
+                    <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Hudson competitor map</li>
+                    <li class="flex items-center gap-2"><span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>Fix-it playbook in 2 minutes</li>
+                  </ul>
+                </div>
+
+                <input type="hidden" name="placeId" id="placeId" />
+
+                <button type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Run my free audit</button>
+                <p class="hidden text-xs text-amber-300" id="grader-warning"></p>
               </div>
-
-
-              <input type="hidden" name="placeId" id="placeId" />
-
-              <button type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Run my free audit</button>
-              <p class="hidden text-xs text-amber-300" id="grader-warning"></p>
             </form>
 
             <!-- Scanning View: Map-first with left sticky rail -->
@@ -490,6 +491,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     try {
       console.log('Starting DOM element selection...');
       const form = document.getElementById('grader-form');
+      const intakeSection = document.getElementById('grader-intake');
       console.log('Form found:', !!form);
     const warning = document.getElementById('grader-warning');
     const progressSection = document.getElementById('grader-progress');
@@ -1107,16 +1109,25 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
 
     function toggle(el, show) {
       if (!el) return;
-      const before = el.classList.contains('hidden');
-      el.classList.toggle('hidden', !show);
-      const after = el.classList.contains('hidden');
-      const tracked = ['grader-progress', 'grader-verify', 'grader-result'];
-      if (before !== after || tracked.includes(el.id)) {
+      const tracked = ['grader-form', 'grader-progress', 'grader-verify', 'grader-result'];
+      const beforeHidden = el.classList.contains('hidden');
+
+      if (show) {
+        el.classList.remove('hidden');
+        el.style.removeProperty('display');
+      } else {
+        el.classList.add('hidden');
+        el.style.display = 'none';
+      }
+
+      const afterHidden = el.classList.contains('hidden');
+      if (beforeHidden !== afterHidden || tracked.includes(el.id)) {
         console.log('toggle()', {
           target: el.id || '(no-id)',
           show,
-          beforeHidden: before,
-          afterHidden: after,
+          beforeHidden,
+          afterHidden,
+          styleDisplay: el.style.display || '(auto)',
           classList: el.className
         });
       }
@@ -1490,7 +1501,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         const businessName = payload.businessName || 'Your restaurant';
         updateScanningQuery(businessName);
         
-        toggle(form, false);
+        toggle(intakeSection, false);
         toggle(progressSection, true);
         
         // Start timer and polling
