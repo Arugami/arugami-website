@@ -8,9 +8,10 @@ const description = 'Run a 60-second local visibility audit for your restaurant.
 
 // Cache busting deployment - September 24, 2025
 const apiBase = import.meta.env.PUBLIC_API_BASE ?? 'https://arugami-website-production.up.railway.app';
-const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '6LewvNArAAAAAEdG9i-zSnwDs_FSu8Nh-hxLXV2P';
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 const disableVerification = (import.meta.env.PUBLIC_DISABLE_VERIFICATION ?? 'true') === 'true';
-const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerification });
+const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey, disableVerification });
 ---
 
 <BaseLayout title={pageTitle} description={description}>
@@ -105,6 +106,23 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
                 </div>
 
                 <input type="hidden" name="placeId" id="placeId" />
+
+                {turnstileSiteKey && (
+                  <div class="space-y-2" id="grader-human-check">
+                    <label class="block text-sm font-semibold text-white" for="grader-turnstile">Verify you’re human *</label>
+                    <div
+                      id="grader-turnstile"
+                      class="cf-turnstile"
+                      data-sitekey={turnstileSiteKey}
+                      data-theme="dark"
+                      data-action="grader_start"
+                      data-callback="graderTurnstileSuccess"
+                      data-expired-callback="graderTurnstileExpired"
+                      data-error-callback="graderTurnstileError"
+                    >
+                    </div>
+                  </div>
+                )}
 
                 <button id="run-audit" type="submit" class="w-full rounded-lg bg-pink-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-pink-500">Run my free audit</button>
                 <p class="hidden text-xs text-amber-300" id="grader-warning"></p>
@@ -486,9 +504,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
     const usingFallbackApi = !config.apiBase;
     const verificationDisabled = Boolean(config.disableVerification);
-    console.log('Config loaded:', { apiBase, config });
-    console.log('API Base source:', usingFallbackApi ? 'fallback' : 'config');
-    console.log('Verification disabled:', verificationDisabled);
+    const turnstileSiteKey = config.turnstileSiteKey || '';
+    const hasRecaptchaConfigured = Boolean(config.recaptchaSiteKey) || !turnstileSiteKey;
+    console.log('Config loaded:', { apiBase, usingFallbackApi, verificationDisabled, turnstileSiteKey, hasRecaptchaConfigured });
 
     try {
       console.log('Starting DOM element selection...');
@@ -541,9 +559,38 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
       unlockModal?.classList.add('hidden');
     }
 
-    if (runAuditButton && !(placeIdInput?.value?.trim())) {
-      runAuditButton.disabled = true;
+    function ensureTurnstileScript() {
+      if (!turnstileSiteKey) return;
+      if (window.turnstile) return;
+      if (document.querySelector('script[data-turnstile]')) return;
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      script.dataset.turnstile = 'true';
+      document.head.appendChild(script);
     }
+
+    if (turnstileSiteKey) {
+      ensureTurnstileScript();
+      window.graderTurnstileSuccess = (token) => {
+        turnstileToken = token;
+        console.log('[grader] turnstile token received');
+        updateSubmitState('turnstile-success');
+      };
+      window.graderTurnstileExpired = () => {
+        turnstileToken = null;
+        console.log('[grader] turnstile token expired');
+        updateSubmitState('turnstile-expired');
+      };
+      window.graderTurnstileError = () => {
+        turnstileToken = null;
+        console.warn('[grader] turnstile encountered an error');
+        updateSubmitState('turnstile-error');
+      };
+    }
+
+    updateSubmitState('initial');
 
     const stepOrder = ['resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
     let scanId = null;
@@ -609,6 +656,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
     let currentSuggestions = [];
     let activeSuggestionIndex = -1;
     let manualMode = false;
+    let turnstileToken = null;
+    let lastSubmitSnapshot = null;
 
     let selectedPlace = null;
 
@@ -628,12 +677,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
       if (placeIdInput) {
         placeIdInput.value = '';
       }
-      if (runAuditButton) {
-        runAuditButton.disabled = true;
-      }
       if (hadSelection && !silent) {
         console.log('[grader] selection cleared');
       }
+      updateSubmitState('clear-place');
     }
 
     function setPlaceSelection(item) {
@@ -647,13 +694,54 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         if (businessInput && label) {
           businessInput.value = label;
         }
-        if (runAuditButton) {
-          runAuditButton.disabled = false;
-        }
         console.log('[grader] selection set', { placeId, label });
       } else {
         clearPlaceSelection();
       }
+      updateSubmitState('set-place');
+    }
+
+    function computeSubmitSnapshot() {
+      const placeIdVal = placeIdInput?.value?.trim() || '';
+      const businessVal = businessInput?.value?.trim() || '';
+      const captchaReady = turnstileSiteKey ? Boolean(turnstileToken) : hasRecaptchaConfigured;
+      const shouldEnable = Boolean(placeIdVal) && Boolean(businessVal) && captchaReady;
+      return {
+        shouldEnable,
+        placeIdReady: Boolean(placeIdVal),
+        businessReady: Boolean(businessVal),
+        captchaReady
+      };
+    }
+
+    function updateSubmitState(reason = 'unknown') {
+      if (!runAuditButton) return;
+      const snapshot = computeSubmitSnapshot();
+      const snapshotKey = JSON.stringify(snapshot);
+      if (!lastSubmitSnapshot || JSON.stringify(lastSubmitSnapshot) !== snapshotKey) {
+        console.log('[grader] submit state', { reason, ...snapshot });
+        runAuditButton.disabled = !snapshot.shouldEnable;
+        lastSubmitSnapshot = JSON.parse(snapshotKey);
+      } else if (reason === 'force') {
+        runAuditButton.disabled = !snapshot.shouldEnable;
+      }
+    }
+
+    function formatValidationErrors(details) {
+      if (!details || typeof details !== 'object') return '';
+      const messages = [];
+      for (const [key, value] of Object.entries(details)) {
+        const parts = Array.isArray(value) ? value : [value];
+        const label = key
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/^./, (ch) => ch.toUpperCase())
+          .trim();
+        for (const part of parts) {
+          if (!part) continue;
+          messages.push(`${label}: ${part}`);
+        }
+      }
+      return messages.join(' ');
     }
 
     function getInitials(value) {
@@ -1052,8 +1140,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         const value = event.target.value ?? '';
         if (selectedPlace) {
           clearPlaceSelection();
-        } else if (runAuditButton) {
-          runAuditButton.disabled = true;
         }
         if (suggestionTimeout) {
           clearTimeout(suggestionTimeout);
@@ -1069,6 +1155,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         // Debounce search with different delays based on query length
         const delay = value.trim().length < 3 ? 300 : 150;
         suggestionTimeout = window.setTimeout(() => loadSuggestions(value), delay);
+        updateSubmitState('input-change');
       });
 
       businessInput.addEventListener('focus', () => {
@@ -1539,28 +1626,46 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
         console.warn('[grader] blocked submit: missing placeId');
         warning.textContent = 'Select your restaurant from the list so we can run the audit.';
         warning.classList.remove('hidden');
-        if (runAuditButton) {
-          runAuditButton.disabled = true;
-        }
         businessInput?.focus({ preventScroll: true });
+        updateSubmitState('missing-place');
         return;
       }
+
+      console.log('[grader] submit attempt', {
+        businessName,
+        placeId,
+        captchaReady: turnstileSiteKey ? Boolean(turnstileToken) : hasRecaptchaConfigured
+      });
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
-      let recaptchaToken = null;
-      try {
-        recaptchaToken = await getRecaptchaToken('grader_start');
-      } catch (error) {
-        warning.textContent = 'Could not load reCAPTCHA. Please refresh and try again.';
-        warning.classList.remove('hidden');
-        return;
+      let captchaToken = null;
+      if (turnstileSiteKey) {
+        captchaToken = turnstileToken;
+        if (!captchaToken) {
+          warning.textContent = 'Verify you’re human before running the audit.';
+          warning.classList.remove('hidden');
+          updateSubmitState('missing-captcha');
+          return;
+        }
+      } else {
+        try {
+          captchaToken = await getRecaptchaToken('grader_start');
+        } catch (error) {
+          warning.textContent = 'Could not load reCAPTCHA. Please refresh and try again.';
+          warning.classList.remove('hidden');
+          return;
+        }
       }
 
-      payload.recaptchaToken = recaptchaToken;
+      payload.recaptchaToken = captchaToken;
+      payload.businessName = businessName;
+      payload.placeId = placeId;
+      payload.source = payload.source ?? 'grader-site';
 
       try {
         console.log('[grader] submitting scan for', { placeId, businessName });
+        console.log('[grader] payload prepared', payload);
         const res = await fetch(`${finalApiBase}/api/scan/start`, {
           method: 'POST',
           headers: {
@@ -1569,10 +1674,19 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
           body: JSON.stringify(payload)
         });
 
+        console.log('[grader] start response status', res.status);
         if (!res.ok) {
-          const error = await res.json().catch(() => ({}));
-          warning.textContent = error.error === 'recaptcha_failed' ? 'We could not verify you are human. Reload and try again.' : 'Something went wrong starting your scan. Try again.';
+          const errorBody = await res.json().catch(() => ({}));
+          console.warn('[grader] start error', { status: res.status, error: errorBody });
+          const detailed =
+            formatValidationErrors(errorBody?.details) ||
+            formatValidationErrors(errorBody?.errors);
+          const fallbackMessage = errorBody?.error === 'recaptcha_failed'
+            ? 'We could not verify you are human. Reload and try again.'
+            : 'Something went wrong starting your scan. Try again.';
+          warning.textContent = detailed || fallbackMessage;
           warning.classList.remove('hidden');
+          updateSubmitState('server-error');
           return;
         }
 
