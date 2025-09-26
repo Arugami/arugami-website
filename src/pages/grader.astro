@@ -136,6 +136,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, disableVerificati
                           <span id="scan-timer">~30 seconds remaining</span>
                         </div>
                       </div>
+                      <div class="mt-3 space-y-1">
+                        <p id="progress-status" class="text-sm font-medium text-white">Queued — warming up the APIs</p>
+                        <p id="progress-subtitle" class="text-xs text-slate-400">We queue your grader and lock in a short-lived token.</p>
+                      </div>
                     </div>
 
                     <!-- Progress steps -->
