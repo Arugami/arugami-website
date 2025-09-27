@@ -115,7 +115,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
                   Change selection
                 </button>
 
-                {turnstileSiteKey && (
+                {!disableVerification && turnstileSiteKey && (
                   <div class="space-y-2" id="grader-human-check">
                     <label class="block text-sm font-semibold text-white" for="grader-turnstile">Verify you’re human *</label>
                     <div
@@ -492,142 +492,228 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
   <script type="application/json" id="grader-config" set:html={configJson}></script>
   <script type="module">
-    console.log('Grader script loading...');
+    const FALLBACK_API_BASE = 'https://arugami-website-production.up.railway.app';
 
-    const state = {
-      apiBase: 'https://arugami-website-production.up.railway.app',
+    let state = {
+      apiBase: FALLBACK_API_BASE,
       usingFallbackApi: true,
-      verificationDisabled: false,
-      recaptchaSiteKey: '',
+      disableVerification: false,
       turnstileSiteKey: '',
+      recaptchaSiteKey: '',
+      selected: null,
+      hasSelection: false,
+      isSubmitting: false,
+      captchaReady: false,
       placeId: '',
       selectedLabel: '',
-      hasSelection: false,
-      recaptchaToken: '',
-      turnstileToken: '',
-      isSubmitting: false,
-      lastSubmitSnapshotKey: ''
+      turnstileToken: ''
     };
 
+    let lastSubmitSnapshot = null;
+    let lastSubmitSnapshotKey = '';
+
     const initGrader = () => {
-    console.log('DOM loaded, initializing grader...');
-    const configEl = document.getElementById('grader-config');
-    console.log('Config element:', configEl);
-    console.log('Config text content:', configEl ? configEl.textContent : null);
-    
-    let config = {};
-    try {
-      config = configEl ? JSON.parse(configEl.textContent) : {};
-    } catch (error) {
-      console.error('JSON parse error:', error);
-      config = { apiBase: '', recaptchaSiteKey: '' };
-    }
-    
-    const FALLBACK_API_BASE = 'https://arugami-website-production.up.railway.app';
-    state.apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
-    state.usingFallbackApi = !config.apiBase;
-    state.verificationDisabled = Boolean(config.disableVerification);
-    state.turnstileSiteKey = config.turnstileSiteKey || '';
-    state.recaptchaSiteKey = config.recaptchaSiteKey || recaptchaSiteKey || '';
+      const configEl = document.getElementById('grader-config');
 
-    const apiBase = state.apiBase;
-    const usingFallbackApi = state.usingFallbackApi;
-    const verificationDisabled = state.verificationDisabled;
-    const turnstileSiteKey = state.turnstileSiteKey;
-    const hasRecaptchaConfigured = Boolean(state.recaptchaSiteKey);
-    const captchaMode = verificationDisabled ? 'disabled' : turnstileSiteKey ? 'turnstile' : hasRecaptchaConfigured ? 'recaptcha' : 'none';
-    console.log('Config loaded:', { apiBase, usingFallbackApi, verificationDisabled, turnstileSiteKey, hasRecaptchaConfigured, captchaMode });
+      let config = {};
+      try {
+        config = configEl ? JSON.parse(configEl.textContent) : {};
+      } catch (error) {
+        console.error('JSON parse error:', error);
+        config = {};
+      }
 
-    try {
-      console.log('Starting DOM element selection...');
-      const form = document.getElementById('grader-form');
-      const intakeSection = document.getElementById('grader-intake');
-      console.log('Form found:', !!form);
-    const warning = document.getElementById('grader-warning');
-    const progressSection = document.getElementById('grader-progress');
-    const stepsList = document.getElementById('progress-steps');
-    const statusEl = document.getElementById('progress-status');
-    const subtitleEl = document.getElementById('progress-subtitle');
-    const verifySection = document.getElementById('grader-verify');
-    const verifyForm = document.getElementById('verify-form');
-    const verifyCodeForm = document.getElementById('verify-code-form');
-    const verifyWarning = document.getElementById('verify-warning');
-    const resultSection = document.getElementById('grader-result');
-    const resultHeadline = document.getElementById('result-headline');
-    const resultLink = document.getElementById('result-link');
-    const businessInput = document.getElementById('businessName');
-    const suggestionContainer = document.getElementById('search-suggestions');
-    const suggestionList = document.getElementById('search-suggestion-list');
-    const runAuditButton = document.getElementById('run-audit');
-    console.log('DOM elements found:', { businessInput, suggestionContainer, suggestionList });
-    console.log('Business input element:', businessInput);
-    
-    if (!businessInput) {
-      console.error('CRITICAL: businessInput element not found!');
-      throw new Error('businessInput element not found');
-    }
-    const suggestionHint = document.getElementById('suggestion-hint');
-    const suggestionStatus = document.getElementById('suggestion-status');
-    const searchSpinner = document.getElementById('search-spinner');
-    const manualTrigger = document.getElementById('manual-trigger');
-    const manualIntake = document.getElementById('manual-intake');
-    const cityInput = document.getElementById('city');
-    const websiteInput = document.getElementById('website');
-    const placeIdInput = document.getElementById('placeId');
-    const progressPreviews = document.getElementById('progress-previews');
-    const previewCards = progressPreviews ? progressPreviews.querySelectorAll('[data-preview-step]') : [];
-    const scoreMeter = document.getElementById('score-meter');
-    const scoreBreakdown = document.getElementById('score-breakdown');
-    const evidenceTabs = document.querySelectorAll('.evidence-tab');
-    const evidencePanels = document.querySelectorAll('[data-evidence-panel]');
-    const unlockModal = document.getElementById('unlock-modal');
-    const unlockRecaptcha = document.getElementById('unlock-recaptcha');
-    const unlockContinue = document.getElementById('unlock-continue');
-    const changeSelectionButton = document.getElementById('change-selection');
+      state.apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
+      state.usingFallbackApi = !config.apiBase;
+      state.disableVerification = Boolean(config.disableVerification);
+      state.turnstileSiteKey = config.turnstileSiteKey || '';
+      state.recaptchaSiteKey = config.recaptchaSiteKey || recaptchaSiteKey || '';
+      state.captchaReady = state.disableVerification;
 
-    if (verificationDisabled) {
-      verifySection?.classList.add('hidden');
-      unlockModal?.classList.add('hidden');
-    }
+      const apiBase = state.apiBase;
+      const usingFallbackApi = state.usingFallbackApi;
+      const disableVerification = state.disableVerification;
+      const turnstileSiteKey = state.turnstileSiteKey;
+      const hasRecaptchaConfigured = Boolean(state.recaptchaSiteKey);
+      const captchaMode = disableVerification ? 'disabled' : turnstileSiteKey ? 'turnstile' : hasRecaptchaConfigured ? 'recaptcha' : 'none';
+      console.log('Config loaded:', { apiBase, usingFallbackApi, disableVerification, turnstileSiteKey, hasRecaptchaConfigured, captchaMode });
 
-    state.placeId = placeIdInput?.value?.trim() || '';
-    if (state.placeId) {
-      state.hasSelection = true;
-      state.selectedLabel = businessInput?.value?.trim() || '';
-    }
+      if (disableVerification && typeof window.fetch === 'function' && !window.__graderFetchLogger) {
+        const nativeFetch = window.fetch.bind(window);
+        window.fetch = async (...fetchArgs) => {
+          const [input, init] = fetchArgs;
+          const url = typeof input === 'string' ? input : input?.url ?? '';
+          const trace = typeof url === 'string' && url.includes('/api/scan/start');
+          let requestBodyInfo = null;
 
-    // Submit/captcha state lives on the shared `state` object defined above.
+          if (trace) {
+            try {
+              let rawBody = '';
+              if (init?.body && typeof init.body === 'string') {
+                rawBody = init.body;
+              } else if (typeof Request !== 'undefined' && input instanceof Request) {
+                rawBody = await input.clone().text();
+              }
 
-    function ensureTurnstileScript() {
-      if (!turnstileSiteKey) return;
-      if (window.turnstile) return;
-      if (document.querySelector('script[data-turnstile]')) return;
-      const script = document.createElement('script');
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-      script.async = true;
-      script.defer = true;
-      script.dataset.turnstile = 'true';
-      document.head.appendChild(script);
-    }
+              if (rawBody) {
+                try {
+                  requestBodyInfo = JSON.parse(rawBody);
+                } catch (error) {
+                  requestBodyInfo = rawBody;
+                }
+              }
+            } catch (error) {
+              requestBodyInfo = { readError: error?.message };
+            }
 
-    if (turnstileSiteKey) {
-      ensureTurnstileScript();
-      window.graderTurnstileSuccess = (token) => {
-        state.turnstileToken = token;
-        console.log('[grader] turnstile token received');
-        updateSubmitState('turnstile-success');
-      };
-      window.graderTurnstileExpired = () => {
-        state.turnstileToken = '';
-        console.log('[grader] turnstile token expired');
-        updateSubmitState('turnstile-expired');
-      };
-      window.graderTurnstileError = () => {
-        state.turnstileToken = '';
-        console.warn('[grader] turnstile encountered an error');
-        updateSubmitState('turnstile-error');
-      };
-    }
+            if (requestBodyInfo !== null) {
+              console.log('[grader][fetch] /api/scan/start request', requestBodyInfo);
+            }
+          }
+
+          let response;
+          try {
+            response = await nativeFetch(...fetchArgs);
+          } catch (error) {
+            if (trace) {
+              console.log('[grader][fetch] /api/scan/start response', {
+                status: 'network-error',
+                error: error?.message
+              });
+            }
+            throw error;
+          }
+
+          if (trace) {
+            try {
+              const clone = response.clone();
+              const text = await clone.text();
+              let parsed = null;
+              if (text) {
+                try {
+                  parsed = JSON.parse(text);
+                } catch (error) {
+                  parsed = text;
+                }
+              }
+              console.log('[grader][fetch] /api/scan/start response', {
+                status: response.status,
+                body: parsed
+              });
+            } catch (error) {
+              console.log('[grader][fetch] /api/scan/start response', {
+                status: response.status,
+                parseError: error?.message
+              });
+            }
+          }
+
+          return response;
+        };
+        window.__graderFetchLogger = true;
+      }
+
+      try {
+        const form = document.getElementById('grader-form');
+        const intakeSection = document.getElementById('grader-intake');
+        const warning = document.getElementById('grader-warning');
+        const progressSection = document.getElementById('grader-progress');
+        const stepsList = document.getElementById('progress-steps');
+        const statusEl = document.getElementById('progress-status');
+        const subtitleEl = document.getElementById('progress-subtitle');
+        const verifySection = document.getElementById('grader-verify');
+        const verifyForm = document.getElementById('verify-form');
+        const verifyCodeForm = document.getElementById('verify-code-form');
+        const verifyWarning = document.getElementById('verify-warning');
+        const resultSection = document.getElementById('grader-result');
+        const resultHeadline = document.getElementById('result-headline');
+        const resultLink = document.getElementById('result-link');
+        const businessInput = document.getElementById('businessName');
+        const suggestionContainer = document.getElementById('search-suggestions');
+        const suggestionList = document.getElementById('search-suggestion-list');
+        const runAuditButton = document.getElementById('run-audit');
+        console.log('DOM elements found:', { businessInput, suggestionContainer, suggestionList });
+        console.log('Business input element:', businessInput);
+        
+        if (!businessInput) {
+          console.error('CRITICAL: businessInput element not found!');
+          throw new Error('businessInput element not found');
+        }
+        const suggestionHint = document.getElementById('suggestion-hint');
+        const suggestionStatus = document.getElementById('suggestion-status');
+        const searchSpinner = document.getElementById('search-spinner');
+        const manualTrigger = document.getElementById('manual-trigger');
+        const manualIntake = document.getElementById('manual-intake');
+        const cityInput = document.getElementById('city');
+        const websiteInput = document.getElementById('website');
+        const placeIdInput = document.getElementById('placeId');
+        const progressPreviews = document.getElementById('progress-previews');
+        const previewCards = progressPreviews ? progressPreviews.querySelectorAll('[data-preview-step]') : [];
+        const scoreMeter = document.getElementById('score-meter');
+        const scoreBreakdown = document.getElementById('score-breakdown');
+        const evidenceTabs = document.querySelectorAll('.evidence-tab');
+        const evidencePanels = document.querySelectorAll('[data-evidence-panel]');
+        const unlockModal = document.getElementById('unlock-modal');
+        const unlockRecaptcha = document.getElementById('unlock-recaptcha');
+        const unlockContinue = document.getElementById('unlock-continue');
+        const changeSelectionButton = document.getElementById('change-selection');
+
+        if (disableVerification) {
+          verifySection?.classList.add('hidden');
+          unlockModal?.classList.add('hidden');
+        }
+
+        state.placeId = placeIdInput?.value?.trim() || '';
+        if (state.placeId) {
+          state.hasSelection = true;
+          state.selectedLabel = businessInput?.value?.trim() || '';
+          state.selected = {
+            placeId: state.placeId,
+            label: state.selectedLabel
+          };
+        }
+
+        if (!disableVerification && !turnstileSiteKey && hasRecaptchaConfigured) {
+          ensureRecaptchaScript().catch((error) => {
+            console.error('[grader] reCAPTCHA init failed', error);
+          });
+        }
+
+        // Submit/captcha state lives on the shared `state` object defined above.
+
+        function ensureTurnstileScript() {
+          if (!turnstileSiteKey) return;
+          if (window.turnstile) return;
+          if (document.querySelector('script[data-turnstile]')) return;
+          const script = document.createElement('script');
+          script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+          script.async = true;
+          script.defer = true;
+          script.dataset.turnstile = 'true';
+          document.head.appendChild(script);
+        }
+
+        if (!disableVerification && turnstileSiteKey) {
+          ensureTurnstileScript();
+          window.graderTurnstileSuccess = (token) => {
+            state.turnstileToken = token;
+            state.captchaReady = Boolean(token);
+            console.log('[grader] turnstile token received');
+            updateSubmitState('turnstile-success');
+          };
+          window.graderTurnstileExpired = () => {
+            state.turnstileToken = '';
+            state.captchaReady = false;
+            console.log('[grader] turnstile token expired');
+            updateSubmitState('turnstile-expired');
+          };
+          window.graderTurnstileError = () => {
+            state.turnstileToken = '';
+            state.captchaReady = false;
+            console.warn('[grader] turnstile encountered an error');
+            updateSubmitState('turnstile-error');
+          };
+        }
 
     syncSelectionUI();
     updateSubmitState('initial');
@@ -692,12 +778,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         category: "Mexican Restaurant"
       }
     ];
+    const MIN_QUERY_LENGTH = 2;
+    const SEARCH_DEBOUNCE_MS = 250;
     let suggestionTimeout = null;
     let currentSuggestions = [];
     let activeSuggestionIndex = -1;
     let manualMode = false;
-
-    let selectedSuggestion = null;
 
     function resolvePlaceId(item) {
       if (!item) return '';
@@ -717,7 +803,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     function clearPlaceSelection({ silent = false, keepInput = true } = {}) {
       const hadSelection = state.hasSelection;
-      selectedSuggestion = null;
+      state.selected = null;
       state.hasSelection = false;
       state.placeId = '';
       state.selectedLabel = '';
@@ -747,10 +833,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         return;
       }
 
-      selectedSuggestion = item;
       state.placeId = placeId;
       state.hasSelection = true;
       state.selectedLabel = label;
+      state.selected = { placeId, label };
 
       if (placeIdInput) {
         placeIdInput.value = placeId;
@@ -771,11 +857,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     function computeSubmitSnapshot() {
       const businessVal = businessInput?.value?.trim() || '';
       const placeIdReady = state.hasSelection && Boolean(state.placeId);
-      const captchaReady = state.verificationDisabled
-        ? true
-        : state.turnstileSiteKey
-          ? Boolean(state.turnstileToken)
-          : Boolean(state.recaptchaSiteKey);
+      const captchaReady = state.disableVerification ? true : state.captchaReady;
       const shouldEnable = placeIdReady && Boolean(businessVal) && captchaReady && !state.isSubmitting;
       return {
         shouldEnable,
@@ -790,13 +872,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (!runAuditButton) return;
       const snapshot = computeSubmitSnapshot();
       const snapshotKey = JSON.stringify(snapshot);
-      const changed = snapshotKey !== state.lastSubmitSnapshotKey;
+      const changed = snapshotKey !== lastSubmitSnapshotKey;
 
-      if (!state.lastSubmitSnapshotKey || changed || reason === 'force' || reason === 'initial') {
+      if (!lastSubmitSnapshotKey || changed || reason === 'force' || reason === 'initial') {
         console.log('[grader] submit state', { reason, ...snapshot });
         runAuditButton.disabled = !snapshot.shouldEnable;
         runAuditButton.setAttribute('aria-disabled', snapshot.shouldEnable ? 'false' : 'true');
-        state.lastSubmitSnapshotKey = snapshotKey;
+        lastSubmitSnapshotKey = snapshotKey;
+        lastSubmitSnapshot = snapshot;
       }
     }
 
@@ -1113,7 +1196,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         return;
       }
 
-      if (trimmed.length < 2) {
+      if (trimmed.length < MIN_QUERY_LENGTH) {
         renderSuggestions([], 'Keep typing to search restaurants...', 'loading', trimmed);
         return;
       }
@@ -1231,14 +1314,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         manualMode = false;
         setActiveSuggestion(-1);
 
-        if (trimmed.length > 0 && trimmed.length < 2) {
+        if (trimmed.length > 0 && trimmed.length < MIN_QUERY_LENGTH) {
           renderSuggestions([], 'Keep typing to search restaurants...', 'loading', rawValue);
         }
 
-        if (trimmed.length >= 2) {
-          const delay = trimmed.length < 3 ? 300 : 150;
-          suggestionTimeout = window.setTimeout(() => loadSuggestions(rawValue), delay);
-        } else {
+        if (trimmed.length >= MIN_QUERY_LENGTH) {
+          suggestionTimeout = window.setTimeout(() => loadSuggestions(rawValue), SEARCH_DEBOUNCE_MS);
+        } else if (trimmed.length === 0) {
           hideSuggestions();
         }
 
@@ -1450,7 +1532,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     // Unlock modal functions
     function showUnlockModal() {
-      if (verificationDisabled) return;
+      if (disableVerification) return;
       if (unlockModal) {
         unlockModal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -1544,31 +1626,59 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     }
 
     async function ensureRecaptchaScript() {
-      if (!config.recaptchaSiteKey) return;
-      if (window.grecaptcha) return;
+      if (!state.recaptchaSiteKey || disableVerification || turnstileSiteKey) {
+        return;
+      }
+      if (window.grecaptcha && typeof window.grecaptcha.ready === 'function') {
+        window.grecaptcha.ready(() => {
+          state.captchaReady = true;
+          updateSubmitState('recaptcha-ready');
+        });
+        return;
+      }
+
       await new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = `https://www.google.com/recaptcha/api.js?render=${config.recaptchaSiteKey}`;
+        script.src = `https://www.google.com/recaptcha/api.js?render=${state.recaptchaSiteKey}`;
         script.async = true;
-        script.onload = resolve;
+        script.onload = () => {
+          if (window.grecaptcha && typeof window.grecaptcha.ready === 'function') {
+            window.grecaptcha.ready(() => {
+              state.captchaReady = true;
+              updateSubmitState('recaptcha-ready');
+              resolve();
+            });
+          } else {
+            resolve();
+          }
+        };
         script.onerror = () => reject(new Error('Failed to load reCAPTCHA.'));
         document.head.appendChild(script);
       });
     }
 
     async function getRecaptchaToken(action) {
-      if (!config.recaptchaSiteKey) {
+      if (!state.recaptchaSiteKey) {
         return 'dev-bypass-token';
       }
       await ensureRecaptchaScript();
-      return new Promise((resolve, reject) => {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha
-            .execute(config.recaptchaSiteKey, { action })
-            .then(resolve)
-            .catch(reject);
-        });
-      });
+      if (!window.grecaptcha || typeof window.grecaptcha.execute !== 'function') {
+        throw new Error('reCAPTCHA unavailable');
+      }
+      return window.grecaptcha.execute(state.recaptchaSiteKey, { action });
+    }
+
+    async function requestCaptchaToken() {
+      if (state.disableVerification) {
+        return '';
+      }
+      if (turnstileSiteKey) {
+        if (!state.turnstileToken) {
+          throw new Error('missing-turnstile-token');
+        }
+        return state.turnstileToken;
+      }
+      return getRecaptchaToken('grader_submit');
     }
 
     async function pollStatus(id) {
@@ -1587,7 +1697,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           
         if (data.status === 'done') {
           stopScanTimer();
-          if (verificationDisabled) {
+          if (disableVerification) {
             hideUnlockModal();
             toggle(progressSection, false);
             toggle(verifySection, false);
@@ -1702,23 +1812,24 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     form?.addEventListener('submit', async (event) => {
       console.log('Form submitted!');
       event.preventDefault();
-      const finalApiBase = apiBase || FALLBACK_API_BASE;
+      const finalApiBase = state.apiBase || FALLBACK_API_BASE;
       if (!finalApiBase) {
         console.log('No API base configured');
         return;
       }
+
       hideSuggestions(true);
       warning.classList.add('hidden');
 
-      const businessName = businessInput?.value?.trim();
-      if (!businessName || businessName.length < 2) {
+      const businessName = businessInput?.value?.trim() ?? '';
+      if (businessName.length < 2) {
         warning.textContent = 'Please enter your restaurant name.';
         warning.classList.remove('hidden');
         businessInput?.focus({ preventScroll: true });
         return;
       }
 
-      const placeId = placeIdInput?.value?.trim();
+      const placeId = state.selected?.placeId || state.placeId || placeIdInput?.value?.trim() || '';
       if (!placeId) {
         console.warn('[grader] blocked submit: missing placeId');
         warning.textContent = 'Select your restaurant from the list so we can run the audit.';
@@ -1731,39 +1842,31 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       console.log('[grader] submit attempt', {
         businessName,
         placeId,
-        captchaReady: state.verificationDisabled
-          ? true
-          : turnstileSiteKey
-            ? Boolean(state.turnstileToken)
-            : hasRecaptchaConfigured
+        captchaReady: state.disableVerification ? true : state.captchaReady
       });
 
-      const formData = new FormData(form);
-      const payload = Object.fromEntries(formData.entries());
-      let captchaToken = null;
-      if (turnstileSiteKey) {
-        captchaToken = state.turnstileToken;
-        if (!captchaToken) {
-          warning.textContent = 'Verify you’re human before running the audit.';
+      let captchaToken = '';
+      if (!state.disableVerification) {
+        try {
+          captchaToken = await requestCaptchaToken();
+        } catch (error) {
+          const message = error?.message === 'missing-turnstile-token'
+            ? 'Verify you’re human before running the audit.'
+            : 'Could not load reCAPTCHA. Please refresh and try again.';
+          state.captchaReady = false;
+          warning.textContent = message;
           warning.classList.remove('hidden');
           updateSubmitState('missing-captcha');
           return;
         }
-      } else {
-        try {
-          captchaToken = await getRecaptchaToken('grader_start');
-        } catch (error) {
-          warning.textContent = 'Could not load reCAPTCHA. Please refresh and try again.';
-          warning.classList.remove('hidden');
-          return;
-        }
-        state.recaptchaToken = captchaToken;
       }
 
-      payload.recaptchaToken = captchaToken;
-      payload.businessName = businessName;
-      payload.placeId = placeId;
-      payload.source = payload.source ?? 'grader-site';
+      const payload = {
+        placeId,
+        businessName,
+        source: 'grader-site',
+        ...(state.disableVerification ? {} : { captchaToken })
+      };
 
       state.isSubmitting = true;
       updateSubmitState('submit-start');
@@ -1771,7 +1874,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       try {
         console.log('[grader] submitting scan for', { placeId, businessName });
         console.log('[grader] payload prepared', payload);
-        const res = await fetch(`${finalApiBase}/api/scan/start`, {
+        const response = await fetch(`${finalApiBase}/api/scan/start`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -1779,10 +1882,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           body: JSON.stringify(payload)
         });
 
-        console.log('[grader] start response status', res.status);
-        if (!res.ok) {
-          const errorBody = await res.json().catch(() => ({}));
-          console.warn('[grader] start error', { status: res.status, error: errorBody });
+        console.log('[grader] start response status', response.status);
+        if (!response.ok) {
+          const errorBody = await response.json().catch(() => ({}));
+          console.warn('[grader] start error', { status: response.status, error: errorBody });
           const detailed =
             formatValidationErrors(errorBody?.details) ||
             formatValidationErrors(errorBody?.errors);
@@ -1795,17 +1898,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           return;
         }
 
-        const data = await res.json();
+        const data = await response.json();
         scanId = data.scanId;
-        
-        // Update scanning query with business name
-        const businessName = payload.businessName || 'Your restaurant';
+
         updateScanningQuery(businessName);
-        
         toggle(intakeSection, false);
         toggle(progressSection, true);
-        
-        // Start timer and polling
+
         startScanTimer();
         markSteps('resolving');
         updateStatus('resolving');
@@ -1818,8 +1917,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         warning.classList.remove('hidden');
       } finally {
         state.isSubmitting = false;
-        if (turnstileSiteKey) {
+        if (!state.disableVerification && turnstileSiteKey) {
           state.turnstileToken = '';
+          state.captchaReady = false;
           if (window.turnstile && typeof window.turnstile.reset === 'function') {
             try {
               window.turnstile.reset();
@@ -1827,14 +1927,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
               console.warn('[grader] turnstile reset failed', error);
             }
           }
-        } else {
-          state.recaptchaToken = '';
         }
         updateSubmitState('submit-end');
       }
     });
 
-    if (!verificationDisabled) {
+    if (!disableVerification) {
       verifyForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const finalApiBase = apiBase || FALLBACK_API_BASE;
