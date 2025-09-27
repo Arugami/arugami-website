@@ -579,12 +579,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         updateSubmitState('turnstile-success');
       };
       window.graderTurnstileExpired = () => {
-        turnstileToken = null;
+        turnstileToken = '';
         console.log('[grader] turnstile token expired');
         updateSubmitState('turnstile-expired');
       };
       window.graderTurnstileError = () => {
-        turnstileToken = null;
+        turnstileToken = '';
         console.warn('[grader] turnstile encountered an error');
         updateSubmitState('turnstile-error');
       };
@@ -656,8 +656,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     let currentSuggestions = [];
     let activeSuggestionIndex = -1;
     let manualMode = false;
-    let turnstileToken = null;
+    let turnstileToken = '';
+    let isSubmitting = false;
     let lastSubmitSnapshot = null;
+    let lastSubmitSnapshotKey = '';
 
     let selectedPlace = null;
 
@@ -704,13 +706,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     function computeSubmitSnapshot() {
       const placeIdVal = placeIdInput?.value?.trim() || '';
       const businessVal = businessInput?.value?.trim() || '';
-      const captchaReady = turnstileSiteKey ? Boolean(turnstileToken) : hasRecaptchaConfigured;
-      const shouldEnable = Boolean(placeIdVal) && Boolean(businessVal) && captchaReady;
+      const captchaReady = turnstileSiteKey ? Boolean(turnstileToken) : true;
+      const shouldEnable = Boolean(placeIdVal) && Boolean(businessVal) && captchaReady && !isSubmitting;
       return {
         shouldEnable,
         placeIdReady: Boolean(placeIdVal),
         businessReady: Boolean(businessVal),
-        captchaReady
+        captchaReady,
+        isSubmitting
       };
     }
 
@@ -718,12 +721,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (!runAuditButton) return;
       const snapshot = computeSubmitSnapshot();
       const snapshotKey = JSON.stringify(snapshot);
-      if (!lastSubmitSnapshot || JSON.stringify(lastSubmitSnapshot) !== snapshotKey) {
+      const firstRun = lastSubmitSnapshot === null;
+      const changed = snapshotKey !== lastSubmitSnapshotKey;
+
+      if (firstRun || changed || reason === 'force' || reason === 'initial') {
         console.log('[grader] submit state', { reason, ...snapshot });
         runAuditButton.disabled = !snapshot.shouldEnable;
-        lastSubmitSnapshot = JSON.parse(snapshotKey);
-      } else if (reason === 'force') {
-        runAuditButton.disabled = !snapshot.shouldEnable;
+        lastSubmitSnapshot = snapshot;
+        lastSubmitSnapshotKey = snapshotKey;
       }
     }
 
@@ -1663,6 +1668,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       payload.placeId = placeId;
       payload.source = payload.source ?? 'grader-site';
 
+      isSubmitting = true;
+      updateSubmitState('submit-start');
+
       try {
         console.log('[grader] submitting scan for', { placeId, businessName });
         console.log('[grader] payload prepared', payload);
@@ -1711,6 +1719,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         console.error(error);
         warning.textContent = 'We could not start your scan. Check your connection and try again.';
         warning.classList.remove('hidden');
+      } finally {
+        isSubmitting = false;
+        updateSubmitState('submit-end');
       }
     });
 
