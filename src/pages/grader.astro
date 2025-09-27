@@ -107,6 +107,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
                 <input type="hidden" name="placeId" id="placeId" />
 
+                <button
+                  id="change-selection"
+                  type="button"
+                  class="hidden text-xs font-semibold text-pink-200 underline underline-offset-2 hover:text-pink-100 focus:outline-none"
+                >
+                  Change selection
+                </button>
+
                 {turnstileSiteKey && (
                   <div class="space-y-2" id="grader-human-check">
                     <label class="block text-sm font-semibold text-white" for="grader-turnstile">Verify you’re human *</label>
@@ -485,7 +493,22 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
   <script type="application/json" id="grader-config" set:html={configJson}></script>
   <script type="module">
     console.log('Grader script loading...');
-    
+
+    const state = {
+      apiBase: 'https://arugami-website-production.up.railway.app',
+      usingFallbackApi: true,
+      verificationDisabled: false,
+      recaptchaSiteKey: '',
+      turnstileSiteKey: '',
+      placeId: '',
+      selectedLabel: '',
+      hasSelection: false,
+      recaptchaToken: '',
+      turnstileToken: '',
+      isSubmitting: false,
+      lastSubmitSnapshotKey: ''
+    };
+
     const initGrader = () => {
     console.log('DOM loaded, initializing grader...');
     const configEl = document.getElementById('grader-config');
@@ -501,12 +524,19 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     }
     
     const FALLBACK_API_BASE = 'https://arugami-website-production.up.railway.app';
-    const apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
-    const usingFallbackApi = !config.apiBase;
-    const verificationDisabled = Boolean(config.disableVerification);
-    const turnstileSiteKey = config.turnstileSiteKey || '';
-    const hasRecaptchaConfigured = Boolean(config.recaptchaSiteKey) || !turnstileSiteKey;
-    console.log('Config loaded:', { apiBase, usingFallbackApi, verificationDisabled, turnstileSiteKey, hasRecaptchaConfigured });
+    state.apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
+    state.usingFallbackApi = !config.apiBase;
+    state.verificationDisabled = Boolean(config.disableVerification);
+    state.turnstileSiteKey = config.turnstileSiteKey || '';
+    state.recaptchaSiteKey = config.recaptchaSiteKey || recaptchaSiteKey || '';
+
+    const apiBase = state.apiBase;
+    const usingFallbackApi = state.usingFallbackApi;
+    const verificationDisabled = state.verificationDisabled;
+    const turnstileSiteKey = state.turnstileSiteKey;
+    const hasRecaptchaConfigured = Boolean(state.recaptchaSiteKey);
+    const captchaMode = verificationDisabled ? 'disabled' : turnstileSiteKey ? 'turnstile' : hasRecaptchaConfigured ? 'recaptcha' : 'none';
+    console.log('Config loaded:', { apiBase, usingFallbackApi, verificationDisabled, turnstileSiteKey, hasRecaptchaConfigured, captchaMode });
 
     try {
       console.log('Starting DOM element selection...');
@@ -553,17 +583,20 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     const unlockModal = document.getElementById('unlock-modal');
     const unlockRecaptcha = document.getElementById('unlock-recaptcha');
     const unlockContinue = document.getElementById('unlock-continue');
+    const changeSelectionButton = document.getElementById('change-selection');
 
     if (verificationDisabled) {
       verifySection?.classList.add('hidden');
       unlockModal?.classList.add('hidden');
     }
 
-    // Submit/captcha state needs to exist before any helper uses it
-    let turnstileToken = '';
-    let isSubmitting = false;
-    let lastSubmitSnapshot = null;
-    let lastSubmitSnapshotKey = '';
+    state.placeId = placeIdInput?.value?.trim() || '';
+    if (state.placeId) {
+      state.hasSelection = true;
+      state.selectedLabel = businessInput?.value?.trim() || '';
+    }
+
+    // Submit/captcha state lives on the shared `state` object defined above.
 
     function ensureTurnstileScript() {
       if (!turnstileSiteKey) return;
@@ -580,22 +613,23 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     if (turnstileSiteKey) {
       ensureTurnstileScript();
       window.graderTurnstileSuccess = (token) => {
-        turnstileToken = token;
+        state.turnstileToken = token;
         console.log('[grader] turnstile token received');
         updateSubmitState('turnstile-success');
       };
       window.graderTurnstileExpired = () => {
-        turnstileToken = '';
+        state.turnstileToken = '';
         console.log('[grader] turnstile token expired');
         updateSubmitState('turnstile-expired');
       };
       window.graderTurnstileError = () => {
-        turnstileToken = '';
+        state.turnstileToken = '';
         console.warn('[grader] turnstile encountered an error');
         updateSubmitState('turnstile-error');
       };
     }
 
+    syncSelectionUI();
     updateSubmitState('initial');
 
     const stepOrder = ['resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
@@ -663,7 +697,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     let activeSuggestionIndex = -1;
     let manualMode = false;
 
-    let selectedPlace = null;
+    let selectedSuggestion = null;
 
     function resolvePlaceId(item) {
       if (!item) return '';
@@ -675,47 +709,80 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       return (item.description ?? item.inputValue ?? item.name ?? item.label ?? '').toString().trim();
     }
 
-    function clearPlaceSelection({ silent } = {}) {
-      const hadSelection = Boolean(selectedPlace) || Boolean(placeIdInput?.value);
-      selectedPlace = null;
+    function syncSelectionUI() {
+      if (changeSelectionButton) {
+        changeSelectionButton.classList.toggle('hidden', !state.hasSelection);
+      }
+    }
+
+    function clearPlaceSelection({ silent = false, keepInput = true } = {}) {
+      const hadSelection = state.hasSelection;
+      selectedSuggestion = null;
+      state.hasSelection = false;
+      state.placeId = '';
+      state.selectedLabel = '';
       if (placeIdInput) {
         placeIdInput.value = '';
       }
+      if (!keepInput && businessInput) {
+        businessInput.value = '';
+      }
+      syncSelectionUI();
       if (hadSelection && !silent) {
         console.log('[grader] selection cleared');
+      }
+      updateSuggestionStatus('type');
+      if (suggestionHint) {
+        suggestionHint.textContent = 'Start typing to find your exact listing.';
       }
       updateSubmitState('clear-place');
     }
 
-    function setPlaceSelection(item) {
+    function setPlaceSelection(item, { silent = false } = {}) {
+      if (!item) return;
       const placeId = resolvePlaceId(item);
-      if (placeId) {
-        selectedPlace = { ...item, placeId };
-        if (placeIdInput) {
-          placeIdInput.value = placeId;
-        }
-        const label = resolveDisplayLabel(item);
-        if (businessInput && label) {
-          businessInput.value = label;
-        }
-        console.log('[grader] selection set', { placeId, label });
-      } else {
-        clearPlaceSelection();
+      const label = resolveDisplayLabel(item);
+      if (!placeId) {
+        clearPlaceSelection({ silent: true });
+        return;
       }
+
+      selectedSuggestion = item;
+      state.placeId = placeId;
+      state.hasSelection = true;
+      state.selectedLabel = label;
+
+      if (placeIdInput) {
+        placeIdInput.value = placeId;
+      }
+      if (businessInput && label) {
+        businessInput.value = label;
+      }
+      syncSelectionUI();
+      if (!silent) {
+        console.log('[grader] selection set', { placeId, label });
+      }
+      setActiveSuggestion(-1);
+      hideSuggestions(true);
+      updateSuggestionStatus(placeId ? 'live' : 'sample');
       updateSubmitState('set-place');
     }
 
     function computeSubmitSnapshot() {
-      const placeIdVal = placeIdInput?.value?.trim() || '';
       const businessVal = businessInput?.value?.trim() || '';
-      const captchaReady = turnstileSiteKey ? Boolean(turnstileToken) : true;
-      const shouldEnable = Boolean(placeIdVal) && Boolean(businessVal) && captchaReady && !isSubmitting;
+      const placeIdReady = state.hasSelection && Boolean(state.placeId);
+      const captchaReady = state.verificationDisabled
+        ? true
+        : state.turnstileSiteKey
+          ? Boolean(state.turnstileToken)
+          : Boolean(state.recaptchaSiteKey);
+      const shouldEnable = placeIdReady && Boolean(businessVal) && captchaReady && !state.isSubmitting;
       return {
         shouldEnable,
-        placeIdReady: Boolean(placeIdVal),
+        placeIdReady,
         businessReady: Boolean(businessVal),
         captchaReady,
-        isSubmitting
+        isSubmitting: state.isSubmitting
       };
     }
 
@@ -723,14 +790,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (!runAuditButton) return;
       const snapshot = computeSubmitSnapshot();
       const snapshotKey = JSON.stringify(snapshot);
-      const firstRun = lastSubmitSnapshot === null;
-      const changed = snapshotKey !== lastSubmitSnapshotKey;
+      const changed = snapshotKey !== state.lastSubmitSnapshotKey;
 
-      if (firstRun || changed || reason === 'force' || reason === 'initial') {
+      if (!state.lastSubmitSnapshotKey || changed || reason === 'force' || reason === 'initial') {
         console.log('[grader] submit state', { reason, ...snapshot });
         runAuditButton.disabled = !snapshot.shouldEnable;
-        lastSubmitSnapshot = snapshot;
-        lastSubmitSnapshotKey = snapshotKey;
+        runAuditButton.setAttribute('aria-disabled', snapshot.shouldEnable ? 'false' : 'true');
+        state.lastSubmitSnapshotKey = snapshotKey;
       }
     }
 
@@ -858,7 +924,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (suggestionHint) {
         suggestionHint.textContent = 'We’ll scan this listing next.';
       }
-      updateSuggestionStatus(resolvePlaceId(suggestion) ? 'live' : 'sample');
       setActiveSuggestion(-1);
       if (businessInput) {
         businessInput.focus({ preventScroll: true });
@@ -866,8 +931,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       hideSuggestions(true);
     }
 
-    function renderSuggestions(items, hint, state = 'sample', query = '') {
-      console.log('renderSuggestions called', { items, hint, state, query });
+    function renderSuggestions(items, hint, status = 'sample', query = '') {
+      console.log('renderSuggestions called', { items, hint, status, query });
       if (!suggestionContainer || !suggestionList) {
         console.log('Missing elements:', { suggestionContainer, suggestionList });
         return;
@@ -884,13 +949,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (!currentSuggestions.length) {
         const empty = document.createElement('li');
         empty.className = 'list-none rounded-xl border border-white/5 bg-slate-900/70 px-4 py-4 text-xs text-slate-400 animate-in fade-in duration-200';
-        empty.textContent = state === 'loading' ? 'Searching restaurants...' : 'No matches yet. Add details manually below.';
+        empty.textContent = status === 'loading' ? 'Searching restaurants...' : 'No matches yet. Add details manually below.';
         suggestionList.appendChild(empty);
         suggestionContainer.classList.remove('hidden');
         if (suggestionHint) {
-          suggestionHint.textContent = state === 'loading' ? 'Searching listings…' : 'No matches yet—add details manually below.';
+          suggestionHint.textContent = status === 'loading' ? 'Searching listings…' : 'No matches yet—add details manually below.';
         }
-        updateSuggestionStatus(state === 'loading' ? 'loading' : 'empty');
+        updateSuggestionStatus(status === 'loading' ? 'loading' : 'empty');
         return;
       }
 
@@ -985,10 +1050,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (suggestionHint) {
         suggestionHint.textContent = hint ?? 'Select your restaurant to speed up the scan.';
       }
-      updateSuggestionStatus(state);
+      updateSuggestionStatus(status);
       suggestionContainer.classList.remove('hidden');
       console.log('Showing suggestions container, hidden class removed');
-      setActiveSuggestion(state === 'empty' ? -1 : 0);
+      setActiveSuggestion(status === 'empty' ? -1 : 0);
       suggestionList.scrollTop = 0;
     }
 
@@ -1025,9 +1090,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     let searchController = null;
     
-    async function loadSuggestions(query) {
-      const trimmed = query.trim();
-      
+    async function loadSuggestions(query, { allowWhenSelected = false } = {}) {
+      const trimmed = (query ?? '').trim();
+
+      if (state.hasSelection && !allowWhenSelected) {
+        return;
+      }
+
       // Cancel previous request if still pending
       if (searchController) {
         searchController.abort();
@@ -1086,14 +1155,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         }
 
         if (results.length) {
-          const state = data.fallback ? 'sample' : 'live';
+          const resultStatus = data.fallback ? 'sample' : 'live';
           const hudsonCount = results.filter(r => r.withinHudsonCounty).length;
           const hint = data.fallback 
             ? 'Sample matches' 
             : hudsonCount > 0 
               ? `Found ${hudsonCount} Hudson County restaurant${hudsonCount === 1 ? '' : 's'}`
               : 'Live results from Google Places';
-          renderSuggestions(results, hint, state, trimmed);
+          renderSuggestions(results, hint, resultStatus, trimmed);
         } else {
           renderSuggestions([], 'No restaurants found. Try a different search or add details manually.', 'empty', trimmed);
         }
@@ -1144,32 +1213,45 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     if (businessInput) {
       console.log('Attaching event listeners to businessInput');
       businessInput.addEventListener('input', (event) => {
-        const value = event.target.value ?? '';
-        if (selectedPlace) {
-          clearPlaceSelection();
+        const rawValue = event.target.value ?? '';
+        const trimmed = rawValue.trim();
+
+        if (state.hasSelection && trimmed === state.selectedLabel) {
+          updateSubmitState('input-nochange');
+          return;
         }
+
+        if (state.hasSelection) {
+          clearPlaceSelection({ silent: true, keepInput: true });
+        }
+
         if (suggestionTimeout) {
           clearTimeout(suggestionTimeout);
         }
         manualMode = false;
         setActiveSuggestion(-1);
-        
-        // Show immediate feedback for short queries
-        if (value.trim().length > 0 && value.trim().length < 2) {
-          renderSuggestions([], 'Keep typing to search restaurants...', 'loading', value);
+
+        if (trimmed.length > 0 && trimmed.length < 2) {
+          renderSuggestions([], 'Keep typing to search restaurants...', 'loading', rawValue);
         }
-        
-        // Debounce search with different delays based on query length
-        const delay = value.trim().length < 3 ? 300 : 150;
-        suggestionTimeout = window.setTimeout(() => loadSuggestions(value), delay);
+
+        if (trimmed.length >= 2) {
+          const delay = trimmed.length < 3 ? 300 : 150;
+          suggestionTimeout = window.setTimeout(() => loadSuggestions(rawValue), delay);
+        } else {
+          hideSuggestions();
+        }
+
         updateSubmitState('input-change');
       });
 
       businessInput.addEventListener('focus', () => {
         console.log('Input focused');
         const value = businessInput.value ?? '';
-        // Always call loadSuggestions - it handles empty input by showing sample suggestions
-        loadSuggestions(value);
+        if (state.hasSelection && value.trim() === state.selectedLabel) {
+          return;
+        }
+        loadSuggestions(value, { allowWhenSelected: false });
       });
       businessInput.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown' && currentSuggestions.length) {
@@ -1229,11 +1311,19 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       hideSuggestions();
     });
 
+    changeSelectionButton?.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      clearPlaceSelection({ silent: true, keepInput: true });
+      businessInput?.focus({ preventScroll: true });
+      loadSuggestions(businessInput?.value ?? '', { allowWhenSelected: true });
+    });
+
     document.addEventListener('click', (event) => {
       if (!suggestionContainer || !businessInput) return;
       const target = event.target;
       if (!(target instanceof Node)) return;
-      if (target === businessInput) return;
+      if (target === businessInput || target === changeSelectionButton) return;
       if (suggestionContainer.contains(target)) return;
       hideSuggestions();
     });
@@ -1641,14 +1731,18 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       console.log('[grader] submit attempt', {
         businessName,
         placeId,
-        captchaReady: turnstileSiteKey ? Boolean(turnstileToken) : hasRecaptchaConfigured
+        captchaReady: state.verificationDisabled
+          ? true
+          : turnstileSiteKey
+            ? Boolean(state.turnstileToken)
+            : hasRecaptchaConfigured
       });
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
       let captchaToken = null;
       if (turnstileSiteKey) {
-        captchaToken = turnstileToken;
+        captchaToken = state.turnstileToken;
         if (!captchaToken) {
           warning.textContent = 'Verify you’re human before running the audit.';
           warning.classList.remove('hidden');
@@ -1663,6 +1757,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           warning.classList.remove('hidden');
           return;
         }
+        state.recaptchaToken = captchaToken;
       }
 
       payload.recaptchaToken = captchaToken;
@@ -1670,7 +1765,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       payload.placeId = placeId;
       payload.source = payload.source ?? 'grader-site';
 
-      isSubmitting = true;
+      state.isSubmitting = true;
       updateSubmitState('submit-start');
 
       try {
@@ -1722,7 +1817,19 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         warning.textContent = 'We could not start your scan. Check your connection and try again.';
         warning.classList.remove('hidden');
       } finally {
-        isSubmitting = false;
+        state.isSubmitting = false;
+        if (turnstileSiteKey) {
+          state.turnstileToken = '';
+          if (window.turnstile && typeof window.turnstile.reset === 'function') {
+            try {
+              window.turnstile.reset();
+            } catch (error) {
+              console.warn('[grader] turnstile reset failed', error);
+            }
+          }
+        } else {
+          state.recaptchaToken = '';
+        }
         updateSubmitState('submit-end');
       }
     });
