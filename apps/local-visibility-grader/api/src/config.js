@@ -23,7 +23,8 @@ const envSchema = z.object({
   SERPAPI_KEY: z.string().optional(),
   PSI_API_KEY: z.string().optional(),
   GOOGLE_MAPS_API_KEY: z.string().optional(),
-  ENABLE_LOG_REQUESTS: z.string().optional()
+  ENABLE_LOG_REQUESTS: z.string().optional(),
+  VERIFY_DISABLED: z.string().optional()
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -38,7 +39,8 @@ const env = {
   port: parseInt(parsed.data.PORT, 10),
   host: parsed.data.HOST,
   corsOrigins: parsed.data.CORS_ORIGINS?.split(',').map((origin) => origin.trim()).filter(Boolean) ?? [],
-  enableLogRequests: bool(parsed.data.ENABLE_LOG_REQUESTS ?? 'false')
+  enableLogRequests: bool(parsed.data.ENABLE_LOG_REQUESTS ?? 'false'),
+  verifyDisabled: bool(parsed.data.VERIFY_DISABLED ?? 'false')
 };
 
 export default env;

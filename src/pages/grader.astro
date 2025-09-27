@@ -1670,15 +1670,16 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     async function requestCaptchaToken() {
       if (state.disableVerification) {
-        return '';
+        return { recaptchaToken: null, turnstileToken: null };
       }
       if (turnstileSiteKey) {
         if (!state.turnstileToken) {
           throw new Error('missing-turnstile-token');
         }
-        return state.turnstileToken;
+        return { recaptchaToken: null, turnstileToken: state.turnstileToken };
       }
-      return getRecaptchaToken('grader_submit');
+      const recaptchaToken = await getRecaptchaToken('grader_submit');
+      return { recaptchaToken, turnstileToken: null };
     }
 
     async function pollStatus(id) {
@@ -1845,10 +1846,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         captchaReady: state.disableVerification ? true : state.captchaReady
       });
 
-      let captchaToken = '';
+      let captchaTokens = { recaptchaToken: null, turnstileToken: null };
       if (!state.disableVerification) {
         try {
-          captchaToken = await requestCaptchaToken();
+          captchaTokens = await requestCaptchaToken();
         } catch (error) {
           const message = error?.message === 'missing-turnstile-token'
             ? 'Verify you’re human before running the audit.'
@@ -1865,7 +1866,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         placeId,
         businessName,
         source: 'grader-site',
-        ...(state.disableVerification ? {} : { captchaToken })
+        recaptchaToken: state.disableVerification ? null : captchaTokens.recaptchaToken ?? null,
+        turnstileToken: state.disableVerification ? null : captchaTokens.turnstileToken ?? null
       };
 
       state.isSubmitting = true;

@@ -38,13 +38,16 @@ await fastify.register(rateLimit, {
 });
 
 const scanStartSchema = z.object({
-  businessName: z.string().min(2, 'Business name is required').max(120),
-  city: z.string().max(80).optional(),
-  address: z.string().max(255).optional(),
-  cuisine: z.string().max(60).optional(),
+  placeId: z.string().trim().min(1, 'Place ID is required'),
+  businessName: z.string().trim().min(1, 'Business name is required').max(120),
+  source: z.string().trim().max(60).optional(),
+  city: z.string().trim().max(80).optional(),
+  address: z.string().trim().max(255).optional(),
+  cuisine: z.string().trim().max(60).optional(),
   website: z.string().url().optional(),
-  recaptchaToken: z.string().min(10, 'reCAPTCHA token is required'),
-  contactName: z.string().max(120).optional(),
+  recaptchaToken: z.string().min(1).nullish(),
+  turnstileToken: z.string().min(1).nullish(),
+  contactName: z.string().trim().max(120).optional(),
   email: z.string().email().optional()
 });
 
@@ -68,6 +71,46 @@ const placeSearchQuerySchema = z.object({
 
 const PLACES_API_BASE = 'https://places.googleapis.com/v1';
 const LEGACY_PLACES_API_BASE = 'https://maps.googleapis.com/maps/api/place';
+
+const LEGACY_SCAN_START_KEY_MAP = {
+  place_id: 'placeId',
+  business_name: 'businessName',
+  recaptcha_token: 'recaptchaToken',
+  turnstile_token: 'turnstileToken'
+};
+
+function normalizeScanStartBody(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return {};
+  }
+
+  const normalized = {};
+  for (const [key, value] of Object.entries(raw)) {
+    const targetKey = LEGACY_SCAN_START_KEY_MAP[key] ?? key;
+    normalized[targetKey] = value;
+  }
+
+  for (const [key, value] of Object.entries(normalized)) {
+    if (value === null || value === undefined) {
+      if (value === null && (key === 'recaptchaToken' || key === 'turnstileToken')) {
+        normalized[key] = null;
+        continue;
+      }
+      delete normalized[key];
+      continue;
+    }
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (trimmed.length === 0) {
+        delete normalized[key];
+        continue;
+      }
+      normalized[key] = trimmed;
+    }
+  }
+
+  return normalized;
+}
 
 function parseBusinessInput(raw) {
   if (!raw) return {};
@@ -497,7 +540,10 @@ fastify.get(
 );
 
 fastify.post('/api/scan/start', async (request, reply) => {
-  const payload = scanStartSchema.safeParse(request.body);
+  const normalizedBody = normalizeScanStartBody(request.body);
+  console.log('scan/start body:', normalizedBody);
+
+  const payload = scanStartSchema.safeParse(normalizedBody);
 
   if (!payload.success) {
     return reply.status(400).send({
@@ -507,10 +553,18 @@ fastify.post('/api/scan/start', async (request, reply) => {
   }
 
   const body = payload.data;
+  const verifyDisabled = env.verifyDisabled;
+  const hasCaptcha = Boolean(body.recaptchaToken) || Boolean(body.turnstileToken);
 
-  const recaptchaPassed = await validateRecaptcha(body.recaptchaToken);
-  if (!recaptchaPassed) {
-    return reply.status(400).send({ error: 'recaptcha_failed' });
+  if (!verifyDisabled && !hasCaptcha) {
+    return reply.status(400).send({ error: 'captcha_required' });
+  }
+
+  if (!verifyDisabled && body.recaptchaToken) {
+    const recaptchaPassed = await validateRecaptcha(body.recaptchaToken);
+    if (!recaptchaPassed) {
+      return reply.status(400).send({ error: 'recaptcha_failed' });
+    }
   }
 
   const now = new Date().toISOString();
@@ -521,12 +575,13 @@ fastify.post('/api/scan/start', async (request, reply) => {
     cuisine: body.cuisine ?? null,
     website: body.website ?? null,
     contactName: body.contactName ?? null,
-    email: body.email ?? null
+    email: body.email ?? null,
+    source: body.source ?? null
   };
 
   const scan = await insertScan({
     business_input: JSON.stringify(businessInput),
-    place_id: null,
+    place_id: body.placeId,
     lat: null,
     lng: null,
     city: body.city ?? null,
