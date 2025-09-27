@@ -559,6 +559,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       unlockModal?.classList.add('hidden');
     }
 
+    // Submit/captcha state needs to exist before any helper uses it
+    let turnstileToken = '';
+    let isSubmitting = false;
+    let lastSubmitSnapshot = null;
+    let lastSubmitSnapshotKey = '';
+
     function ensureTurnstileScript() {
       if (!turnstileSiteKey) return;
       if (window.turnstile) return;
@@ -656,10 +662,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     let currentSuggestions = [];
     let activeSuggestionIndex = -1;
     let manualMode = false;
-    let turnstileToken = '';
-    let isSubmitting = false;
-    let lastSubmitSnapshot = null;
-    let lastSubmitSnapshotKey = '';
 
     let selectedPlace = null;
 
