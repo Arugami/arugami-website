@@ -295,192 +295,91 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
             </div>
 
             <div id="grader-result" class="hidden">
-              <div class="flex gap-6">
-                <!-- Left sticky rail: Score gauge -->
-                <div class="w-80 flex-shrink-0">
-                  <div class="sticky top-6 space-y-4">
-                    <!-- Score gauge -->
-                    <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6 text-center">
-                      <div class="relative mx-auto mb-4 h-32 w-32">
-                        <!-- Donut gauge background -->
-                        <svg class="h-32 w-32 transform -rotate-90" viewBox="0 0 120 120">
-                          <circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" class="text-slate-700" />
-                          <circle id="score-arc" cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round" 
-                                  class="text-pink-400 transition-all duration-1000" stroke-dasharray="0 314" />
-                        </svg>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                          <div class="text-center">
-                            <div id="score-meter" class="text-3xl font-bold text-white">--</div>
-                            <div class="text-xs text-slate-400">/ 100</div>
-                          </div>
-                        </div>
-                      </div>
-                      <p id="result-headline" class="text-lg font-semibold text-white mb-4">Your score is loading…</p>
-                      
-                      <!-- Category breakdown -->
-                      <div class="space-y-2 text-sm" id="score-breakdown">
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center gap-2">
-                            <div class="h-2 w-2 rounded-full bg-pink-400"></div>
-                            <span class="text-slate-300">Search Results</span>
-                          </div>
-                          <span class="text-white font-medium">--</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center gap-2">
-                            <div class="h-2 w-2 rounded-full bg-green-400"></div>
-                            <span class="text-slate-300">Website Basics</span>
-                          </div>
-                          <span class="text-white font-medium">--</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center gap-2">
-                            <div class="h-2 w-2 rounded-full bg-blue-400"></div>
-                            <span class="text-slate-300">Local Listings</span>
-                          </div>
-                          <span class="text-white font-medium">--</span>
-                        </div>
+              <section class="grid gap-6 md:grid-cols-12" id="result-grid">
+                <article class="md:col-span-4 rounded-2xl border border-white/10 bg-slate-900/80 p-6 min-h-[280px] flex flex-col items-center" data-result-card="score">
+                  <div class="result-skeleton w-full space-y-4 animate-pulse">
+                    <div class="mx-auto h-32 w-32 rounded-full bg-slate-800"></div>
+                    <div class="mx-auto h-4 w-2/3 rounded bg-slate-800"></div>
+                    <div class="mx-auto h-3 w-1/2 rounded bg-slate-800"></div>
+                  </div>
+                  <div class="result-content hidden w-full text-center space-y-4">
+                    <div class="relative mx-auto h-32 w-32">
+                      <svg class="h-32 w-32 -rotate-90" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" class="text-slate-700" />
+                        <circle id="score-arc" cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round" class="text-pink-400 transition-all duration-700" stroke-dasharray="0 314" />
+                      </svg>
+                      <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="result-score-value" class="text-3xl font-bold text-white">--</span>
+                        <span class="text-xs text-slate-400">/ 100</span>
                       </div>
                     </div>
-
-                    <!-- Primary CTA -->
-                    <button class="w-full rounded-xl bg-pink-500 px-6 py-4 text-sm font-semibold text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">
-                      Talk to a Hudson County expert
-                    </button>
+                    <div class="space-y-1">
+                      <p id="result-score-label" class="text-lg font-semibold text-white">Score loading…</p>
+                      <p id="result-business-name" class="text-sm text-slate-400"></p>
+                    </div>
+                    <div id="score-breakdown" class="space-y-2 text-sm"></div>
+                    <a id="result-link" class="hidden" rel="noopener" target="_blank"></a>
+                    <button class="w-full rounded-xl bg-pink-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-300">Talk to a Hudson County expert</button>
                   </div>
-                </div>
+                </article>
 
-                <!-- Right content: Cards with chips -->
-                <div class="flex-1 space-y-6">
-                  <!-- Problems summary card -->
-                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
-                    <div class="flex items-start gap-4">
-                      <div class="flex-shrink-0 rounded-full bg-red-500/20 p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-red-400">
-                          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-                        </svg>
-                      </div>
-                      <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-white mb-2">6 problems are costing you $947/month</h3>
-                        <ul class="space-y-1 text-sm text-slate-300">
-                          <li class="flex items-center gap-2">
-                            <span class="text-red-400">•</span>
-                            <span>Website fails to load order button above fold on mobile</span>
-                          </li>
-                          <li class="flex items-center gap-2">
-                            <span class="text-red-400">•</span>
-                            <span>Missing from "late night tacos jersey city" searches</span>
-                          </li>
-                          <li class="flex items-center gap-2">
-                            <span class="text-red-400">•</span>
-                            <span>No missed-call text-back system detected</span>
-                          </li>
-                        </ul>
-                      </div>
+                <article class="md:col-span-4 rounded-2xl border border-white/10 bg-slate-900/80 p-6 min-h-[320px]" data-result-card="issues">
+                  <div class="result-skeleton space-y-4 animate-pulse">
+                    <div class="h-5 w-2/3 rounded bg-slate-800"></div>
+                    <div class="space-y-2">
+                      <div class="h-3 w-full rounded bg-slate-800"></div>
+                      <div class="h-3 w-11/12 rounded bg-slate-800"></div>
+                      <div class="h-3 w-10/12 rounded bg-slate-800"></div>
                     </div>
                   </div>
+                  <div class="result-content hidden space-y-4">
+                    <div>
+                      <h3 id="result-issues-headline" class="text-lg font-semibold text-white"></h3>
+                      <p id="result-issues-subhead" class="text-sm text-slate-400"></p>
+                    </div>
+                    <ul id="result-issues-list" class="space-y-3 text-sm text-slate-200"></ul>
+                  </div>
+                </article>
 
-                  <!-- Competitor ranking card -->
-                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
-                    <h3 class="text-lg font-semibold text-white mb-4">You're ranking below 6 competitors</h3>
-                    <div class="space-y-3">
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-3">
-                        <div>
-                          <p class="font-medium text-white">Orale Mexican Kitchen</p>
-                          <p class="text-xs text-slate-400">4.6★ • 3,012 reviews</p>
-                        </div>
-                        <div class="text-right">
-                          <div class="text-sm font-medium text-green-400">#1</div>
-                          <div class="text-xs text-slate-500">Map pack</div>
-                        </div>
-                      </div>
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-3">
-                        <div>
-                          <p class="font-medium text-white">Taqueria Downtown</p>
-                          <p class="text-xs text-slate-400">4.5★ • 2,148 reviews</p>
-                        </div>
-                        <div class="text-right">
-                          <div class="text-sm font-medium text-green-400">#2</div>
-                          <div class="text-xs text-slate-500">Map pack</div>
-                        </div>
-                      </div>
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-3">
-                        <div>
-                          <p class="font-medium text-white">Los Cuernos Cantina</p>
-                          <p class="text-xs text-slate-400">4.4★ • 1,847 reviews</p>
-                        </div>
-                        <div class="text-right">
-                          <div class="text-sm font-medium text-amber-400">#3</div>
-                          <div class="text-xs text-slate-500">Map pack</div>
-                        </div>
-                      </div>
+                <article class="md:col-span-4 rounded-2xl border border-white/10 bg-slate-900/80 p-6 min-h-[320px]" data-result-card="competitors">
+                  <div class="result-skeleton space-y-4 animate-pulse">
+                    <div class="h-5 w-2/3 rounded bg-slate-800"></div>
+                    <div class="space-y-2">
+                      <div class="h-3 w-full rounded bg-slate-800"></div>
+                      <div class="h-3 w-11/12 rounded bg-slate-800"></div>
+                      <div class="h-3 w-10/12 rounded bg-slate-800"></div>
                     </div>
                   </div>
-
-                  <!-- Evidence table with chips -->
-                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
-                    <h3 class="text-lg font-semibold text-white mb-4">This is how you're doing online</h3>
-                    <div class="space-y-3">
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
-                        <div class="flex items-center gap-3" aria-live="polite">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
-                            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="text-sm text-slate-300">Best match for "tacos jersey city"</span>
-                        </div>
-                        <span class="rounded-full bg-red-500/20 px-2 py-1 text-xs font-medium text-red-300">Not ranking</span>
-                      </div>
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
-                        <div class="flex items-center gap-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
-                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-                          </svg>
-                          <span class="text-sm text-slate-300">Mobile order button visibility</span>
-                        </div>
-                        <span class="rounded-full bg-red-500/20 px-2 py-1 text-xs font-medium text-red-300">Below fold</span>
-                      </div>
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
-                        <div class="flex items-center gap-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
-                            <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.896 28.896 0 003.105 2.289z" />
-                          </svg>
-                          <span class="text-sm text-slate-300">Missed call text-back system</span>
-                        </div>
-                        <span class="rounded-full bg-red-500/20 px-2 py-1 text-xs font-medium text-red-300">Not detected</span>
-                      </div>
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
-                        <div class="flex items-center gap-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
-                            <path fill-rule="evenodd" d="M1 6a3 3 0 013-3h12a3 3 0 013 3v8a3 3 0 01-3 3H4a3 3 0 01-3-3V6zm4 1.5a2 2 0 114 0 2 2 0 01-4 0zm2 3a4 4 0 00-3.665 2.395.75.75 0 00.416 1A8.98 8.98 0 007 14a8.98 8.98 0 003.249-.604.75.75 0 00.416-1A4 4 0 007 10.5zm5-3.25a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75zm0 2.5a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="text-sm text-slate-300">Google Business Profile photos</span>
-                        </div>
-                        <span class="rounded-full bg-amber-500/20 px-2 py-1 text-xs font-medium text-amber-300">Needs refresh</span>
-                      </div>
-                      <div class="flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/50 p-4">
-                        <div class="flex items-center gap-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-400">
-                            <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="text-sm text-slate-300">Recent Google reviews</span>
-                        </div>
-                        <span class="rounded-full bg-green-500/20 px-2 py-1 text-xs font-medium text-green-300">Active</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Expert testimonial -->
-                  <div class="rounded-2xl border border-white/10 bg-slate-900/80 p-6">
-                    <div class="flex items-start gap-4">
-                      <div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-pink-500 to-purple-600"></div>
+                  <div class="result-content hidden space-y-4">
+                    <div class="flex items-center justify-between">
                       <div>
-                        <p class="font-semibold text-white">Alyssa Garcia · Arugami Strategy</p>
-                        <p class="mt-1 text-sm text-slate-300">"We've run 42 Hudson County audits this summer. The fixes above put tables back in play within 30 days."</p>
+                        <h3 class="text-lg font-semibold text-white">Nearby competitors</h3>
+                        <p class="text-sm text-slate-400" id="result-competitors-subhead">Where customers are booking instead</p>
                       </div>
+                      <span class="rounded-full bg-pink-500/20 px-3 py-1 text-xs font-medium text-pink-200" id="result-competitors-count"></span>
+                    </div>
+                    <ul id="result-competitors-list" class="space-y-3 text-sm text-slate-200"></ul>
+                  </div>
+                </article>
+
+                <article class="md:col-span-12 rounded-2xl border border-white/10 bg-slate-900/80 p-6 min-h-[180px]" data-result-card="highlights">
+                  <div class="result-skeleton space-y-3 animate-pulse">
+                    <div class="h-4 w-1/3 rounded bg-slate-800"></div>
+                    <div class="space-y-2">
+                      <div class="h-3 w-10/12 rounded bg-slate-800"></div>
+                      <div class="h-3 w-9/12 rounded bg-slate-800"></div>
+                      <div class="h-3 w-8/12 rounded bg-slate-800"></div>
                     </div>
                   </div>
-                </div>
-              </div>
+                  <div class="result-content hidden space-y-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-white">Highlights</h3>
+                      <p class="text-sm text-slate-400">Quick wins and signals from your scan</p>
+                    </div>
+                    <ul id="result-highlights-list" class="space-y-2 text-sm text-slate-200"></ul>
+                  </div>
+                </article>
+              </section>
             </div>
 </div>
           </div>
@@ -506,11 +405,18 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       captchaReady: false,
       placeId: '',
       selectedLabel: '',
-      turnstileToken: ''
+      turnstileToken: '',
+      scanId: null,
+      phase: 'idle',
+      progress: { status: 'idle', steps: [], etaSeconds: null },
+      result: null
     };
 
     let lastSubmitSnapshot = null;
     let lastSubmitSnapshotKey = '';
+    let pollGeneration = 0;
+    let pollTimeoutId = null;
+    let fetchedResultGeneration = null;
 
     const initGrader = () => {
       const configEl = document.getElementById('grader-config');
@@ -529,6 +435,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       state.turnstileSiteKey = config.turnstileSiteKey || '';
       state.recaptchaSiteKey = config.recaptchaSiteKey || recaptchaSiteKey || '';
       state.captchaReady = state.disableVerification;
+      state.scanId = null;
+      state.phase = 'intake';
+      state.progress = { status: 'idle', steps: [], etaSeconds: null };
+      state.result = null;
 
       const apiBase = state.apiBase;
       const usingFallbackApi = state.usingFallbackApi;
@@ -626,7 +536,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         const verifyCodeForm = document.getElementById('verify-code-form');
         const verifyWarning = document.getElementById('verify-warning');
         const resultSection = document.getElementById('grader-result');
-        const resultHeadline = document.getElementById('result-headline');
         const resultLink = document.getElementById('result-link');
         const businessInput = document.getElementById('businessName');
         const suggestionContainer = document.getElementById('search-suggestions');
@@ -649,8 +558,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         const placeIdInput = document.getElementById('placeId');
         const progressPreviews = document.getElementById('progress-previews');
         const previewCards = progressPreviews ? progressPreviews.querySelectorAll('[data-preview-step]') : [];
-        const scoreMeter = document.getElementById('score-meter');
-        const scoreBreakdown = document.getElementById('score-breakdown');
         const evidenceTabs = document.querySelectorAll('.evidence-tab');
         const evidencePanels = document.querySelectorAll('[data-evidence-panel]');
         const unlockModal = document.getElementById('unlock-modal');
@@ -717,12 +624,12 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     syncSelectionUI();
     updateSubmitState('initial');
+    renderResult();
+    renderProgress();
 
     const stepOrder = ['resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
     let scanId = null;
-    let pollInterval = null;
     let timerInterval = null;
-    let lastStatus = null;
     let currentPhone = null;
     let scanStartTime = null;
     let estimatedDuration = 35000; // 35 seconds
@@ -875,7 +782,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       const disableVerificationGate = cfg.disableVerification ?? state.disableVerification;
       const businessVal = businessInput?.value?.trim() || '';
       const placeIdVal = state.placeId || placeIdInput?.value?.trim() || '';
-      window.isSubmitting = Boolean(state.isSubmitting);
+      window.isSubmitting = Boolean(state.isSubmitting || state.phase === 'progress');
       const captchaReady = disableVerificationGate ? true : hasSolvedCaptcha();
       const hasPlace = Boolean(placeIdVal);
       const hasBusiness = Boolean(businessVal);
@@ -948,6 +855,346 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       return messages.join(' ');
     }
 
+    function formatCurrency(value) {
+      const amount = Number(value);
+      if (!Number.isFinite(amount)) return '$0';
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+      }).format(Math.max(0, Math.round(amount)));
+    }
+
+    function cancelProgressPolling() {
+      if (pollTimeoutId) {
+        clearTimeout(pollTimeoutId);
+        pollTimeoutId = null;
+      }
+    }
+
+    function renderProgress() {
+      const { status, steps, etaSeconds } = state.progress || {};
+      const normalizedStatus = !status || status === 'idle' ? 'queued' : status;
+      updateStatus(normalizedStatus);
+
+      const timerEl = document.getElementById('scan-timer');
+      if (timerEl) {
+        if (typeof etaSeconds === 'number' && Number.isFinite(etaSeconds)) {
+          const seconds = Math.max(0, Math.ceil(etaSeconds));
+          timerEl.textContent = `~${seconds} seconds remaining`;
+        }
+      }
+
+      if (Array.isArray(steps) && steps.length) {
+        steps.forEach((step) => {
+          if (!step || !step.id) return;
+          const stepEl = stepsList?.querySelector(`[data-step="${step.id}"]`);
+          if (!stepEl) return;
+          const indicator = stepEl.querySelector('span');
+          const labelEl = stepEl.querySelector('.text-sm');
+          const rawStepStatus = (step.status || 'pending').toString().toLowerCase();
+          const stepStatus = rawStepStatus === 'completed'
+            ? 'done'
+            : rawStepStatus === 'active'
+              ? 'current'
+              : rawStepStatus;
+          stepEl.classList.toggle('border-pink-400', stepStatus === 'current' || stepStatus === 'done');
+          stepEl.classList.toggle('bg-pink-500/20', stepStatus === 'current');
+          stepEl.classList.toggle('opacity-60', stepStatus === 'pending');
+          if (indicator) {
+            indicator.classList.toggle('bg-pink-400', stepStatus === 'done');
+            indicator.classList.toggle('bg-slate-500', stepStatus !== 'done');
+          }
+          if (labelEl && step.label) {
+            labelEl.textContent = step.label;
+          }
+        });
+      } else {
+        const fallbackStatus = normalizedStatus === 'running' ? 'details' : normalizedStatus;
+        markSteps(fallbackStatus);
+      }
+    }
+
+    function renderResult() {
+      const showContent = state.phase === 'result' && !!state.result;
+      document.querySelectorAll('[data-result-card]').forEach((card) => {
+        const skeleton = card.querySelector('.result-skeleton');
+        const content = card.querySelector('.result-content');
+        if (skeleton) skeleton.classList.toggle('hidden', showContent);
+        if (content) content.classList.toggle('hidden', !showContent);
+      });
+
+      const scoreValueEl = document.getElementById('result-score-value');
+      const scoreLabelEl = document.getElementById('result-score-label');
+      const businessNameEl = document.getElementById('result-business-name');
+      const breakdownEl = document.getElementById('score-breakdown');
+
+      if (!showContent) {
+        if (scoreValueEl) scoreValueEl.textContent = '--';
+        if (scoreLabelEl) scoreLabelEl.textContent = 'Score loading…';
+        if (businessNameEl) businessNameEl.textContent = '';
+        if (breakdownEl) breakdownEl.innerHTML = '';
+        return;
+      }
+
+      const result = state.result || {};
+      const score = typeof result.score === 'number' ? Math.round(result.score) : null;
+      const issues = Array.isArray(result.issues) ? result.issues : [];
+      const competitors = Array.isArray(result.competitors) ? result.competitors : [];
+      const highlights = Array.isArray(result.highlights) ? result.highlights : [];
+
+      if (scoreValueEl) {
+        scoreValueEl.textContent = score !== null ? String(Math.max(0, Math.min(100, score))) : '--';
+      }
+      if (scoreLabelEl) {
+        scoreLabelEl.textContent = describeScore(score ?? 0);
+      }
+      if (businessNameEl) {
+        businessNameEl.textContent = result.businessName || '';
+      }
+
+      const scoreArc = document.getElementById('score-arc');
+      if (scoreArc) {
+        const circumference = 2 * Math.PI * 50;
+        const clamped = score !== null ? Math.max(0, Math.min(100, score)) : 0;
+        const offset = circumference - (clamped / 100) * circumference;
+        scoreArc.style.strokeDasharray = `${circumference} ${circumference}`;
+        scoreArc.style.strokeDashoffset = `${offset}`;
+      }
+
+      if (breakdownEl) {
+        const totalImpact = issues.reduce((sum, issue) => sum + (Number(issue?.impactMonthly) || 0), 0);
+        const stats = [
+          { label: 'Issues found', value: issues.length ? String(issues.length) : '0' },
+          { label: 'Est. loss / month', value: formatCurrency(totalImpact) },
+          { label: 'Competitors ahead', value: competitors.length ? String(competitors.length) : '0' }
+        ];
+        breakdownEl.innerHTML = stats
+          .map(({ label, value }) => `
+            <div class="flex items-center justify-between">
+              <span class="text-slate-300">${label}</span>
+              <span class="text-white font-medium">${value}</span>
+            </div>
+          `)
+          .join('');
+      }
+
+      const issuesHeadline = document.getElementById('result-issues-headline');
+      const issuesSubhead = document.getElementById('result-issues-subhead');
+      const issuesListEl = document.getElementById('result-issues-list');
+      if (issuesHeadline) {
+        const totalImpact = issues.reduce((sum, issue) => sum + (Number(issue?.impactMonthly) || 0), 0);
+        issuesHeadline.textContent = issues.length
+          ? `${issues.length} problem${issues.length === 1 ? '' : 's'} costing ${formatCurrency(totalImpact)}/month`
+          : 'No major blockers detected';
+      }
+      if (issuesSubhead) {
+        issuesSubhead.textContent = issues.length ? 'Fix these first to unlock quick wins.' : 'Keep your essentials fresh and run another scan soon.';
+      }
+      if (issuesListEl) {
+        issuesListEl.innerHTML = '';
+        if (!issues.length) {
+          const li = document.createElement('li');
+          li.className = 'rounded-lg border border-white/5 bg-slate-950/60 px-4 py-3 text-sm text-slate-300';
+          li.textContent = 'We didn’t find any urgent issues. Nice work—keep the basics steady.';
+          issuesListEl.appendChild(li);
+        } else {
+          issues.slice(0, 6).forEach((issue) => {
+            const li = document.createElement('li');
+            li.className = 'rounded-lg border border-white/5 bg-slate-950/60 px-4 py-3';
+            const impact = issue?.impactMonthly;
+            const impactLabel = Number.isFinite(Number(impact)) ? `${formatCurrency(impact)}/mo` : null;
+            li.innerHTML = `
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex-1">
+                  <p class="font-medium text-white">${escapeHTML(issue?.title || 'Untitled issue')}</p>
+                  ${issue?.description ? `<p class="text-xs text-slate-400 mt-1">${escapeHTML(issue.description)}</p>` : ''}
+                </div>
+                ${impactLabel ? `<span class="rounded-full bg-pink-500/20 px-2 py-1 text-xs font-medium text-pink-200">${escapeHTML(impactLabel)}</span>` : ''}
+              </div>
+            `;
+            issuesListEl.appendChild(li);
+          });
+        }
+      }
+
+      const competitorsCountEl = document.getElementById('result-competitors-count');
+      const competitorsSubhead = document.getElementById('result-competitors-subhead');
+      const competitorsListEl = document.getElementById('result-competitors-list');
+      if (competitorsCountEl) {
+        competitorsCountEl.textContent = competitors.length ? `${competitors.length} listings` : '';
+        competitorsCountEl.classList.toggle('hidden', !competitors.length);
+      }
+      if (competitorsSubhead) {
+        competitorsSubhead.textContent = competitors.length ? 'Where customers are booking instead' : 'No nearby competitors logged yet.';
+      }
+      if (competitorsListEl) {
+        competitorsListEl.innerHTML = '';
+        if (!competitors.length) {
+          const li = document.createElement('li');
+          li.className = 'rounded-lg border border-white/5 bg-slate-950/60 px-4 py-3 text-sm text-slate-300';
+          li.textContent = 'We could not fetch competitor data for this scan.';
+          competitorsListEl.appendChild(li);
+        } else {
+          competitors.slice(0, 5).forEach((comp) => {
+            const rating = comp?.rating ? `${comp.rating}★` : null;
+            const reviews = comp?.reviews ? `${comp.reviews} reviews` : null;
+            const rank = comp?.rankMapPack ?? comp?.rank ?? null;
+            const rightLabel = rank ? `#${rank}` : rating || '';
+            const city = comp?.city || comp?.neighborhood || '';
+            const meta = [rating, reviews, city].filter(Boolean).join(' • ');
+            const li = document.createElement('li');
+            li.className = 'flex items-center justify-between rounded-lg border border-white/5 bg-slate-950/60 px-4 py-3';
+            li.innerHTML = `
+              <div>
+                <p class="font-semibold text-white">${escapeHTML(comp?.name || 'Competitor')}</p>
+                <p class="text-xs text-slate-400">${escapeHTML(meta)}</p>
+              </div>
+              ${rightLabel ? `<div class="text-right text-xs text-slate-300">${escapeHTML(rightLabel)}</div>` : ''}
+            `;
+            competitorsListEl.appendChild(li);
+          });
+        }
+      }
+
+      const highlightsListEl = document.getElementById('result-highlights-list');
+      if (highlightsListEl) {
+        highlightsListEl.innerHTML = '';
+        if (!highlights.length) {
+          const li = document.createElement('li');
+          li.className = 'rounded-lg border border-white/5 bg-slate-950/60 px-4 py-3 text-sm text-slate-300';
+          li.textContent = 'No highlights captured yet. We will surface quick wins here next scan.';
+          highlightsListEl.appendChild(li);
+        } else {
+          highlights.forEach((item) => {
+            const li = document.createElement('li');
+            li.className = 'flex items-start gap-2';
+            li.innerHTML = `<span class="text-pink-300">•</span><span class="flex-1">${escapeHTML(item)}</span>`;
+            highlightsListEl.appendChild(li);
+          });
+        }
+      }
+    }
+
+    function scheduleProgressPoll(scanId, generation, delay = 1200) {
+      cancelProgressPolling();
+      pollTimeoutId = window.setTimeout(() => {
+        pollProgress(scanId, generation).catch((error) => {
+          console.error(error);
+          if (generation !== pollGeneration) return;
+          state.phase = 'error';
+          renderProgress();
+          renderResult();
+          showInlineError('We lost connection while polling your scan. Try again.');
+          updateSubmitState('progress-error');
+        });
+      }, delay);
+    }
+
+    async function pollProgress(scanId, generation) {
+      if (!scanId) return;
+      const finalApiBase = state.apiBase || FALLBACK_API_BASE;
+      if (!finalApiBase) return;
+
+      try {
+        const res = await fetch(`${finalApiBase}/api/scan/${scanId}/progress?ts=${Date.now()}`, {
+          method: 'GET',
+          headers: { Accept: 'application/json' },
+          cache: 'no-store'
+        });
+
+        if (generation !== pollGeneration) {
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error(`progress_request_failed_${res.status}`);
+        }
+
+        const progress = await res.json();
+        console.log('[grader] progress', progress?.status);
+        state.progress = {
+          status: progress?.status || 'running',
+          steps: Array.isArray(progress?.steps) ? progress.steps : [],
+          etaSeconds: typeof progress?.etaSeconds === 'number' ? progress.etaSeconds : null
+        };
+        renderProgress();
+
+        if (state.progress.status === 'done') {
+          cancelProgressPolling();
+          if (generation !== pollGeneration) return;
+          if (fetchedResultGeneration === generation) return;
+          fetchedResultGeneration = generation;
+          await fetchResult(scanId, generation);
+          return;
+        }
+
+        if (state.progress.status === 'error') {
+          cancelProgressPolling();
+          stopScanTimer();
+          state.phase = 'error';
+          renderProgress();
+          renderResult();
+          showInlineError('We hit a snag running your scan. Please try again.');
+          updateSubmitState('progress-error');
+          return;
+        }
+
+        scheduleProgressPoll(scanId, generation, 1200);
+      } catch (error) {
+        console.error(error);
+        if (generation !== pollGeneration) return;
+        cancelProgressPolling();
+        stopScanTimer();
+        state.phase = 'error';
+        renderProgress();
+        renderResult();
+        showInlineError('We lost connection while polling your scan. Try again.');
+        updateSubmitState('progress-error');
+      }
+    }
+
+    async function fetchResult(scanId, generation) {
+      if (generation !== pollGeneration) return;
+      const finalApiBase = state.apiBase || FALLBACK_API_BASE;
+      if (!finalApiBase) return;
+
+      try {
+        const res = await fetch(`${finalApiBase}/api/scan/${scanId}/result?ts=${Date.now()}`, {
+          method: 'GET',
+          headers: { Accept: 'application/json' },
+          cache: 'no-store'
+        });
+
+        if (generation !== pollGeneration) {
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error(`result_request_failed_${res.status}`);
+        }
+
+        const result = await res.json();
+        console.log('[grader] result', { placeId: result?.placeId, score: result?.score });
+        state.result = result;
+        state.phase = 'result';
+        stopScanTimer();
+        renderResult();
+        renderProgress();
+        toggle(progressSection, false);
+        toggle(resultSection, true);
+        updateSubmitState('result-ready');
+      } catch (error) {
+        console.error(error);
+        if (generation !== pollGeneration) return;
+        state.phase = 'error';
+        renderProgress();
+        renderResult();
+        showInlineError('We could not load your results. Try again in a moment.');
+        updateSubmitState('result-error');
+      }
+    }
+
     function getInitials(value) {
       if (!value) return '??';
       const words = value.split(/\s+/).filter(Boolean);
@@ -967,6 +1214,28 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     function escapeRegExp(value) {
       return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function escapeHTML(value) {
+      if (value === null || value === undefined) return '';
+      return value
+        .toString()
+        .replace(/[&<>'"]/g, (char) => {
+          switch (char) {
+            case '&':
+              return '&amp;';
+            case '<':
+              return '&lt;';
+            case '>':
+              return '&gt;';
+            case '"':
+              return '&quot;';
+            case "'":
+              return '&#39;';
+            default:
+              return char;
+          }
+        });
     }
 
     function showSearchSpinner() {
@@ -1539,37 +1808,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     }
 
     // Competitor pin functions
-    function addCompetitorPin(competitor, index) {
-      const pinsContainer = document.getElementById('competitor-pins');
-      if (!pinsContainer) return;
-
-      // Create pin element
-      const pin = document.createElement('div');
-      pin.className = 'absolute transform -translate-x-1/2 -translate-y-full opacity-0 transition-all duration-500';
-      pin.style.left = `${20 + (index * 15)}%`;
-      pin.style.top = `${30 + (index * 12)}%`;
-      
-      pin.innerHTML = `
-        <div class="flex flex-col items-center">
-          <div class="bg-red-500 border-2 border-white rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
-            <div class="w-2 h-2 bg-white rounded-full"></div>
-          </div>
-          <div class="mt-1 bg-slate-900/90 border border-white/20 rounded px-2 py-1 text-xs text-white whitespace-nowrap">
-            <div class="font-medium">${competitor.name || 'Competitor'}</div>
-            <div class="text-slate-300">${competitor.rating || '4.5'}★ • ${competitor.reviews || '1.2k'} reviews</div>
-          </div>
-        </div>
-      `;
-
-      pinsContainer.appendChild(pin);
-
-      // Animate in after a delay
-      setTimeout(() => {
-        pin.classList.remove('opacity-0');
-        pin.classList.add('opacity-100');
-      }, index * 800 + 500);
-    }
-
     // Update scanning query display
     function updateScanningQuery(businessName) {
       const queryEl = document.getElementById('scanning-query');
@@ -1648,24 +1886,28 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     function updateStatus(status) {
       const labels = {
         queued: 'Queued — warming up the APIs',
+        running: 'Scanning your online presence…',
         resolving: 'Finding your Google Business Profile…',
         details: 'Pulling profile details…',
         competitors: 'Comparing top competitors…',
         performance: 'Running PageSpeed Insights…',
         scoring: 'Calculating your score…',
         done: 'Score ready! Verify your phone to unlock it.',
-        failed: 'We hit a snag. Our team will reach out.'
+        failed: 'We hit a snag. Our team will reach out.',
+        error: 'Scan failed — please retry.'
       };
 
       const subtitles = {
         queued: 'We queue your grader and lock in a short-lived token.',
+        running: 'Collecting rankings, reviews, and website vitals in real time.',
         resolving: 'Matching your restaurant and location across Google APIs.',
         details: 'Checking hours, CTA paths, photos, and menu coverage.',
         competitors: 'Ranking nearby restaurants to benchmark visibility.',
         performance: 'Testing mobile speed, responsiveness, and vitals.',
         scoring: 'Rolling everything into a 0–100 score.',
         done: 'Verify your phone to view the report and dollar impact.',
-        failed: 'Our Hudson County team will follow up with next steps.'
+        failed: 'Our Hudson County team will follow up with next steps.',
+        error: 'Please retry the scan—no data was captured this run.'
       };
 
       statusEl.textContent = labels[status] ?? 'Working…';
@@ -1730,126 +1972,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       return { recaptchaToken, turnstileToken: null };
     }
 
-    async function pollStatus(id) {
-      const finalApiBase = apiBase || FALLBACK_API_BASE;
-      if (!finalApiBase) return;
-      try {
-        const res = await fetch(`${finalApiBase}/api/scan/${id}`);
-        if (!res.ok) throw new Error('Status request failed');
-        const data = await res.json();
-        
-        if (data.status && data.status !== lastStatus) {
-          console.log('Scan status update:', data.status, data);
-          lastStatus = data.status;
-          markSteps(data.status);
-          updateStatus(data.status);
-          
-        if (data.status === 'done') {
-          stopScanTimer();
-          if (disableVerification) {
-            hideUnlockModal();
-            toggle(progressSection, false);
-            toggle(verifySection, false);
-            toggle(resultSection, true);
-            if (resultSection) {
-              resultSection.classList.remove('hidden');
-              resultSection.style.display = resultSection.dataset?.defaultDisplay || 'block';
-            }
-            resultSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          } else {
-            showUnlockModal();
-          }
-            if (pollInterval) {
-              clearInterval(pollInterval);
-              pollInterval = null;
-            }
-          }
-          if (data.status === 'failed') {
-            stopScanTimer();
-            if (pollInterval) {
-              clearInterval(pollInterval);
-              pollInterval = null;
-            }
-          }
-        }
-
-        // Add competitor pins when competitors data arrives
-        if (Array.isArray(data.competitors) && data.competitors.length) {
-          const pinsContainer = document.getElementById('competitor-pins');
-          if (pinsContainer && !pinsContainer.hasChildNodes()) {
-            data.competitors.forEach((competitor, index) => {
-              addCompetitorPin(competitor, index);
-            });
-          }
-        }
-
-        if (typeof data.score === 'number' && data.status === 'done') {
-          const label = describeScore(data.score);
-          resultHeadline.textContent = `${data.score}/100 — ${label}`;
-          if (scoreMeter) {
-            scoreMeter.textContent = data.score;
-          }
-          
-          // Animate donut gauge
-          const scoreArc = document.getElementById('score-arc');
-          if (scoreArc) {
-            const circumference = 2 * Math.PI * 50; // radius = 50
-            const offset = circumference - (data.score / 100) * circumference;
-            scoreArc.style.strokeDasharray = `${circumference} ${circumference}`;
-            scoreArc.style.strokeDashoffset = offset;
-          }
-        }
-        
-        const breakdownData = data.scoreBreakdown || data.breakdown;
-        if (breakdownData && scoreBreakdown) {
-          const labelMap = {
-            gbp: { label: 'Google Profile', color: 'bg-pink-400' },
-            reviews: { label: 'Reviews & Reputation', color: 'bg-green-400' },
-            photos: { label: 'Photos & Media', color: 'bg-blue-400' },
-            performance: { label: 'Website Performance', color: 'bg-purple-400' },
-            rankings: { label: 'Local Rankings', color: 'bg-amber-400' }
-          };
-
-          const entries = Array.isArray(breakdownData)
-            ? breakdownData.map((item, index) => [`bucket-${index + 1}`, typeof item === 'number' ? item : item?.score ?? item])
-            : Object.entries(breakdownData);
-
-          scoreBreakdown.innerHTML = '';
-
-          entries.forEach(([key, rawValue]) => {
-            const numericValue = typeof rawValue === 'number' ? rawValue : Number.parseFloat(rawValue) || 0;
-            const meta = labelMap[key] ?? {
-              label: key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()),
-              color: 'bg-slate-500'
-            };
-
-            const row = document.createElement('div');
-            row.className = 'flex items-center justify-between';
-
-            const left = document.createElement('div');
-            left.className = 'flex items-center gap-2';
-
-            const dot = document.createElement('div');
-            dot.className = `h-2 w-2 rounded-full ${meta.color}`;
-
-            const label = document.createElement('span');
-            label.className = 'text-slate-300';
-            label.textContent = meta.label;
-
-            const score = document.createElement('span');
-            score.className = 'text-white font-medium';
-            score.textContent = Math.round(numericValue).toString();
-
-            left.append(dot, label);
-            row.append(left, score);
-            scoreBreakdown.appendChild(row);
-          });
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
     if (usingFallbackApi) {
       console.log('No API base found, using fallback');
       // Don't show warning or disable form - let it work with fallback
@@ -1872,6 +1994,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (existingError) {
         existingError.textContent = '';
       }
+
+      cancelProgressPolling();
+      state.scanId = null;
+      state.result = null;
+      state.progress = { status: 'idle', steps: [], etaSeconds: null };
+      state.phase = 'intake';
+      renderResult();
+      renderProgress();
 
       const businessName = businessInput?.value?.trim() ?? '';
       if (businessName.length < 2) {
@@ -1932,17 +2062,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       updateSubmitState('submit-start');
 
       try {
-        console.log('[grader] submitting scan for', { placeId, businessName });
-        console.log('[grader] payload prepared', payload);
         const response = await fetch(`${finalApiBase}/api/scan/start`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
+          cache: 'no-store',
           body: JSON.stringify(payload)
         });
 
-        console.log('[grader] start response status', response.status);
         const responseText = await response.text();
         let responseBody = {};
         if (responseText) {
@@ -1959,20 +2087,26 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
             formatValidationErrors(responseBody?.details) ||
             formatValidationErrors(responseBody?.errors);
           const fallbackMessage = responseBody?.error || `Start failed (${response.status})`;
+          state.phase = 'error';
           showInlineError(detailed || fallbackMessage);
           updateSubmitState('server-error');
           return;
         }
 
-        scanId = responseBody.scanId ?? scanId;
+        const scanId = responseBody.scanId;
         if (!scanId) {
+          state.phase = 'error';
           showInlineError('Start failed (missing scan id).');
           updateSubmitState('server-error');
           return;
         }
-        const effectiveName = businessName || state.selectedLabel || 'Your restaurant';
-        updateScanningQuery(effectiveName);
-        warning?.classList.add('hidden');
+
+        console.log('[grader] start', { scanId });
+        state.scanId = scanId;
+        state.phase = 'progress';
+        state.progress = { status: 'queued', steps: [], etaSeconds: null };
+        renderProgress();
+        renderResult();
 
         if (typeof window.forceShow === 'function') {
           try {
@@ -1984,25 +2118,32 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           document.getElementById('grader-progress')?.classList.remove('hidden');
         }
 
+        toggle(resultSection, true);
+        if (verifySection) {
+          toggle(verifySection, false);
+        }
         toggle(intakeSection, false);
         toggle(progressSection, true);
 
-        startScanTimer();
-        markSteps('resolving');
-        updateStatus('resolving');
+        updateScanningQuery(businessName || state.selectedLabel || 'Your restaurant');
 
-        if (pollInterval) {
-          clearInterval(pollInterval);
-        }
-        pollInterval = setInterval(() => pollStatus(scanId), 1000);
-        await pollStatus(scanId);
+        startScanTimer();
+
+        pollGeneration += 1;
+        const generation = pollGeneration;
+        fetchedResultGeneration = null;
+        await pollProgress(scanId, generation);
       } catch (error) {
         console.error(error);
+        state.phase = 'error';
+        renderProgress();
+        renderResult();
         showInlineError('Something went wrong starting the scan.');
+        updateSubmitState('server-error');
       } finally {
         state.isSubmitting = false;
         window.isSubmitting = false;
-        if (!state.disableVerification && turnstileSiteKey) {
+        if (!state.disableVerification && state.turnstileSiteKey) {
           state.turnstileToken = '';
           state.captchaReady = false;
           if (window.turnstile && typeof window.turnstile.reset === 'function') {
@@ -2016,6 +2157,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         updateSubmitState('submit-end');
       }
     }
+
 
     let lastCtaClick = false;
 
@@ -2114,14 +2256,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           toggle(progressSection, false);
           toggle(verifySection, false);
           toggle(resultSection, true);
+          state.phase = 'result';
+          renderResult();
           if (resultSection) {
             resultSection.classList.remove('hidden');
             resultSection.style.display = resultSection.dataset?.defaultDisplay || 'block';
           }
-          if (pollInterval) {
-            clearInterval(pollInterval);
-            pollInterval = null;
-          }
+          cancelProgressPolling();
         } catch (error) {
           console.error(error);
           verifyWarning.textContent = 'Unexpected error unlocking the report. Try again or contact us.';
