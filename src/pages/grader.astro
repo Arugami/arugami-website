@@ -391,10 +391,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
   <script type="application/json" id="grader-config" set:html={configJson}></script>
   <script type="module">
-    const FALLBACK_API_BASE = 'https://arugami-website-production.up.railway.app';
-
     let state = {
-      apiBase: FALLBACK_API_BASE,
+      apiBase: '',
       usingFallbackApi: true,
       disableVerification: false,
       turnstileSiteKey: '',
@@ -433,6 +431,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       failed: null
     };
 
+    function getApiBase() {
+      return state.usingFallbackApi ? '' : state.apiBase;
+    }
+
+    function buildApiUrl(path) {
+      const normalized = path.startsWith('/') ? path : `/${path}`;
+      return `${getApiBase()}${normalized}`;
+    }
+
     function refreshStepOrder() {
       if (!Array.isArray(stepOrder)) return;
       stepOrder.forEach((step) => {
@@ -451,8 +458,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         config = {};
       }
 
-      state.apiBase = config.apiBase ? config.apiBase.replace(/\/$/, '') : FALLBACK_API_BASE;
-      state.usingFallbackApi = !config.apiBase;
+      const rawApiBase = typeof config.apiBase === 'string' ? config.apiBase.trim() : '';
+      state.apiBase = rawApiBase ? rawApiBase.replace(/\/$/, '') : '';
+      state.usingFallbackApi = !state.apiBase;
       state.disableVerification = Boolean(config.disableVerification);
       state.turnstileSiteKey = config.turnstileSiteKey || '';
       state.recaptchaSiteKey = typeof config.recaptchaSiteKey === 'string' && config.recaptchaSiteKey.length
@@ -1140,11 +1148,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     async function pollProgress(scanId, generation) {
       if (!scanId) return;
-      const finalApiBase = state.apiBase || FALLBACK_API_BASE;
-      if (!finalApiBase) return;
-
       try {
-        const res = await fetch(`${finalApiBase}/api/scan/${scanId}/progress?ts=${Date.now()}`, {
+        const progressUrl = buildApiUrl(`/api/scan/${scanId}/progress?ts=${Date.now()}`);
+        const res = await fetch(progressUrl, {
           method: 'GET',
           headers: { Accept: 'application/json' },
           cache: 'no-store'
@@ -1204,11 +1210,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     async function fetchResult(scanId, generation) {
       if (generation !== pollGeneration) return;
-      const finalApiBase = state.apiBase || FALLBACK_API_BASE;
-      if (!finalApiBase) return;
-
       try {
-        const res = await fetch(`${finalApiBase}/api/scan/${scanId}/result?ts=${Date.now()}`, {
+        const resultUrl = buildApiUrl(`/api/scan/${scanId}/result?ts=${Date.now()}`);
+        const res = await fetch(resultUrl, {
           method: 'GET',
           headers: { Accept: 'application/json' },
           cache: 'no-store'
@@ -1567,22 +1571,13 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         return;
       }
 
-      const finalApiBase = apiBase || FALLBACK_API_BASE;
-      if (!finalApiBase) {
-        const fallback = sampleSuggestions.filter((item) => {
-          const label = (item.inputValue ?? item.name ?? '').toLowerCase();
-          return label.includes(trimmed.toLowerCase());
-        });
-        renderSuggestions(fallback.length ? fallback : sampleSuggestions, 'Sample matches', 'sample', trimmed);
-        return;
-      }
-
       // Show loading state immediately
       renderSuggestions([], 'Searching restaurants...', 'loading', trimmed);
 
       try {
         searchController = new AbortController();
-        const res = await fetch(`${finalApiBase}/api/places/search?q=${encodeURIComponent(trimmed)}&limit=8`, {
+        const searchUrl = buildApiUrl(`/api/places/search?q=${encodeURIComponent(trimmed)}&limit=8&t=${Date.now()}`);
+        const res = await fetch(searchUrl, {
           signal: searchController.signal
         });
         
@@ -2067,13 +2062,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     }
 
     async function startScan() {
-      const finalApiBase = state.apiBase || FALLBACK_API_BASE;
-      if (!finalApiBase) {
-        console.log('No API base configured');
-        showInlineError('We could not start your scan. API base missing.');
-        return;
-      }
-
       hideSuggestions(true);
       warning?.classList.add('hidden');
       const existingError = document.getElementById('grader-error');
@@ -2148,7 +2136,8 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       updateSubmitState('submit-start');
 
       try {
-        const response = await fetch(`${finalApiBase}/api/scan/start`, {
+        const startUrl = buildApiUrl('/api/scan/start');
+        const response = await fetch(startUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -2286,15 +2275,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     if (!disableVerification) {
       verifyForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const finalApiBase = apiBase || FALLBACK_API_BASE;
-        if (!finalApiBase || !scanId) return;
+        if (!scanId) return;
         verifyWarning.classList.add('hidden');
 
         const formData = new FormData(verifyForm);
         const phone = formData.get('phone');
 
         try {
-          const res = await fetch(`${finalApiBase}/api/verify/start`, {
+          const verifyStartUrl = buildApiUrl('/api/verify/start');
+          const res = await fetch(verifyStartUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -2320,15 +2309,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
       verifyCodeForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const finalApiBase = apiBase || FALLBACK_API_BASE;
-        if (!finalApiBase || !scanId || !currentPhone) return;
+        if (!scanId || !currentPhone) return;
         verifyWarning.classList.add('hidden');
 
         const formData = new FormData(verifyCodeForm);
         const code = formData.get('code');
 
         try {
-          const res = await fetch(`${finalApiBase}/api/verify/check`, {
+          const verifyCheckUrl = buildApiUrl('/api/verify/check');
+          const res = await fetch(verifyCheckUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
