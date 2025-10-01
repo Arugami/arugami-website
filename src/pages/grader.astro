@@ -419,6 +419,20 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     let fetchedResultGeneration = null;
     let stepOrder = [];
 
+    const statusStepMap = {
+      queued: 'who',
+      running: 'who',
+      processing: 'who',
+      resolving: 'who',
+      details: 'gbp',
+      competitors: 'web',
+      performance: 'photos',
+      scoring: 'mobile',
+      done: 'mobile',
+      error: null,
+      failed: null
+    };
+
     function refreshStepOrder() {
       if (!Array.isArray(stepOrder)) return;
       stepOrder.forEach((step) => {
@@ -1949,20 +1963,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       if (score >= 50) return 'Needs Work';
       return 'Foundation at Risk';
     }
-
-    const statusStepMap = {
-      queued: 'who',
-      running: 'who',
-      processing: 'who',
-      resolving: 'who',
-      details: 'gbp',
-      competitors: 'web',
-      performance: 'photos',
-      scoring: 'mobile',
-      done: 'mobile',
-      error: null,
-      failed: null
-    };
 
     function updateStatus(order, status, explicitActiveId) {
       const labels = {
