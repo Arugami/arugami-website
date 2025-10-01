@@ -173,41 +173,41 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
                     <!-- Progress steps -->
                     <div class="space-y-3" aria-live="polite" id="progress-steps">
-                      <div data-step="resolving" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                      <div id="step-who" data-step="who" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
                         <div class="flex h-6 w-6 items-center justify-center">
-                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                          <span data-step-dot class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
                         </div>
                         <div class="flex-1">
                           <p class="text-sm font-medium text-white">Who/Name & competitors</p>
                         </div>
                       </div>
-                      <div data-step="details" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                      <div id="step-gbp" data-step="gbp" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
                         <div class="flex h-6 w-6 items-center justify-center">
-                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                          <span data-step-dot class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
                         </div>
                         <div class="flex-1">
                           <p class="text-sm font-medium text-white">Google Business profile</p>
                         </div>
                       </div>
-                      <div data-step="competitors" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                      <div id="step-web" data-step="web" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
                         <div class="flex h-6 w-6 items-center justify-center">
-                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                          <span data-step-dot class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
                         </div>
                         <div class="flex-1">
                           <p class="text-sm font-medium text-white">Web conversion path</p>
                         </div>
                       </div>
-                      <div data-step="performance" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                      <div id="step-photos" data-step="photos" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
                         <div class="flex h-6 w-6 items-center justify-center">
-                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                          <span data-step-dot class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
                         </div>
                         <div class="flex-1">
                           <p class="text-sm font-medium text-white">Photo quality and quantity</p>
                         </div>
                       </div>
-                      <div data-step="scoring" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
+                      <div id="step-mobile" data-step="mobile" class="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-3">
                         <div class="flex h-6 w-6 items-center justify-center">
-                          <span class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
+                          <span data-step-dot class="h-2 w-2 rounded-full bg-slate-500 transition-colors duration-200"></span>
                         </div>
                         <div class="flex-1">
                           <p class="text-sm font-medium text-white">Mobile experience</p>
@@ -417,6 +417,14 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     let pollGeneration = 0;
     let pollTimeoutId = null;
     let fetchedResultGeneration = null;
+    let stepOrder = [];
+
+    function refreshStepOrder() {
+      if (!Array.isArray(stepOrder)) return;
+      stepOrder.forEach((step) => {
+        step.el = document.getElementById(`step-${step.id}`);
+      });
+    }
 
     const initGrader = () => {
       const configEl = document.getElementById('grader-config');
@@ -528,7 +536,6 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         const intakeSection = document.getElementById('grader-intake');
         const warning = document.getElementById('grader-warning');
         const progressSection = document.getElementById('grader-progress');
-        const stepsList = document.getElementById('progress-steps');
         const statusEl = document.getElementById('progress-status');
         const subtitleEl = document.getElementById('progress-subtitle');
         const verifySection = document.getElementById('grader-verify');
@@ -622,13 +629,20 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           };
         }
 
+        stepOrder = [
+          { id: 'who', el: document.getElementById('step-who') },
+          { id: 'gbp', el: document.getElementById('step-gbp') },
+          { id: 'web', el: document.getElementById('step-web') },
+          { id: 'photos', el: document.getElementById('step-photos') },
+          { id: 'mobile', el: document.getElementById('step-mobile') }
+        ];
+
     syncSelectionUI();
     updateSubmitState('initial');
+    refreshStepOrder();
     renderResult();
     renderProgress();
 
-    const stepOrder = ['resolving', 'details', 'competitors', 'performance', 'scoring', 'done'];
-    let scanId = null;
     let timerInterval = null;
     let currentPhone = null;
     let scanStartTime = null;
@@ -872,47 +886,53 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       }
     }
 
-    function renderProgress() {
-      const { status, steps, etaSeconds } = state.progress || {};
+    function renderProgress(progressState = state.progress) {
+      refreshStepOrder();
+
+      const { status, steps, etaSeconds } = progressState || {};
       const normalizedStatus = !status || status === 'idle' ? 'queued' : status;
-      updateStatus(normalizedStatus);
 
       const timerEl = document.getElementById('scan-timer');
-      if (timerEl) {
-        if (typeof etaSeconds === 'number' && Number.isFinite(etaSeconds)) {
-          const seconds = Math.max(0, Math.ceil(etaSeconds));
-          timerEl.textContent = `~${seconds} seconds remaining`;
-        }
+      if (timerEl && typeof etaSeconds === 'number' && Number.isFinite(etaSeconds)) {
+        const seconds = Math.max(0, Math.ceil(etaSeconds));
+        timerEl.textContent = `~${seconds} seconds remaining`;
       }
 
+      let activeFromSteps = null;
       if (Array.isArray(steps) && steps.length) {
         steps.forEach((step) => {
           if (!step || !step.id) return;
-          const stepEl = stepsList?.querySelector(`[data-step="${step.id}"]`);
-          if (!stepEl) return;
-          const indicator = stepEl.querySelector('span');
-          const labelEl = stepEl.querySelector('.text-sm');
-          const rawStepStatus = (step.status || 'pending').toString().toLowerCase();
-          const stepStatus = rawStepStatus === 'completed'
-            ? 'done'
-            : rawStepStatus === 'active'
-              ? 'current'
-              : rawStepStatus;
-          stepEl.classList.toggle('border-pink-400', stepStatus === 'current' || stepStatus === 'done');
-          stepEl.classList.toggle('bg-pink-500/20', stepStatus === 'current');
-          stepEl.classList.toggle('opacity-60', stepStatus === 'pending');
-          if (indicator) {
-            indicator.classList.toggle('bg-pink-400', stepStatus === 'done');
-            indicator.classList.toggle('bg-slate-500', stepStatus !== 'done');
+          const mappedId = mapStepId(step.id);
+          if (!mappedId) return;
+
+          const stepEntry = stepOrder.find((entry) => entry.id === mappedId);
+          const stepEl = stepEntry?.el || document.getElementById(`step-${mappedId}`);
+          if (stepEl && step.label) {
+            const labelEl = stepEl.querySelector('.text-sm');
+            if (labelEl) {
+              labelEl.textContent = step.label;
+            }
           }
-          if (labelEl && step.label) {
-            labelEl.textContent = step.label;
+
+          const stateValue = (step.status || '').toString().toLowerCase();
+          if (stateValue === 'current' || stateValue === 'active') {
+            activeFromSteps = mappedId;
           }
         });
-      } else {
-        const fallbackStatus = normalizedStatus === 'running' ? 'details' : normalizedStatus;
-        markSteps(fallbackStatus);
+
+        if (!activeFromSteps) {
+          for (let i = steps.length - 1; i >= 0; i -= 1) {
+            const mappedId = mapStepId(steps[i]?.id);
+            const stateValue = (steps[i]?.status || '').toString().toLowerCase();
+            if (mappedId && (stateValue === 'done' || stateValue === 'completed')) {
+              activeFromSteps = mappedId;
+              break;
+            }
+          }
+        }
       }
+
+      updateStatus(stepOrder, normalizedStatus, activeFromSteps);
     }
 
     function renderResult() {
@@ -928,6 +948,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       const scoreLabelEl = document.getElementById('result-score-label');
       const businessNameEl = document.getElementById('result-business-name');
       const breakdownEl = document.getElementById('score-breakdown');
+      const reportLinkEl = document.getElementById('result-link');
 
       if (!showContent) {
         if (scoreValueEl) scoreValueEl.textContent = '--';
@@ -951,6 +972,15 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       }
       if (businessNameEl) {
         businessNameEl.textContent = result.businessName || '';
+      }
+      if (reportLinkEl) {
+        if (result.reportUrl) {
+          reportLinkEl.href = result.reportUrl;
+          reportLinkEl.classList.remove('hidden');
+        } else {
+          reportLinkEl.removeAttribute('href');
+          reportLinkEl.classList.add('hidden');
+        }
       }
 
       const scoreArc = document.getElementById('score-arc');
@@ -1083,6 +1113,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
           console.error(error);
           if (generation !== pollGeneration) return;
           state.phase = 'error';
+          state.progress = { status: 'error', steps: [], etaSeconds: null };
           renderProgress();
           renderResult();
           showInlineError('We lost connection while polling your scan. Try again.');
@@ -1147,6 +1178,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         cancelProgressPolling();
         stopScanTimer();
         state.phase = 'error';
+        state.progress = { status: 'error', steps: [], etaSeconds: null };
         renderProgress();
         renderResult();
         showInlineError('We lost connection while polling your scan. Try again.');
@@ -1188,6 +1220,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         console.error(error);
         if (generation !== pollGeneration) return;
         state.phase = 'error';
+        state.progress = { status: 'error', steps: [], etaSeconds: null };
         renderProgress();
         renderResult();
         showInlineError('We could not load your results. Try again in a moment.');
@@ -1844,36 +1877,68 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       });
     }
 
-    function setStepStatus(step, completed) {
-      const item = stepsList?.querySelector(`[data-step="${step}"]`);
-      if (!item) return;
-      const indicator = item.querySelector('span');
-      if (indicator) {
-        indicator.classList.toggle('bg-pink-400', completed);
-        indicator.classList.toggle('bg-slate-500', !completed);
+    function mapStepId(rawId) {
+      if (!rawId) return null;
+      const key = rawId.toString().toLowerCase();
+      switch (key) {
+        case 'resolving':
+        case 'who':
+        case 'name':
+          return 'who';
+        case 'details':
+        case 'gbp':
+          return 'gbp';
+        case 'competitors':
+        case 'web':
+          return 'web';
+        case 'performance':
+        case 'photos':
+          return 'photos';
+        case 'mobile':
+        case 'scoring':
+          return 'mobile';
+        default:
+          return key;
       }
-      item.classList.toggle('border-pink-400', completed);
     }
 
-    function revealPreviews(currentIndex) {
-      if (!previewCards || previewCards.length === 0) return;
-      previewCards.forEach((card) => {
-        const step = card.getAttribute('data-preview-step');
-        const stepIndex = stepOrder.indexOf(step ?? '');
-        if (stepIndex !== -1 && stepIndex <= currentIndex) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
+    function markSteps(order, activeId) {
+      if (!Array.isArray(order)) return;
+      const activeIndex = activeId ? order.findIndex(({ id }) => id === activeId) : -1;
+
+      order.forEach((step, index) => {
+        const el = step.el || document.getElementById(`step-${step.id}`);
+        if (!el) return;
+        step.el = el;
+
+        let state = 'idle';
+        if (activeId) {
+          if (index < activeIndex) state = 'done';
+          else if (index === activeIndex) state = 'active';
+        }
+
+        el.dataset.state = state;
+        el.classList.toggle('border-pink-400', state === 'active' || state === 'done');
+        el.classList.toggle('bg-pink-500/20', state === 'active');
+        el.classList.toggle('opacity-60', state === 'idle');
+
+        const dot = el.querySelector('[data-step-dot]') || el.querySelector('span');
+        if (dot) {
+          dot.classList.toggle('bg-pink-400', state === 'active' || state === 'done');
+          dot.classList.toggle('bg-slate-500', state === 'idle');
         }
       });
     }
 
-    function markSteps(status) {
-      const currentIndex = stepOrder.indexOf(status);
-      stepOrder.forEach((step, index) => {
-        setStepStatus(step, index <= currentIndex);
+    function updatePreviews(order, activeId) {
+      if (!previewCards || !previewCards.length) return;
+      const activeIndex = activeId ? order.findIndex(({ id }) => id === activeId) : -1;
+      previewCards.forEach((card) => {
+        const stepId = mapStepId(card.getAttribute('data-preview-step'));
+        const stepIndex = stepId ? order.findIndex(({ id }) => id === stepId) : -1;
+        const shouldShow = activeIndex >= 0 && stepIndex !== -1 && stepIndex <= activeIndex;
+        card.classList.toggle('hidden', !shouldShow);
       });
-      revealPreviews(currentIndex);
     }
 
     function describeScore(score) {
@@ -1883,10 +1948,25 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       return 'Foundation at Risk';
     }
 
-    function updateStatus(status) {
+    const statusStepMap = {
+      queued: 'who',
+      running: 'who',
+      processing: 'who',
+      resolving: 'who',
+      details: 'gbp',
+      competitors: 'web',
+      performance: 'photos',
+      scoring: 'mobile',
+      done: 'mobile',
+      error: null,
+      failed: null
+    };
+
+    function updateStatus(order, status, explicitActiveId) {
       const labels = {
         queued: 'Queued — warming up the APIs',
         running: 'Scanning your online presence…',
+        processing: 'Scanning your online presence…',
         resolving: 'Finding your Google Business Profile…',
         details: 'Pulling profile details…',
         competitors: 'Comparing top competitors…',
@@ -1900,6 +1980,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       const subtitles = {
         queued: 'We queue your grader and lock in a short-lived token.',
         running: 'Collecting rankings, reviews, and website vitals in real time.',
+        processing: 'Collecting rankings, reviews, and website vitals in real time.',
         resolving: 'Matching your restaurant and location across Google APIs.',
         details: 'Checking hours, CTA paths, photos, and menu coverage.',
         competitors: 'Ranking nearby restaurants to benchmark visibility.',
@@ -1912,7 +1993,10 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
       statusEl.textContent = labels[status] ?? 'Working…';
       subtitleEl.textContent = subtitles[status] ?? '';
-      markSteps(status);
+
+      const mappedActive = explicitActiveId || statusStepMap[status] || null;
+      markSteps(order, mappedActive);
+      updatePreviews(order, mappedActive);
     }
 
     async function ensureRecaptchaScript() {
@@ -2088,6 +2172,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
             formatValidationErrors(responseBody?.errors);
           const fallbackMessage = responseBody?.error || `Start failed (${response.status})`;
           state.phase = 'error';
+          state.progress = { status: 'error', steps: [], etaSeconds: null };
+          renderProgress();
+          renderResult();
           showInlineError(detailed || fallbackMessage);
           updateSubmitState('server-error');
           return;
@@ -2096,6 +2183,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
         const scanId = responseBody.scanId;
         if (!scanId) {
           state.phase = 'error';
+          state.progress = { status: 'error', steps: [], etaSeconds: null };
+          renderProgress();
+          renderResult();
           showInlineError('Start failed (missing scan id).');
           updateSubmitState('server-error');
           return;
@@ -2136,6 +2226,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       } catch (error) {
         console.error(error);
         state.phase = 'error';
+        state.progress = { status: 'error', steps: [], etaSeconds: null };
         renderProgress();
         renderResult();
         showInlineError('Something went wrong starting the scan.');
