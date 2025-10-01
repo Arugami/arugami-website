@@ -441,7 +441,9 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
       state.usingFallbackApi = !config.apiBase;
       state.disableVerification = Boolean(config.disableVerification);
       state.turnstileSiteKey = config.turnstileSiteKey || '';
-      state.recaptchaSiteKey = config.recaptchaSiteKey || recaptchaSiteKey || '';
+      state.recaptchaSiteKey = typeof config.recaptchaSiteKey === 'string' && config.recaptchaSiteKey.length
+        ? config.recaptchaSiteKey
+        : '';
       state.captchaReady = state.disableVerification;
       state.scanId = null;
       state.phase = 'intake';
