@@ -1,44 +1,6 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Footer from '../components/Footer.astro';
-
 const title = "Arugami — Hudson County's First AI Studio";
 const description = "None of this was filmed. Cinematic ads made from your world. Apply for studio access in Hudson County.";
-
-// Client-side redirect to the landing page
-const redirectScript = `
-  <script>
-    // Check if we're not already on the landing page to prevent infinite redirects
-    if (!window.location.pathname.includes('/landing')) {
-      window.location.href = '/landing';
-    }
-  </script>
-`;
-
-const heroH1 = 'Your business, cinematic.';
-const heroH2 = 'AI-powered ads that feel like a movie.';
-const heroSubhead = 'No film crews needed.';
-const heroPrimaryCta = {
-  label: 'Get Started',
-  href: '/contact',
-};
-const heroStats = [
-  {
-    value: '3.1x',
-    label: 'site conversion',
-  },
-  {
-    value: '+38%',
-    label: 'review velocity',
-  },
-  {
-    value: '88% faster',
-    label: 'response time',
-  },
-];
-const variant = 'primary';
-const ctaParam = 'hero-cta';
-
 const services = [
   {
     title: 'Review Velocity',
