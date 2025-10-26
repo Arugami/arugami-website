@@ -23,15 +23,30 @@ const description = "None of this was filmed. Cinematic ads made from your world
 
   <!-- HERO SECTION - The Shock -->
   <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <!-- Hero Image -->
-    <div class="absolute inset-0">
+    <!-- Hero Background - Mobile: 9x16 Video Montage -->
+    <div class="absolute inset-0 md:hidden">
+      <video
+        class="w-full h-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+      >
+        <source src="/videos/grok-video-33a80096-58ec-4c6f-a564-12670226f1e7 copy 2.mp4" type="video/mp4" />
+      </video>
+      <!-- Dark gradient overlay for text readability -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+    </div>
+
+    <!-- Hero Background - Desktop: Original Image -->
+    <div class="absolute inset-0 hidden md:block">
       <img
         src="/arugami photos october/17.png"
         alt="Arugami neon sign against NYC skyline"
-        class="w-full h-full object-cover object-center md:object-[center_center]"
-        style="object-position: 40% center;"
+        class="w-full h-full object-cover object-center"
       />
-      <!-- Dark gradient overlay for text readability and reducing neon competition -->
+      <!-- Dark gradient overlay for text readability -->
       <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
     </div>
 
@@ -49,11 +64,6 @@ const description = "None of this was filmed. Cinematic ads made from your world
       >
         Reserve Your Spot
       </a>
-    </div>
-
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-      <div class="w-1 h-16 bg-gradient-to-b from-arugami-pink/50 to-transparent animate-pulse"></div>
     </div>
   </section>
 
@@ -141,9 +151,11 @@ const description = "None of this was filmed. Cinematic ads made from your world
         <p class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-5 md:mb-6">
           None of it was filmed. All of it is real.
         </p>
-        <p class="text-lg md:text-xl text-white/70">
+        <p class="text-lg md:text-xl text-white/70 mb-8 md:mb-12">
           This is what we do for Hudson County businesses.
         </p>
+        <!-- Connector Arrow -->
+        <div class="inline-block text-arugami-pink/50 text-3xl md:text-4xl">⬇</div>
       </div>
 
     </div>
