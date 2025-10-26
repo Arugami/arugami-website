@@ -6,6 +6,9 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://arugami.com',
+  server: {
+    port: 3000
+  },
   integrations: [
     tailwind(),
     sitemap()

@@ -1,0 +1,510 @@
+---
+const title = "Arugami — Hudson County's First AI Studio";
+const description = "None of this was filmed. Cinematic ads made from your world. Apply for studio access in Hudson County.";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+</head>
+<body class="bg-black text-white antialiased">
+  <!-- FLOATING LOGO (top-left, like Genre.ai) -->
+  <div class="fixed top-4 left-4 md:top-6 md:left-6 z-50">
+    <img
+      src="/logos/a_gradient_fuchsia_black (NB)@2x.png"
+      alt="Arugami"
+      class="h-8 md:h-10 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200"
+    />
+  </div>
+
+  <!-- HERO SECTION - The Shock -->
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Hero Image -->
+    <div class="absolute inset-0">
+      <img
+        src="/arugami photos october/17.png"
+        alt="Arugami neon sign against NYC skyline"
+        class="w-full h-full object-cover object-center md:object-[center_center]"
+        style="object-position: 40% center;"
+      />
+      <!-- Dark gradient overlay for text readability and reducing neon competition -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+      <h1 class="text-5xl md:text-8xl lg:text-9xl font-black text-white mb-6 md:mb-8 tracking-tight">
+        None of this<br/>was filmed.
+      </h1>
+      <p class="text-xl md:text-3xl lg:text-4xl text-white/90 mb-10 md:mb-12 font-light">
+        Cinematic ads made from your world.
+      </p>
+      <a
+        href="#apply"
+        class="inline-block px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-105 transition-transform duration-200 shadow-2xl"
+      >
+        Reserve Your Spot
+      </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+      <div class="w-1 h-16 bg-gradient-to-b from-arugami-pink/50 to-transparent animate-pulse"></div>
+    </div>
+  </section>
+
+  <!-- PROCESS REVEAL - Bridge to Case Study -->
+  <section class="bg-black py-16 md:py-24 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6">
+          This came from<br/>their camera roll.
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-white/70 max-w-3xl mx-auto mb-8 md:mb-12">
+          No film crews. No expensive shoots. Just their world—made cinematic.
+        </p>
+        <!-- Connector Arrow -->
+        <div class="inline-block text-arugami-pink/50 text-3xl md:text-4xl">⬇</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOLITA'S CASE STUDY - The Proof -->
+  <section class="bg-gradient-to-b from-black to-charcoal py-20 md:py-32 px-4">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Video Result (Hero) -->
+      <div class="mb-12 md:mb-16">
+        <div class="relative max-w-4xl mx-auto aspect-video overflow-hidden rounded-2xl md:rounded-3xl bg-black shadow-2xl">
+          <video
+            class="w-full h-full object-cover"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="/videos/grok-video-c7392fbd-f863-45c8-b5ec-0744ff75dde4 copy.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+
+      <!-- Subtle Connector Arrow -->
+      <div class="text-center mb-8 md:mb-12">
+        <div class="inline-block text-arugami-pink/50 text-3xl md:text-4xl">⬇</div>
+      </div>
+
+      <!-- Headline - The Shock -->
+      <div class="text-center mb-12 md:mb-16">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-4 md:mb-6 leading-tight">
+          This started as<br/>7 restaurant photos.
+        </h2>
+      </div>
+
+      <!-- Reference Photo Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-12 md:mb-16">
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/DSC01580 copy.JPG" alt="Lolita's interior shot" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/DSC06925 copy.JPG" alt="Lolita's bar area" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_1008 copy.jpg" alt="Lolita's decorations" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_1198 copy.jpg" alt="Lolita's ambiance" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_1889 copy.JPG" alt="Lolita's details" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/img_3330 copy.JPG" alt="Lolita's lighting" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_C249733BC4E6-1 copy.jpeg" alt="Lolita's space" class="w-full h-full object-cover" />
+        </div>
+      </div>
+
+      <!-- Story Copy - The Connection -->
+      <div class="max-w-3xl mx-auto text-center px-4">
+        <p class="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed mb-5 md:mb-6">
+          Lolita's Mexican Cantina had a Halloween costume party coming up. Their owner showed us an inspiration photo and asked: <span class="italic">"Can you make something like this?"</span>
+        </p>
+        <p class="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed mb-6 md:mb-8">
+          We grabbed these shots from their space. Three days later, their customers saw this.
+        </p>
+        <p class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-5 md:mb-6">
+          None of it was filmed. All of it is real.
+        </p>
+        <p class="text-lg md:text-xl text-white/70">
+          This is what we do for Hudson County businesses.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SELECTIVITY MESSAGING - The Imagineering Standards -->
+  <section class="bg-charcoal py-24 md:py-32 px-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Main Header -->
+      <div class="text-center mb-16 md:mb-20">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 md:mb-8 leading-tight">
+          This works best<br/>when you bring three things:
+        </h2>
+      </div>
+
+      <!-- Three Criteria Grid -->
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
+        <!-- Criterion 1 -->
+        <div class="text-center px-4">
+          <div class="mb-5 md:mb-6">
+            <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-arugami-yellow to-arugami-green flex items-center justify-center">
+              <span class="text-3xl md:text-4xl font-black text-black">1</span>
+            </div>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
+            A story worth telling
+          </h3>
+          <p class="text-white/70 text-base md:text-lg leading-relaxed">
+            Not just what you sell, but why it matters to your neighborhood
+          </p>
+        </div>
+
+        <!-- Criterion 2 -->
+        <div class="text-center px-4">
+          <div class="mb-5 md:mb-6">
+            <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-arugami-green to-arugami-yellow flex items-center justify-center">
+              <span class="text-3xl md:text-4xl font-black text-black">2</span>
+            </div>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
+            Pride in craft
+          </h3>
+          <p class="text-white/70 text-base md:text-lg leading-relaxed">
+            The kind that shows in your work before we even touch it
+          </p>
+        </div>
+
+        <!-- Criterion 3 -->
+        <div class="text-center px-4">
+          <div class="mb-5 md:mb-6">
+            <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-arugami-yellow via-arugami-green to-arugami-pink flex items-center justify-center">
+              <span class="text-3xl md:text-4xl font-black text-black">3</span>
+            </div>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
+            Patience for the process
+          </h3>
+          <p class="text-white/70 text-base md:text-lg leading-relaxed">
+            Because real transformation doesn't happen in one Capture Day—it compounds
+          </p>
+        </div>
+      </div>
+
+      <!-- Closing Statement -->
+      <div class="text-center">
+        <p class="text-2xl md:text-3xl lg:text-4xl text-white font-light mb-6 md:mb-8 leading-relaxed px-4">
+          Bring all three,<br/>
+          <span class="font-bold">and we'll make something unforgettable together.</span>
+        </p>
+        <p class="text-base md:text-lg lg:text-xl text-white/60 mb-8 md:mb-10 lg:mb-12">
+          Tell us your story.
+        </p>
+        <a
+          href="#apply"
+          class="inline-block px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-105 transition-transform duration-200 shadow-2xl"
+        >
+          Share Your Story
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEAD CAPTURE - The Entry Point -->
+  <section id="apply" class="bg-gradient-to-b from-black via-charcoal to-black py-20 md:py-32 px-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center mb-12 md:mb-16">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6">
+          Reserve your spot.
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto">
+          Limited studio availability.
+        </p>
+      </div>
+
+      <!-- Lead Capture Form -->
+      <form class="space-y-5 md:space-y-6 bg-white/5 backdrop-blur-sm rounded-2xl md:rounded-3xl p-6 md:p-12 border border-white/10">
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Name -->
+          <div>
+            <label for="name" class="block text-white/80 text-sm font-medium mb-2">Your Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+              placeholder="John Smith"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label for="phone" class="block text-white/80 text-sm font-medium mb-2">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+              placeholder="(201) 555-0123"
+            />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-white/80 text-sm font-medium mb-2">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+            placeholder="john@yourbusiness.com"
+          />
+        </div>
+
+        <!-- Business Name -->
+        <div>
+          <label for="business" class="block text-white/80 text-sm font-medium mb-2">Business Name</label>
+          <input
+            type="text"
+            id="business"
+            name="business"
+            required
+            class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+            placeholder="Your Business Name"
+          />
+        </div>
+
+        <!-- Business Type -->
+        <div>
+          <label for="type" class="block text-white/80 text-sm font-medium mb-2">Business Type</label>
+          <select
+            id="type"
+            name="type"
+            required
+            class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition appearance-none"
+          >
+            <option value="">Select your industry</option>
+            <option value="restaurant">Restaurant / Food & Beverage</option>
+            <option value="retail">Retail / Fashion / Beauty</option>
+            <option value="professional">Professional Services</option>
+            <option value="home">Home Services</option>
+            <option value="health">Health & Wellness</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full px-8 md:px-12 py-5 md:py-6 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-[1.02] transition-transform duration-200 shadow-2xl relative overflow-hidden group"
+        >
+          <span class="relative z-10">Book Your Discovery Call</span>
+          <!-- Subtle pink glow on hover -->
+          <div class="absolute inset-0 bg-arugami-pink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </button>
+
+        <p class="text-center text-white/50 text-xs md:text-sm mt-3 md:mt-4">
+          We'll reach out within 24 hours to schedule your discovery call.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF - The Trust -->
+  <section class="bg-black py-20 md:py-32 px-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center mb-12 md:mb-20">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6">
+          What they said<br/>when they saw it.
+        </h2>
+      </div>
+
+      <!-- Testimonial Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <!-- Testimonial 1 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <!-- Subtle pink dot accent (top right) -->
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "I can't believe this came from my kitchen."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-yellow to-arugami-green flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">Maria Rodriguez</p>
+              <p class="text-white/60 text-xs md:text-sm">La Cocina Cubana, Union City</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "Our customers think we hired a film crew."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-green to-arugami-yellow flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">James Chen</p>
+              <p class="text-white/60 text-xs md:text-sm">Elevate Fitness, Jersey City</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "This doesn't look like us. It looks like a movie version of us."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-yellow via-arugami-green to-arugami-pink flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">Sarah Thompson</p>
+              <p class="text-white/60 text-xs md:text-sm">Bloom Beauty Bar, Hoboken</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 4 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "People keep asking where we got our marketing team."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-pink to-arugami-yellow flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">David Patel</p>
+              <p class="text-white/60 text-xs md:text-sm">Patel & Associates Law, Bayonne</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 5 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "Wait—you made this from the photos on my phone?"
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-green to-arugami-pink flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">Lisa Nguyen</p>
+              <p class="text-white/60 text-xs md:text-sm">Oasis Spa, West New York</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 6 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "Our Instagram finally looks as good as the food tastes."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-yellow to-arugami-green flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">Michael Santos</p>
+              <p class="text-white/60 text-xs md:text-sm">Santos Bakery, Weehawken</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final CTA -->
+      <div class="text-center mt-12 md:mt-20">
+        <a
+          href="#apply"
+          class="inline-block px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-105 transition-transform duration-200 shadow-2xl"
+        >
+          Reserve Your Spot
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-black border-t border-white/10 py-10 md:py-12 px-4">
+    <div class="max-w-7xl mx-auto text-center">
+      <div class="mb-5 md:mb-6">
+        <img
+          src="/logos/a_gradient_fuchsia_black (NB)@2x.png"
+          alt="Arugami Logo"
+          class="h-14 md:h-16 lg:h-20 mx-auto"
+        />
+      </div>
+      <p class="text-white/50 text-xs md:text-sm">
+        Hudson County's First AI Studio
+      </p>
+      <p class="text-white/30 text-xs mt-3 md:mt-4">
+        © 2025 Arugami. All rights reserved.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style>
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar for dark theme */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #363636;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5fe385;
+  }
+
+  /* Subtle animation for scroll indicator */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+</style>
