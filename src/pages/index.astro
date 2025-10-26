@@ -1,38 +1,45 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-const title = "Arugami — Hudson County’s First AI Studio & #1 Growth Partner";
-const description = "Hudson County’s first AI Studio and #1 growth partner. Digital foundations, cinematic campaigns, and supervised automations that keep Jersey City, Hoboken, Bayonne, and beyond fully booked.";
+const title = "Arugami — Hudson County's First AI Studio";
+const description = "None of this was filmed. Cinematic ads made from your world. Apply for studio access in Hudson County.";
 
+// Client-side redirect to the landing page
+const redirectScript = `
+  <script>
+    // Check if we're not already on the landing page to prevent infinite redirects
+    if (!window.location.pathname.includes('/landing')) {
+      window.location.href = '/landing';
+    }
+  </script>
+`;
+
+const heroH1 = 'Your business, cinematic.';
+const heroH2 = 'AI-powered ads that feel like a movie.';
+const heroSubhead = 'No film crews needed.';
+const heroPrimaryCta = {
+  label: 'Get Started',
+  href: '/contact',
+};
 const heroStats = [
-  { label: 'Hudson County businesses transformed', value: '200+' },
-  { label: 'Average reply time reduced to', value: '44s' },
-  { label: 'Guaranteed HudPost features per year', value: '12' },
+  {
+    value: '3.1x',
+    label: 'site conversion',
+  },
+  {
+    value: '+38%',
+    label: 'review velocity',
+  },
+  {
+    value: '88% faster',
+    label: 'response time',
+  },
 ];
+const variant = 'primary';
+const ctaParam = 'hero-cta';
 
-// Hero messaging - Wonder/Smirk/Brave framework
-const heroH1 = 'None of this was filmed.';
-const heroH2 = 'Cinematic ads made from your world. We build the system that makes them convert.';
-const heroSubhead = "Hudson County's first AI Studio. We turn your camera roll into Hollywood-level campaigns—then build the infrastructure that keeps them paying off.";
-
-const heroPrimaryCta = { href: '/contact', label: 'Apply for Hudson County Studio Access' };
-const heroSecondaryCta = { href: '/case-studies', label: 'See the Before/After Proof' };
-
-const kpiTrack = [
-  {
-    title: 'Speed-to-Reply',
-    description: 'Missed call text-back, unified inbox, AI receptionist that never clocks out.',
-    metric: '24/7',
-    accent: 'pink',
-  },
-  {
-    title: 'Top 3 on Google (map pack)',
-    description: 'Google Business Profile tune-ups, geo-tagged media, monthly review velocity.',
-    metric: '#1-3',
-    accent: 'green',
-  },
+const services = [
   {
     title: 'Review Velocity',
     description: 'QR-powered review flows, automated thank-yous, AI-crafted replies.',
