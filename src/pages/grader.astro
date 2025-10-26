@@ -258,7 +258,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
                     <div class="rounded border border-white/10 bg-slate-800/50 px-4 py-3 text-xs text-slate-400">
                       <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="unlock-recaptcha" class="rounded border-white/20 bg-slate-700 text-pink-500 focus:ring-pink-400">
-                        <span>I'm not a robot</span>
+                        <span>I\'m not a robot</span>
                       </label>
                     </div>
                   </div>
@@ -1342,7 +1342,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
     updateSuggestionStatus('empty');
     
     // Initialize suggestions on page load - only show when focused
-    // Don't show sample suggestions immediately
+    // Don\'t show sample suggestions immediately
 
     function hideSuggestions(preserveStatus = false) {
       if (suggestionContainer) {
@@ -2055,7 +2055,7 @@ const configJson = JSON.stringify({ apiBase, recaptchaSiteKey, turnstileSiteKey,
 
     if (usingFallbackApi) {
       console.log('No API base found, using fallback');
-      // Don't show warning or disable form - let it work with fallback
+      // Don\'t show warning or disable form - let it work with fallback
       console.log('API base will use fallback URL:', apiBase);
     } else {
       console.log('API base configured:', apiBase);

@@ -1,701 +1,510 @@
 ---
-const title = "Arugami — Hudson County's First AI Studio";
+const title = "Arugami — Hudson County\'s First AI Studio";
 const description = "None of this was filmed. Cinematic ads made from your world. Apply for studio access in Hudson County.";
-const services = [
-  {
-    title: 'Review Velocity',
-    description: 'QR-powered review flows, automated thank-yous, AI-crafted replies.',
-    metric: '+38%',
-    accent: 'yellow',
-  },
-  {
-    title: 'Site Conversion',
-    description: 'Conversion-first pages, click-to-book flows, SMS + email nurture.',
-    metric: '3.1x',
-    accent: 'pink',
-  },
-];
-
-const stages = [
-  {
-    name: 'Phase 1 · Digital Foundation',
-    points: [
-      'Conversion-ready website + mobile-first UX',
-      'Google Business Profile clean-up and content cadence',
-      'Lead capture routing into Arugami CRM + SMS webchat',
-    ],
-    accent: 'pink',
-  },
-  {
-    name: 'Phase 2 · Social Presence',
-    points: [
-      'Daily platform-native content (IG, TikTok, Facebook)',
-      'HudPost + local media placements every quarter',
-      'Local partnerships and UGC that feel like home',
-    ],
-    accent: 'green',
-  },
-  {
-    name: 'Phase 3 · Smart Automation',
-    points: [
-      'AI “smart employee” workflows for replies + follow-up',
-      'Retention automations for VIPs, memberships, and reviews',
-      'Dashboard that tracks what fills seats, not vanity metrics',
-    ],
-    accent: 'yellow',
-  },
-];
-
-const services = [
-  {
-    name: 'Professional Legends',
-    blurb: 'Law, finance, real estate, healthcare — we position you ahead of Manhattan firms with local proof and trust systems.',
-    href: '/professional-services',
-  },
-  {
-    name: 'Home & Field Heroes',
-    blurb: 'Home services, auto repair, trades — instant response flows and review boosts so you win every urgent search.',
-    href: '/home-services',
-  },
-  {
-    name: 'Retail & Beauty Icons',
-    blurb: 'Salons, boutiques, fitness studios — content that feels like culture plus loyalty automations customers love.',
-    href: '/retail-beauty',
-  },
-  {
-    name: 'Food & Hospitality Legends',
-    blurb: 'Restaurants, bars, cafes — scroll-stopping visuals, HudPost spotlights, and tables that stay booked.',
-    href: '/restaurant-marketing',
-  },
-];
-
-const locations = [
-  {
-    name: 'Jersey City',
-    detail: 'Waterfront luxury meets Journal Square hustle — we tailor messaging from Newport to the Heights.',
-    href: '/jersey-city',
-  },
-  {
-    name: 'Hoboken',
-    detail: 'Weekend foot traffic + weekday professionals. We build programs that hit both.',
-    href: '/hoboken',
-  },
-  {
-    name: 'Bayonne',
-    detail: 'Service-first, family-owned legends. Hyperlocal SEO and reputation wins.',
-    href: '/bayonne',
-  },
-  {
-    name: 'Union City',
-    detail: 'Multilingual storytelling and community-first campaigns that actually feel Hudson.',
-    href: '/union-city',
-  },
-  {
-    name: 'Weehawken',
-    detail: 'Luxury service experiences with skyline-level polish and local warmth.',
-    href: '/weehawken',
-  },
-  {
-    name: 'West New York',
-    detail: 'Dense retail corridors, bilingual content, and loyalty loops for repeat visits.',
-    href: '/west-new-york',
-  },
-  {
-    name: 'North Bergen',
-    detail: 'Neighborhood staples + commuter traffic. We make both remember your name.',
-    href: '/north-bergen',
-  },
-];
-
-const proofPoints = [
-  {
-    stat: '88% faster',
-    copy: 'response time after deploying AI receptionist & missed-call text back for a Union City salon collective.',
-  },
-  {
-    stat: '4.8⭐',
-    copy: 'average Google rating across Hoboken hospitality roster after review velocity campaigns.',
-  },
-  {
-    stat: '$240k',
-    copy: 'new revenue in 6 months for Bayonne home services trio combining foundation-first rebuild + HudPost coverage.',
-  },
-];
 ---
 
-<BaseLayout title={title} description={description}>
-  <Header />
-  <main class="bg-white text-arugami-dark">
-    <section class="relative overflow-hidden">
-      <div class="absolute inset-0">
-        <div class="absolute inset-0 bg-gradient-to-br from-arugami-dark via-black/80 to-arugami-dark"></div>
-        <img src="/images/culture/culture-rooftop-street-team@2x.jpg" width="1920" height="1989" loading="lazy" decoding="async" alt="Arugami culture crew celebrating on a Jersey City rooftop" class="absolute inset-0 h-full w-full object-cover opacity-35" />
-      </div>
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-        <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
-          <div class="space-y-8 text-white">
-            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-              Hudson County foundation-first marketing
-            </span>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight">
-              {heroH1}
-            </h1>
-            <p class="text-2xl sm:text-3xl font-bold text-white/90 max-w-2xl">
-              {heroH2}
-            </p>
-            <p class="text-lg text-white/70 max-w-2xl">
-              {heroSubhead}
-            </p>
-            <div class="flex flex-wrap gap-4">
-              <a href={heroPrimaryCta.href} class="inline-flex items-center gap-3 rounded-full bg-arugami-pink px-6 py-3 text-sm font-bold text-white shadow-[0_16px_30px_rgba(255,51,153,0.28)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark" data-component="hero-cta-primary" data-variant={variant} data-cta-variant={ctaParam}>
-                {heroPrimaryCta.label}
-              </a>
-              <a href="/contact" class="inline-flex items-center gap-3 rounded-full border border-white/30 px-6 py-3 text-sm font-bold text-white/80 transition hover:border-arugami-green hover:text-white">
-                Show me what you’d fix
-              </a>
-            </div>
-          </div>
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-            <p class="text-white/70 text-sm uppercase tracking-[0.3em]">Your results</p>
-            <div class="mt-6 space-y-4">
-              {heroStats.map((item) => (
-                <div class="rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
-                  <p class="text-3xl font-black text-white">{item.value}</p>
-                  <p class="text-sm text-white/70">{item.label}</p>
-                </div>
-              ))}
-            </div>
-            <p class="mt-6 text-xs text-white/60">
-              Powered by foundation-first systems, HudPost partnership, and AI that sounds like you.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+</head>
+<body class="bg-black text-white antialiased">
+  <!-- FLOATING LOGO (top-left, like Genre.ai) -->
+  <div class="fixed top-4 left-4 md:top-6 md:left-6 z-50">
+    <img
+      src="/logos/a_gradient_fuchsia_black (NB)@2x.png"
+      alt="Arugami"
+      class="h-8 md:h-10 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200"
+    />
+  </div>
 
-    <!-- Bridge Copy: Wonder→Smirk Transition -->
-    <section class="py-16 bg-gradient-to-b from-arugami-dark to-white">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-        <p class="text-xl sm:text-2xl text-white/90 leading-relaxed">
-          You found us because you want your business to look like a movie.
+  <!-- HERO SECTION - The Shock -->
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Hero Image -->
+    <div class="absolute inset-0">
+      <img
+        src="/arugami photos october/17.png"
+        alt="Arugami neon sign against NYC skyline"
+        class="w-full h-full object-cover object-center md:object-[center_center]"
+        style="object-position: 40% center;"
+      />
+      <!-- Dark gradient overlay for text readability and reducing neon competition -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+      <h1 class="text-5xl md:text-8xl lg:text-9xl font-black text-white mb-6 md:mb-8 tracking-tight">
+        None of this<br/>was filmed.
+      </h1>
+      <p class="text-xl md:text-3xl lg:text-4xl text-white/90 mb-10 md:mb-12 font-light">
+        Cinematic ads made from your world.
+      </p>
+      <a
+        href="#apply"
+        class="inline-block px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-105 transition-transform duration-200 shadow-2xl"
+      >
+        Reserve Your Spot
+      </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+      <div class="w-1 h-16 bg-gradient-to-b from-arugami-pink/50 to-transparent animate-pulse"></div>
+    </div>
+  </section>
+
+  <!-- PROCESS REVEAL - Bridge to Case Study -->
+  <section class="bg-black py-16 md:py-24 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6">
+          This came from<br/>their camera roll.
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-white/70 max-w-3xl mx-auto mb-8 md:mb-12">
+          No film crews. No expensive shoots. Just their world—made cinematic.
         </p>
-        <p class="text-xl sm:text-2xl text-white/90 leading-relaxed">
-          But we're not just going to dump AI content on broken foundations.
+        <!-- Connector Arrow -->
+        <div class="inline-block text-arugami-pink/50 text-3xl md:text-4xl">⬇</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOLITA\'S CASE STUDY - The Proof -->
+  <section class="bg-gradient-to-b from-black to-charcoal py-20 md:py-32 px-4">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Video Result (Hero) -->
+      <div class="mb-12 md:mb-16">
+        <div class="relative max-w-4xl mx-auto aspect-video overflow-hidden rounded-2xl md:rounded-3xl bg-black shadow-2xl">
+          <video
+            class="w-full h-full object-cover"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="/videos/grok-video-c7392fbd-f863-45c8-b5ec-0744ff75dde4 copy.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+
+      <!-- Subtle Connector Arrow -->
+      <div class="text-center mb-8 md:mb-12">
+        <div class="inline-block text-arugami-pink/50 text-3xl md:text-4xl">⬇</div>
+      </div>
+
+      <!-- Headline - The Shock -->
+      <div class="text-center mb-12 md:mb-16">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-4 md:mb-6 leading-tight">
+          This started as<br/>7 restaurant photos.
+        </h2>
+      </div>
+
+      <!-- Reference Photo Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-12 md:mb-16">
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/DSC01580 copy.JPG" alt="Lolita\'s interior shot" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/DSC06925 copy.JPG" alt="Lolita\'s bar area" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_1008 copy.jpg" alt="Lolita\'s decorations" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_1198 copy.jpg" alt="Lolita\'s ambiance" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_1889 copy.JPG" alt="Lolita\'s details" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/img_3330 copy.JPG" alt="Lolita\'s lighting" class="w-full h-full object-cover" />
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg md:rounded-xl shadow-lg hover:scale-105 transition-transform duration-200">
+          <img src="/casestudy/IMG_C249733BC4E6-1 copy.jpeg" alt="Lolita\'s space" class="w-full h-full object-cover" />
+        </div>
+      </div>
+
+      <!-- Story Copy - The Connection -->
+      <div class="max-w-3xl mx-auto text-center px-4">
+        <p class="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed mb-5 md:mb-6">
+          Lolita\'s Mexican Cantina had a Halloween costume party coming up. Their owner showed us an inspiration photo and asked: <span class="italic">"Can you make something like this?"</span>
         </p>
-        <p class="text-xl sm:text-2xl text-white leading-relaxed font-semibold">
-          We fix what's costing you customers TODAY—your website, your Google profile, how customers reach you—THEN we turn one quarterly shoot into weeks of cinematic campaigns.
+        <p class="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed mb-6 md:mb-8">
+          We grabbed these shots from their space. Three days later, their customers saw this.
         </p>
-        <p class="text-lg text-white/70">
-          That's why our clients stay.
+        <p class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-5 md:mb-6">
+          None of it was filmed. All of it is real.
         </p>
-        <div class="pt-4">
-          <p class="text-2xl font-black text-arugami-yellow">
-            Film crews are optional now. Infrastructure isn't.
+        <p class="text-lg md:text-xl text-white/70">
+          This is what we do for Hudson County businesses.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SELECTIVITY MESSAGING - The Imagineering Standards -->
+  <section class="bg-charcoal py-24 md:py-32 px-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Main Header -->
+      <div class="text-center mb-16 md:mb-20">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 md:mb-8 leading-tight">
+          This works best<br/>when you bring three things:
+        </h2>
+      </div>
+
+      <!-- Three Criteria Grid -->
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
+        <!-- Criterion 1 -->
+        <div class="text-center px-4">
+          <div class="mb-5 md:mb-6">
+            <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-arugami-yellow to-arugami-green flex items-center justify-center">
+              <span class="text-3xl md:text-4xl font-black text-black">1</span>
+            </div>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
+            A story worth telling
+          </h3>
+          <p class="text-white/70 text-base md:text-lg leading-relaxed">
+            Not just what you sell, but why it matters to your neighborhood
+          </p>
+        </div>
+
+        <!-- Criterion 2 -->
+        <div class="text-center px-4">
+          <div class="mb-5 md:mb-6">
+            <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-arugami-green to-arugami-yellow flex items-center justify-center">
+              <span class="text-3xl md:text-4xl font-black text-black">2</span>
+            </div>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
+            Pride in craft
+          </h3>
+          <p class="text-white/70 text-base md:text-lg leading-relaxed">
+            The kind that shows in your work before we even touch it
+          </p>
+        </div>
+
+        <!-- Criterion 3 -->
+        <div class="text-center px-4">
+          <div class="mb-5 md:mb-6">
+            <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-arugami-yellow via-arugami-green to-arugami-pink flex items-center justify-center">
+              <span class="text-3xl md:text-4xl font-black text-black">3</span>
+            </div>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
+            Patience for the process
+          </h3>
+          <p class="text-white/70 text-base md:text-lg leading-relaxed">
+            Because real transformation doesn\'t happen in one Capture Day—it compounds
           </p>
         </div>
       </div>
-    </section>
 
-    <!-- Module 1: The Magic (Wonder-Heavy) -->
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_540px] lg:items-center">
-          <div class="space-y-6">
-            <span class="inline-flex rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">The Magic</span>
-            <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-arugami-dark">From Your World to Their Screens</h2>
-            <div class="space-y-4 text-lg text-arugami-dark/80 leading-relaxed">
-              <p>
-                Every local business has a story worth telling. Most just can't afford $10K film crews to tell it.
-              </p>
-              <p>
-                We taught AI how to turn whatever's in your camera roll—iPhone photos, Android shots, your kitchen, your team, your craft—into cinematic moments that make people stop scrolling.
-              </p>
-            </div>
-            <div class="pt-4 rounded-2xl border border-arugami-pink/20 bg-arugami-pink/5 p-6">
-              <p class="text-lg font-semibold text-arugami-dark italic">
-                "Yes, we fake it beautifully. No, your customers won't know the difference."
-              </p>
-            </div>
-          </div>
-          <div class="relative overflow-hidden rounded-3xl border border-arugami-pink/20 shadow-[0_30px_60px_rgba(255,51,153,0.25)]">
-            <div class="aspect-[9/16] bg-gradient-to-br from-arugami-dark/90 to-black/90 flex items-center justify-center">
-              <div class="text-center text-white p-8 space-y-4">
-                <p class="text-sm uppercase tracking-wider opacity-70">Before/After Showcase</p>
-                <p class="text-2xl font-black">La Isla Kitchen → Scorsese Reel</p>
-                <p class="text-sm opacity-70">Embedded video showcase coming soon</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Closing Statement -->
+      <div class="text-center">
+        <p class="text-2xl md:text-3xl lg:text-4xl text-white font-light mb-6 md:mb-8 leading-relaxed px-4">
+          Bring all three,<br/>
+          <span class="font-bold">and we\'ll make something unforgettable together.</span>
+        </p>
+        <p class="text-base md:text-lg lg:text-xl text-white/60 mb-8 md:mb-10 lg:mb-12">
+          Tell us your story.
+        </p>
+        <a
+          href="#apply"
+          class="inline-block px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-105 transition-transform duration-200 shadow-2xl"
+        >
+          Share Your Story
+        </a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Module 2: The Machine (Smirk-Heavy, Foundation-First) -->
-    <section class="py-20 bg-soft-gray">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <span class="inline-flex rounded-full bg-arugami-green/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-green">The Machine</span>
-          <h2 class="mt-4 text-4xl sm:text-5xl font-black tracking-tight text-arugami-dark">Beautiful Content Won't Save a Broken Website</h2>
-          <p class="mt-6 text-lg text-arugami-dark/80 leading-relaxed">
-            Most agencies sell you Instagram Reels and call it marketing.
-          </p>
-          <p class="mt-4 text-lg text-arugami-dark/80 leading-relaxed font-semibold">
-            We start different.
-          </p>
-        </div>
-
-        <div class="max-w-4xl mx-auto space-y-8">
-          <div class="rounded-3xl border border-arugami-dark/10 bg-white p-8 space-y-6">
-            <p class="text-xl text-arugami-dark/80 leading-relaxed">
-              Before we turn on the AI Studio, we audit your digital foundation:
-            </p>
-            <ul class="space-y-4">
-              <li class="flex items-start gap-4">
-                <span class="inline-flex h-3 w-3 flex-none rounded-full bg-arugami-pink mt-2"></span>
-                <div>
-                  <p class="font-bold text-arugami-dark">Website</p>
-                  <p class="text-arugami-dark/70">Fast-loading, mobile-first, built to convert visitors into leads</p>
-                </div>
-              </li>
-              <li class="flex items-start gap-4">
-                <span class="inline-flex h-3 w-3 flex-none rounded-full bg-arugami-green mt-2"></span>
-                <div>
-                  <p class="font-bold text-arugami-dark">Google Business Profile</p>
-                  <p class="text-arugami-dark/70">Optimized to show up in the Map Pack (top 3 local results)</p>
-                </div>
-              </li>
-              <li class="flex items-start gap-4">
-                <span class="inline-flex h-3 w-3 flex-none rounded-full bg-arugami-yellow mt-2"></span>
-                <div>
-                  <p class="font-bold text-arugami-dark">CRM & Automations</p>
-                  <p class="text-arugami-dark/70">Every call, text, and DM captured and answered—even at 2 AM</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div class="rounded-3xl border border-arugami-pink/20 bg-white p-8">
-            <p class="text-lg text-arugami-dark/80 leading-relaxed italic">
-              "Look, beautiful content on a slow website with a broken contact form is like hiring a Ferrari to deliver pizza in a snowstorm. We fix the roads first."
-            </p>
-          </div>
-
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <div class="rounded-2xl border border-arugami-pink/30 bg-white p-6">
-              <p class="text-sm font-semibold text-arugami-dark/60 uppercase">Foundation Systems</p>
-              <p class="mt-2 text-2xl font-black text-arugami-pink">$999/mo</p>
-              <p class="mt-2 text-sm text-arugami-dark/70">Website + Google + Review Flow</p>
-            </div>
-            <div class="rounded-2xl border border-arugami-green/30 bg-white p-6">
-              <p class="text-sm font-semibold text-arugami-dark/60 uppercase">+ Media Engine</p>
-              <p class="mt-2 text-2xl font-black text-arugami-green">$1,650/mo</p>
-              <p class="mt-2 text-sm text-arugami-dark/70">Add AI Studio content</p>
-            </div>
-            <div class="rounded-2xl border border-arugami-yellow/40 bg-white p-6">
-              <p class="text-sm font-semibold text-arugami-dark/60 uppercase">+ Growth Engine</p>
-              <p class="mt-2 text-2xl font-black text-arugami-dark">$2,750/mo</p>
-              <p class="mt-2 text-sm text-arugami-dark/70">Add 6 AI automation bots</p>
-            </div>
-            <div class="rounded-2xl border border-arugami-pink/30 bg-white p-6">
-              <p class="text-sm font-semibold text-arugami-dark/60 uppercase">Domination</p>
-              <p class="mt-2 text-2xl font-black text-arugami-pink">$3,750/mo</p>
-              <p class="mt-2 text-sm text-arugami-dark/70">Add HudPost + local ads</p>
-            </div>
-          </div>
-
-          <div class="text-center">
-            <a href="/contact" class="inline-flex items-center gap-2 rounded-full bg-arugami-pink px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark">
-              Get Your Free Foundation Audit →
-            </a>
-          </div>
-        </div>
+  <!-- LEAD CAPTURE - The Entry Point -->
+  <section id="apply" class="bg-gradient-to-b from-black via-charcoal to-black py-20 md:py-32 px-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center mb-12 md:mb-16">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6">
+          Reserve your spot.
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto">
+          Limited studio availability.
+        </p>
       </div>
-    </section>
 
-    <!-- Module 3: The Results (Brave-Heavy, Proof-Led) -->
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <span class="inline-flex rounded-full bg-arugami-yellow/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark">The Results</span>
-          <h2 class="mt-4 text-4xl sm:text-5xl font-black tracking-tight text-arugami-dark">Hudson County Businesses, Booked and Buzzing</h2>
-          <p class="mt-6 text-lg text-arugami-dark/70">
-            What happens when you combine cinematic content with infrastructure that actually works.
-          </p>
+      <!-- Lead Capture Form -->
+      <form class="space-y-5 md:space-y-6 bg-white/5 backdrop-blur-sm rounded-2xl md:rounded-3xl p-6 md:p-12 border border-white/10">
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Name -->
+          <div>
+            <label for="name" class="block text-white/80 text-sm font-medium mb-2">Your Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+              placeholder="John Smith"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label for="phone" class="block text-white/80 text-sm font-medium mb-2">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+              placeholder="(201) 555-0123"
+            />
+          </div>
         </div>
 
-        <div class="grid gap-8 md:grid-cols-3">
-          <!-- Client Story 1: La Isla Restaurant -->
-          <div class="rounded-3xl border border-arugami-pink/20 bg-white p-8 space-y-6">
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-white/80 text-sm font-medium mb-2">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+            placeholder="john@yourbusiness.com"
+          />
+        </div>
+
+        <!-- Business Name -->
+        <div>
+          <label for="business" class="block text-white/80 text-sm font-medium mb-2">Business Name</label>
+          <input
+            type="text"
+            id="business"
+            name="business"
+            required
+            class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition"
+            placeholder="Your Business Name"
+          />
+        </div>
+
+        <!-- Business Type -->
+        <div>
+          <label for="type" class="block text-white/80 text-sm font-medium mb-2">Business Type</label>
+          <select
+            id="type"
+            name="type"
+            required
+            class="w-full px-6 py-4 bg-black/50 border border-white/20 rounded-xl text-white focus:outline-none focus:border-arugami-green focus:ring-2 focus:ring-arugami-green/30 transition appearance-none"
+          >
+            <option value="">Select your industry</option>
+            <option value="restaurant">Restaurant / Food & Beverage</option>
+            <option value="retail">Retail / Fashion / Beauty</option>
+            <option value="professional">Professional Services</option>
+            <option value="home">Home Services</option>
+            <option value="health">Health & Wellness</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full px-8 md:px-12 py-5 md:py-6 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-[1.02] transition-transform duration-200 shadow-2xl relative overflow-hidden group"
+        >
+          <span class="relative z-10">Book Your Discovery Call</span>
+          <!-- Subtle pink glow on hover -->
+          <div class="absolute inset-0 bg-arugami-pink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </button>
+
+        <p class="text-center text-white/50 text-xs md:text-sm mt-3 md:mt-4">
+          We\'ll reach out within 24 hours to schedule your discovery call.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF - The Trust -->
+  <section class="bg-black py-20 md:py-32 px-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center mb-12 md:mb-20">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6">
+          What they said<br/>when they saw it.
+        </h2>
+      </div>
+
+      <!-- Testimonial Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <!-- Testimonial 1 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <!-- Subtle pink dot accent (top right) -->
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "I can\'t believe this came from my kitchen."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-yellow to-arugami-green flex-shrink-0"></div>
             <div>
-              <h3 class="text-2xl font-black text-arugami-dark">La Isla Restaurant</h3>
-              <p class="text-sm text-arugami-dark/60 mt-1">Union City · Restaurant</p>
+              <p class="text-white font-medium text-sm md:text-base">Maria Rodriguez</p>
+              <p class="text-white/60 text-xs md:text-sm">La Cocina Cubana, Union City</p>
             </div>
-            <div class="space-y-4 text-sm text-arugami-dark/75">
-              <div>
-                <p class="font-semibold text-arugami-dark/60 uppercase text-xs">Before</p>
-                <p>847 Instagram followers, 12 likes per post, DMs answered "when we remember"</p>
-              </div>
-              <div>
-                <p class="font-semibold text-arugami-pink uppercase text-xs">After 90 Days</p>
-                <p>2,400 followers, 30+ bookings/month from Instagram, 60-second DM response time</p>
-              </div>
-            </div>
-            <blockquote class="border-l-4 border-arugami-pink pl-4 italic text-arugami-dark/80">
-              "People think we hired a marketing agency from Manhattan. We just send Jordan our kitchen photos."
-              <footer class="mt-2 text-sm font-semibold text-arugami-dark not-italic">— Chef Maria, Owner</footer>
-            </blockquote>
-          </div>
-
-          <!-- Client Story 2: Hudson Coffee Co. -->
-          <div class="rounded-3xl border border-arugami-green/20 bg-white p-8 space-y-6">
-            <div>
-              <h3 class="text-2xl font-black text-arugami-dark">Hudson Coffee Co.</h3>
-              <p class="text-sm text-arugami-dark/60 mt-1">Jersey City · Coffee Shop</p>
-            </div>
-            <div class="space-y-4 text-sm text-arugami-dark/75">
-              <div>
-                <p class="font-semibold text-arugami-dark/60 uppercase text-xs">Before</p>
-                <p>Website from 2017, missed 40% of calls, zero text-back system</p>
-              </div>
-              <div>
-                <p class="font-semibold text-arugami-green uppercase text-xs">After 90 Days</p>
-                <p>New mobile-first site, 31 recovered bookings from missed calls, 18% conversion rate on contact forms</p>
-              </div>
-            </div>
-            <blockquote class="border-l-4 border-arugami-green pl-4 italic text-arugami-dark/80">
-              "The AI answers texts faster than I could. Customers don't know it's not me—and honestly? It's more consistent than I'd be."
-              <footer class="mt-2 text-sm font-semibold text-arugami-dark not-italic">— Mike, Owner</footer>
-            </blockquote>
-          </div>
-
-          <!-- Client Story 3: Union City Salon -->
-          <div class="rounded-3xl border border-arugami-yellow/30 bg-white p-8 space-y-6">
-            <div>
-              <h3 class="text-2xl font-black text-arugami-dark">Union City Salon</h3>
-              <p class="text-sm text-arugami-dark/60 mt-1">Union City · Salon</p>
-            </div>
-            <div class="space-y-4 text-sm text-arugami-dark/75">
-              <div>
-                <p class="font-semibold text-arugami-dark/60 uppercase text-xs">Before</p>
-                <p>$400/mo on Facebook ads, no tracking, guessing what worked</p>
-              </div>
-              <div>
-                <p class="font-semibold text-arugami-dark uppercase text-xs">After 90 Days</p>
-                <p>$500/mo hyper-targeted Hudson County ads, GA4 + CRM attribution, 12:1 ROI</p>
-              </div>
-            </div>
-            <blockquote class="border-l-4 border-arugami-yellow pl-4 italic text-arugami-dark/80">
-              "First time I actually know where my customers come from. Now I know where to spend."
-              <footer class="mt-2 text-sm font-semibold text-arugami-dark not-italic">— Lola, Salon Manager</footer>
-            </blockquote>
           </div>
         </div>
 
-        <div class="mt-12 text-center">
-          <p class="text-2xl font-black text-arugami-dark mb-6">
-            The magic gets them in the door. The integrated system keeps them forever.
+        <!-- Testimonial 2 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "Our customers think we hired a film crew."
           </p>
-          <a href="/case-studies" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">
-            See More Hudson County Success Stories →
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Supporting: Start with one tool -->
-    <section class="py-20 bg-soft-gray">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto">
-          <span class="inline-flex rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Start with one tool</span>
-          <h2 class="mt-4 text-4xl font-black tracking-tight text-arugami-dark">Pick your biggest pain. We'll set it up fast.</h2>
-          <p class="mt-4 text-lg text-arugami-dark/70">Feel the difference this week. Add more later — once the basics hum. Single tools typically run $99–$299/month.</p>
-        </div>
-        <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          <a href="/contact?tool=textback" class="group relative overflow-hidden rounded-3xl border border-arugami-pink/20 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-black text-arugami-dark">Missing calls?</h3>
-              <span class="rounded-full bg-arugami-pink/10 px-3 py-1 text-[11px] font-semibold text-arugami-pink">$99–$299/mo</span>
-            </div>
-            <p class="mt-3 text-sm text-arugami-dark/70">Turn missed calls into text conversations that book jobs automatically.</p>
-            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-pink">Start this →</span>
-          </a>
-          <a href="/contact?tool=dm" class="group relative overflow-hidden rounded-3xl border border-arugami-green/20 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-black text-arugami-dark">Social taking forever?</h3>
-              <span class="rounded-full bg-arugami-green/10 px-3 py-1 text-[11px] font-semibold text-arugami-green">$99–$299/mo</span>
-            </div>
-            <p class="mt-3 text-sm text-arugami-dark/70">Auto-replies for DMs and comments so no one waits for answers.</p>
-            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-green">Start this →</span>
-          </a>
-          <a href="/contact?tool=reviews" class="group relative overflow-hidden rounded-3xl border border-arugami-yellow/30 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-black text-arugami-dark">Reviews too slow?</h3>
-              <span class="rounded-full bg-arugami-yellow/20 px-3 py-1 text-[11px] font-semibold text-arugami-dark">$99–$299/mo</span>
-            </div>
-            <p class="mt-3 text-sm text-arugami-dark/70">QR-powered review asks and on-brand replies grow 5‑stars monthly.</p>
-            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-dark">Start this →</span>
-          </a>
-          <a href="/contact?tool=chat" class="group relative overflow-hidden rounded-3xl border border-arugami-pink/20 bg-white p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(54,54,54,0.08)]">
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-black text-arugami-dark">Site not converting?</h3>
-              <span class="rounded-full bg-arugami-pink/10 px-3 py-1 text-[11px] font-semibold text-arugami-pink">$99–$299/mo</span>
-            </div>
-            <p class="mt-3 text-sm text-arugami-dark/70">24/7 website assistant that answers FAQs and books appointments.</p>
-            <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-arugami-pink">Start this →</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
-          <div class="space-y-6">
-            <span class="inline-flex rounded-full bg-arugami-yellow/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark">First 30 days</span>
-            <h2 class="text-4xl font-black tracking-tight">What you get in the first 30 days</h2>
-            <p class="text-lg text-arugami-dark/70">Fast wins, set up for long-term growth. You’ll feel it quickly — faster replies, more bookings, steady reviews.</p>
-            <ul class="grid gap-4 text-sm text-arugami-dark/75 sm:grid-cols-2">
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
-                Website tune-up and Google Business Profile clean-up
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-green"></span>
-                Missed-call text-back on and 24/7 website chat enabled
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-yellow"></span>
-                Review flow started with QR kit + on-brand replies
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
-                Forms, calls, chat, and DMs routed to one inbox (CRM)
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-green"></span>
-                Simple scorecard to track bookings, leads, reviews
-              </li>
-            </ul>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-green to-arugami-yellow flex-shrink-0"></div>
             <div>
-              <a href="/contact" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">See my 30‑day plan →</a>
+              <p class="text-white font-medium text-sm md:text-base">James Chen</p>
+              <p class="text-white/60 text-xs md:text-sm">Elevate Fitness, Jersey City</p>
             </div>
           </div>
-          <div class="relative overflow-hidden rounded-3xl border border-arugami-dark/10 bg-soft-gray p-6">
-            <img src="/images/culture/culture-rooftop-sofa-skyline@2x.jpg" width="1600" height="1616" loading="lazy" decoding="async" alt="Arugami team setting up systems in a Hudson County business" class="h-full w-full object-cover rounded-2xl" />
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "This doesn\'t look like us. It looks like a movie version of us."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-yellow via-arugami-green to-arugami-pink flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">Sarah Thompson</p>
+              <p class="text-white/60 text-xs md:text-sm">Bloom Beauty Bar, Hoboken</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="border-y border-arugami-dark/10 bg-white py-14">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {kpiTrack.map((kpi) => (
-            <div class={`rounded-2xl border px-5 py-6 shadow-sm ${
-              kpi.accent === 'pink'
-                ? 'border-arugami-pink/30'
-                : kpi.accent === 'green'
-                ? 'border-arugami-green/30'
-                : 'border-arugami-yellow/40'
-            }`}> 
-              <p class="text-sm font-semibold text-arugami-dark/60 uppercase tracking-wide">{kpi.title}</p>
-              <p class={`mt-3 text-3xl font-black ${
-                kpi.accent === 'pink'
-                  ? 'text-arugami-pink'
-                  : kpi.accent === 'green'
-                  ? 'text-arugami-green'
-                  : 'text-arugami-dark'
-              }`}>{kpi.metric}</p>
-              <p class="mt-2 text-sm text-arugami-dark/70">{kpi.description}</p>
+        <!-- Testimonial 4 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "People keep asking where we got our marketing team."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-pink to-arugami-yellow flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">David Patel</p>
+              <p class="text-white/60 text-xs md:text-sm">Patel & Associates Law, Bayonne</p>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="py-20 bg-soft-gray">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto">
-          <span class="inline-flex items-center gap-2 rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Foundation first</span>
-          <h2 class="mt-4 text-4xl font-black tracking-tight">The three-phase system that keeps Hudson County busy</h2>
-          <p class="mt-4 text-lg text-arugami-dark/70">We never drop you into flashy tactics before the basics are bulletproof. Every engagement moves through the same foundation-first methodology.</p>
-        </div>
-        <div class="mt-12 grid gap-8 lg:grid-cols-3">
-          {stages.map((stage) => (
-            <div class={`rounded-3xl border bg-white p-8 shadow-[0_20px_40px_rgba(54,54,54,0.06)] ${
-              stage.accent === 'pink'
-                ? 'border-arugami-pink/30'
-                : stage.accent === 'green'
-                ? 'border-arugami-green/30'
-                : 'border-arugami-yellow/30'
-            }`}>
-              <h3 class="text-xl font-black text-arugami-dark">{stage.name}</h3>
-              <ul class="mt-6 space-y-4 text-arugami-dark/75">
-                {stage.points.map((point) => (
-                  <li class="flex items-start gap-3 text-sm">
-                    <span class={`mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full ${
-                      stage.accent === 'pink'
-                        ? 'bg-arugami-pink'
-                        : stage.accent === 'green'
-                        ? 'bg-arugami-green'
-                        : 'bg-arugami-yellow'
-                    }`}></span>
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
-          <div class="space-y-6">
-            <span class="inline-flex rounded-full bg-arugami-green/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-green">HudPost + Local Authority</span>
-            <h2 class="text-4xl font-black tracking-tight">Hudson County coverage you can’t get anywhere else.</h2>
-            <p class="text-lg text-arugami-dark/70">Our exclusive HudPost partnership means guaranteed editorial features, while our cameras capture the real culture of your block. We swap stock photos for rooftop shoots, block party stories, and local legends.</p>
-            <ul class="grid gap-4 text-sm text-arugami-dark/75 sm:grid-cols-2">
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
-                Monthly HudPost feature baked into every growth retainer.
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-green"></span>
-                Neighborhood-specific plans for each Hudson County city.
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-yellow"></span>
-                Simple scorecard focused on real revenue metrics.
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full bg-arugami-pink"></span>
-                AI “smart employees” trained on your offers and tone.
-              </li>
-            </ul>
-            <a href="/hudpost-partnership" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">
-              See the HudPost playbook →
-            </a>
-          </div>
-          <div class="relative overflow-hidden rounded-3xl border border-arugami-pink/20 shadow-[0_30px_60px_rgba(255,51,153,0.25)]">
-            <img src="/images/culture/culture-rooftop-sofa-skyline@2x.jpg" width="1600" height="1616" loading="lazy" decoding="async" alt="Neon Arugami sign on a Hudson County rooftop" class="h-full w-full object-cover" />
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="py-16 bg-soft-gray">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
-        <div class="space-y-6">
-          <span class="inline-flex rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Creator campaigns</span>
-          <h2 class="text-4xl font-black tracking-tight text-arugami-dark">Content Creator Network + influencer access, managed by Arugami.</h2>
-          <p class="text-lg text-arugami-dark/70">Tap our curated roster of Hudson County storytellers — trade collaborations, paid campaigns, and HudPost amplification handled in one workspace.</p>
-          <ul class="space-y-4 text-sm text-arugami-dark/75">
-            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-pink"></span>Vetted local creators with compensation preferences captured up front.</li>
-            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-green"></span>Airtable-backed intake and booking so every deliverable stays on schedule.</li>
-            <li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-arugami-yellow"></span>Foodie Creator Roster for hospitality plus custom builds for other industries.</li>
-          </ul>
-          <a href="/content-creator-network" class="inline-flex items-center gap-2 text-sm font-bold text-arugami-pink transition hover:text-arugami-dark">Explore the Creator Network →</a>
-        </div>
-        <div class="rounded-3xl border border-arugami-pink/20 bg-white p-6 shadow-[0_20px_40px_rgba(255,51,153,0.15)]">
-          <h3 class="text-lg font-black text-arugami-dark">La Isla Hoboken highlight</h3>
-          <p class="mt-3 text-sm text-arugami-dark/70">Trade collaboration reels averaged 45K views and filled weekend brunch after combining HudPost coverage with our creator roster.</p>
-          <dl class="mt-6 space-y-3 text-sm text-arugami-dark/75">
-            <div class="flex items-center justify-between rounded-2xl bg-soft-gray px-4 py-3">
-              <dt class="font-semibold text-arugami-dark">3.2x engagement lift</dt>
-              <dd>versus self-managed visits</dd>
+        <!-- Testimonial 5 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "Wait—you made this from the photos on my phone?"
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-green to-arugami-pink flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">Lisa Nguyen</p>
+              <p class="text-white/60 text-xs md:text-sm">Oasis Spa, West New York</p>
             </div>
-            <div class="flex items-center justify-between rounded-2xl bg-soft-gray px-4 py-3">
-              <dt class="font-semibold text-arugami-dark">Bookings waitlist</dt>
-              <dd>filled within 48 hours</dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-arugami-dark text-white py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto">
-          <span class="inline-flex rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/70">Who we make famous</span>
-          <h2 class="mt-4 text-4xl font-black tracking-tight">Built for local legends across every Hudson County industry</h2>
-          <p class="mt-4 text-lg text-white/70">One system, four industry playbooks tuned to the way your customers discover, choose, and come back.</p>
-        </div>
-        <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {services.map((service) => (
-            <a href={service.href} class="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-arugami-yellow/60">
-              <div class="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 transition group-hover:opacity-100"></div>
-              <h3 class="text-xl font-black text-white">{service.name}</h3>
-              <p class="mt-4 text-sm text-white/70">{service.blurb}</p>
-              <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-arugami-yellow">Explore playbook →</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
-          <div class="space-y-6">
-            <span class="inline-flex rounded-full bg-arugami-yellow/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-dark">Hudson County footprint</span>
-            <h2 class="text-4xl font-black tracking-tight">Seven municipalities. One culture-first system.</h2>
-            <p class="text-lg text-arugami-dark/70">From PATH commuters to Bergenline shoppers, we tailor campaigns to the neighborhoods you actually serve. No generic North Jersey fluff — just block-by-block relevance.</p>
           </div>
-          <div class="rounded-3xl border border-arugami-dark/10 bg-soft-gray p-6 shadow-inner">
-            <div class="grid gap-4">
-              {locations.map((city) => (
-                <a href={city.href} class="rounded-2xl border border-arugami-dark/10 bg-white p-4 transition hover:border-arugami-pink/30 hover:shadow-lg">
-                  <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-black text-arugami-dark">{city.name}</h3>
-                    <svg class="h-4 w-4 text-arugami-pink" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7" />
-                    </svg>
-                  </div>
-                  <p class="mt-2 text-sm text-arugami-dark/70">{city.detail}</p>
-                </a>
-              ))}
+        </div>
+
+        <!-- Testimonial 6 -->
+        <div class="bg-white/5 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-white/10 relative">
+          <div class="absolute top-4 right-4 md:top-6 md:right-6 w-2 h-2 bg-arugami-pink rounded-full"></div>
+
+          <p class="text-xl md:text-2xl lg:text-3xl text-white font-light mb-5 md:mb-6 leading-relaxed">
+            "Our Instagram finally looks as good as the food tastes."
+          </p>
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-arugami-yellow to-arugami-green flex-shrink-0"></div>
+            <div>
+              <p class="text-white font-medium text-sm md:text-base">Michael Santos</p>
+              <p class="text-white/60 text-xs md:text-sm">Santos Bakery, Weehawken</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <section class="py-20 bg-soft-gray">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
-          <div class="space-y-8">
-            <span class="inline-flex rounded-full bg-arugami-pink/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-arugami-pink">Proof Hudson County trusts</span>
-            <h2 class="text-4xl font-black tracking-tight text-arugami-dark">Real numbers, not vanity metrics.</h2>
-            <p class="text-lg text-arugami-dark/70">Every win is tracked against the results that move revenue — faster replies, higher conversion, more repeat business, and media coverage that actually matters.</p>
-            <div class="grid gap-6 md:grid-cols-3">
-              {proofPoints.map((proof) => (
-                <div class="rounded-3xl border border-arugami-dark/10 bg-white p-6 shadow-sm">
-                  <p class="text-3xl font-black text-arugami-pink">{proof.stat}</p>
-                  <p class="mt-3 text-sm text-arugami-dark/70">{proof.copy}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div class="overflow-hidden rounded-3xl border border-arugami-pink/20 shadow-[0_20px_40px_rgba(255,51,153,0.2)]">
-            <img src="/images/culture/culture-graffiti-crew@2x.jpg" width="1600" height="1818" loading="lazy" decoding="async" alt="Hudson County business owners captured at a street mural" class="h-full w-full object-cover" />
-          </div>
-        </div>
+      <!-- Final CTA -->
+      <div class="text-center mt-12 md:mt-20">
+        <a
+          href="#apply"
+          class="inline-block px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl font-bold text-black bg-gradient-to-r from-arugami-yellow via-arugami-green to-arugami-green rounded-full hover:scale-105 transition-transform duration-200 shadow-2xl"
+        >
+          Reserve Your Spot
+        </a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="bg-arugami-dark text-white py-20">
-      <div class="max-w-5xl mx-auto px-4 text-center">
-        <h2 class="text-4xl font-black tracking-tight">Ready to make Hudson County talk about you?</h2>
-        <p class="mt-4 text-lg text-white/70">Let’s build the foundation, line up your HudPost spotlight, and train AI to sound like your best employee. We’ll map your results before we touch a tactic.</p>
-        <div class="mt-8 flex flex-wrap justify-center gap-4">
-          <a href="/contact" class="inline-flex items-center gap-3 rounded-full bg-arugami-pink px-8 py-3 text-sm font-bold text-white shadow-[0_18px_40px_rgba(255,51,153,0.35)] transition hover:-translate-y-1 hover:bg-arugami-yellow hover:text-arugami-dark">Book a quick 15‑minute call</a>
-          <a href="/contact" class="inline-flex items-center gap-3 rounded-full border border-white/30 px-8 py-3 text-sm font-bold text-white/80 transition hover:border-arugami-green hover:text-white">Let’s get me busy</a>
-        </div>
+  <!-- FOOTER -->
+  <footer class="bg-black border-t border-white/10 py-10 md:py-12 px-4">
+    <div class="max-w-7xl mx-auto text-center">
+      <div class="mb-5 md:mb-6">
+        <img
+          src="/logos/a_gradient_fuchsia_black (NB)@2x.png"
+          alt="Arugami Logo"
+          class="h-14 md:h-16 lg:h-20 mx-auto"
+        />
       </div>
-    </section>
-  </main>
-  <Footer />
-</BaseLayout>
+      <p class="text-white/50 text-xs md:text-sm">
+        Hudson County\'s First AI Studio
+      </p>
+      <p class="text-white/30 text-xs mt-3 md:mt-4">
+        © 2025 Arugami. All rights reserved.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style>
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar for dark theme */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #363636;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5fe385;
+  }
+
+  /* Subtle animation for scroll indicator */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+</style>
