@@ -1,0 +1,7 @@
+name = "arugami-email-responder"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Email routing configuration
+[email]
+route = "hello@arugami.com"

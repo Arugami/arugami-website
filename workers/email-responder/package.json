@@ -1,0 +1,16 @@
+{
+  "name": "arugami-email-responder",
+  "version": "1.0.0",
+  "description": "Auto-responder worker for hello@arugami.com",
+  "main": "src/index.js",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "keywords": ["cloudflare", "workers", "email"],
+  "author": "Arugami",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
