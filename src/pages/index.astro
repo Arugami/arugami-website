@@ -14,11 +14,13 @@ const description = "None of this was filmed. Cinematic ads made from your world
 <body class="bg-black text-white antialiased">
   <!-- FLOATING LOGO (top-left, like Genre.ai) -->
   <div class="fixed top-4 left-4 md:top-6 md:left-6 z-50">
-    <img
-      src="/logos/a_gradient_fuchsia_black (NB)@2x.png"
-      alt="Arugami"
-      class="h-8 md:h-10 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200"
-    />
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+      <img
+        src="/logos/a_gradient_fuchsia_black (NB)@2x.png"
+        alt="Arugami"
+        class="h-8 md:h-10 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200"
+      />
+    </a>
   </div>
 
   <!-- HERO SECTION - The Shock -->
@@ -35,8 +37,8 @@ const description = "None of this was filmed. Cinematic ads made from your world
       >
         <source src="/videos/hero-mobile.mp4" type="video/mp4" />
       </video>
-      <!-- Dark gradient overlay for text readability -->
-      <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+      <!-- Stronger gradient overlay for better text contrast -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
     </div>
 
     <!-- Hero Background - Desktop: Original Image -->
@@ -52,10 +54,10 @@ const description = "None of this was filmed. Cinematic ads made from your world
 
     <!-- Hero Content -->
     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-      <h1 class="text-5xl md:text-8xl lg:text-9xl font-black text-white mb-6 md:mb-8 tracking-tight">
+      <h1 class="text-5xl md:text-8xl lg:text-9xl font-black text-white mb-6 md:mb-8 tracking-tight" style="text-shadow: 0 4px 20px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.8), 0 8px 40px rgba(0,0,0,0.6);">
         None of this<br/>was filmed.
       </h1>
-      <p class="text-xl md:text-3xl lg:text-4xl text-white/90 mb-10 md:mb-12 font-light">
+      <p class="text-xl md:text-3xl lg:text-4xl text-white mb-10 md:mb-12 font-light" style="text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 4px 24px rgba(0,0,0,0.7);">
         Cinematic ads made from your world.
       </p>
       <a
